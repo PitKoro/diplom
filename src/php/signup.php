@@ -1,8 +1,9 @@
-<?
+<? # скипт для регистрации
 
-    session_start();
-    require_once 'connect.php';
+    session_start(); # Создаем сессию
+    require_once 'connect.php'; # Подключаем скрипт connect.php, таким образом устанавливаем соединение с сервером MySQL
 
+    # забираем данные из полей
     $full_name = $_POST['full_name'];
     $login = $_POST['login'];
     $email = $_POST['email'];
@@ -10,9 +11,10 @@
     $password_confirm = $_POST['password_confirm'];
     $status = 10;
 
-
-    $check_login = mysqli_query($connect, "SELECT * FROM `users` WHERE `login`='$login'");
-    if(mysqli_num_rows($check_login) > 0) {
+    # проверяем введеный логин на наличие в БД
+    $check_login = mysqli_query($connect, "SELECT * FROM `users` WHERE `login`='$login'"); # Запрос в БД на выборку записи с таким же логином
+    if(mysqli_num_rows($check_login) > 0) { # если в БД уже есть такой логин
+        #формируем ответ с ошибкой
         $response = [
             "status" => false,
             "message" => "Такой логин уже существует",
@@ -20,12 +22,13 @@
             "fields" => ['login']
         ];
 
-        echo json_encode($response);
-        die();
+        echo json_encode($response); # Возвращаем ответ в формате json
+        die(); # Останавливаем выполнение скрипта
     }
 
-    $error_fields = [];
+    $error_fields = []; # инициализируем массив под названия полей с ошибками
 
+    #Если пользователь отправил пустое поле, то добавляем название поля в конец массива $error_fields
     if( $login === '' ) {
         $error_fields[] = 'login';
     } 
@@ -50,7 +53,9 @@
         $error_fields[] = 'avatar';
     }
 
+    # Если хотя бы одно поле оказалось пустым
     if( !empty($error_fields) ) {
+        #формируем ответ с ошибкой
         $response = [
             "status" => false,
             "message" => "Проверьте правильность полей",
@@ -58,37 +63,44 @@
             "fields" => $error_fields
         ];
 
-        echo json_encode($response);
-
-        die();
+        echo json_encode($response); # Возвращаем ответ в формате json
+        die(); # Останавливаем выполнение скрипта
     }
 
+    # проверяем введеные пароли на соответствие друг к другу
     if ($password === $password_confirm) {
 
-        $path = 'public/img/uploads/' . time() . $_FILES['avatar']['name'];
+        $path = 'public/img/uploads/' . time() . $_FILES['avatar']['name']; # добавляем в название аватарки числа текущего времени (чтобы не возникал конфликт имен)
+
+        # перемещяем загруженное изображение в public/img/uploads/
         if (!move_uploaded_file($_FILES['avatar']['tmp_name'], '../../' . $path)) {
+            # Если не удалось переместить, то формируем ответ с ошибкой
             $response = [
                 "status" => false,
                 "message" => "ошибка при загрузке изображения",
                 "type" => 2
             ];
     
-            echo json_encode($response);
+            echo json_encode($response); # Возвращаем ответ в формате json
         }
 
+        # шифруем пароль
         $password = md5($password);
+        # вставляем в БД новую запись (добавляем нового пользователя)
         mysqli_query($connect, "INSERT INTO `users` (`id`, `login`, `email`, `password`, `full_name`, `avatar`, `status`) VALUES (NULL, '$login', '$email', '$password', '$full_name', '$path', '$status')");
         
+        # формируем ответ
         $response = [
             "status" => true,
             "message" => "Регистрация прошла успешно!"
         ];
 
-        echo json_encode($response);
-        die();
+        echo json_encode($response); # Возвращаем ответ в формате json
+        die(); # Останавливаем выполнение скрипта
 
 
-    } else {
+    } else { # Если введенные пароли не совпали
+        #формируем ответ с ошибкой
         $response = [
             "status" => false,
             "message" => "Пароли не совпадают!",
@@ -96,7 +108,7 @@
             "fields" => ['password', 'password_confirm']
         ];
 
-        echo json_encode($response);
+        echo json_encode($response); # Возвращаем ответ в формате json
     }
 
 ?>
