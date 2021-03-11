@@ -69,7 +69,7 @@ $('.register-btn').click(function(e){
     
 
     $.ajax({
-        url: 'signup.php',
+        url: '../php/signup.php',
         type: 'POST',
         dataType: 'json',
         processData: false, // Не обрабатываем файлы

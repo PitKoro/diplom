@@ -1,4 +1,48 @@
-* {
+body {
+    color: #24292e;
+}
+
+.auth-form {
+    width: 340px;
+    margin: auto;
+}
+
+.auth-form-header {
+    margin-bottom: 15px;
+    color: #24292e;
+    font-size: 40px;
+    text-align: center;
+    text-shadow: none;
+    letter-spacing: -.5px;
+}
+.auth-form-body {
+    padding: 20px;
+    font-size: 14px;
+    background-color: #f6f8fa;
+    border: 1px solid #eaecef;
+    border-radius: 6px;
+}
+
+.login-btn{
+    width: 100%;
+}
+
+.auth-form-footer {
+    padding: 15px 20px;
+    text-align: center;
+    font-size: 14px;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
+}
+
+.auth-error {
+    background-color: #ffe3e6;
+    border: 1px solid;
+    border-radius: 6px;
+
+}
+
+/* * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -61,4 +105,4 @@ button {
 }
 .logout {
     color: #b7625c;
-}
+} */
