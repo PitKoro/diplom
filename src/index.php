@@ -23,42 +23,28 @@ if ($_SESSION['user']) {
 </head>
 <body>
     
-    <div class="auth-form px-3">
-        <div class="auth-form-header">
+    <div class="auth-form px-3 mt-5">
+        <div class="form-header">
             <p>Авторизация</p>
         </div>
-        <div class="auth-error none">
-            <p class="msg "></p>
-        </div>
-        <div class="auth-form-body">
+
+        <div class="auth-error mb-3 none "></div>
+
+        <div class="form-body">
             <form>
                 <label class="form-label" name="login" for="auth_login_field">Логин</label>
-                <input class="form-control mb-3" id="auth_login_field" type="text" name="login" placeholder="Введите свой логин">
+                <input class="form-control mb-3" id="auth_login_field" type="text" name="login" placeholder="Введите свой логин" required>
+
                 <label class="form-label" for="auth_password_field">Пароль</label>
-                <input class="form-control mb-3" id="auth_password_field" name="password" type="password" name="password" placeholder="Введите пароль">
+                <input class="form-control mb-3" id="auth_password_field" name="password" type="password" name="password" placeholder="Введите пароль" required>
                 <button type="submit" class="login-btn btn btn-success" >Войти</button>
             </form>
         </div>
 
-        <div class="auth-form-footer mt-3">
+        <div class="form-footer mt-3">
             У вас нет аккаунта? - <a href="templates/register.php">зарегистрируйтесь</a>!
         </div>
     </div>
-
-
-    <!-- Форма авторизации -->
-
-    <!-- <form>
-        <label>Логин</label>
-        <input type="text" name="login" placeholder="Введите свой логин">
-        <label>Пароль</label>
-        <input type="password" name="password" placeholder="Введите пароль">
-        <button type="submit" class="mt-3 login-btn" >Войти</button>
-        <p>
-            У вас нет аккаунта? - <a href="templates/register.php">зарегистрируйтесь</a>!
-        </p>
-        <p class="msg none"></p>
-    </form> -->
 
     <!-- Bootstrap and jQuery JS -->
     <script src="../public/vendor/jquery/jquery-3.5.1.min.js"></script>

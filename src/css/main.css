@@ -2,12 +2,21 @@ body {
     color: #24292e;
 }
 
+.container-sm {
+    max-width: 544px;
+}
+
 .auth-form {
-    width: 340px;
+    max-width: 440px;
     margin: auto;
 }
 
-.auth-form-header {
+.reg-form {
+    max-width: 700px;
+    margin: auto;
+}
+
+.form-header {
     margin-bottom: 15px;
     color: #24292e;
     font-size: 40px;
@@ -15,7 +24,8 @@ body {
     text-shadow: none;
     letter-spacing: -.5px;
 }
-.auth-form-body {
+
+.form-body {
     padding: 20px;
     font-size: 14px;
     background-color: #f6f8fa;
@@ -27,7 +37,12 @@ body {
     width: 100%;
 }
 
-.auth-form-footer {
+.register-btn {
+    width: 100%;
+    height: 50px;
+}
+
+.form-footer {
     padding: 15px 20px;
     text-align: center;
     font-size: 14px;
@@ -39,70 +54,12 @@ body {
     background-color: #ffe3e6;
     border: 1px solid;
     border-radius: 6px;
-
-}
-
-/* * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: Montserrat, sans-serif;
-}
-
-a {
-    color: #7c9ab7;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-p {
-    margin: 10px 0;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    width: 400px;
-    padding: 20px;
-}
-
-input {
-    margin: 10px 0;
-    padding: 10px;
-    border: unset;
-    border-bottom: 2px solid #e3e3e3;
-    outline: none;
-}
-
-button {
-    padding: 10px;
-    background: #e3e3e3;
-    border: unset;
-    cursor: pointer;
-}
-
-.error {
-    border-bottom: 2px solid #ff4332;
-}
-
-.msg {
-    border: 2px solid #ffa908;
-    border-radius: 3px;
-    padding: 10px;
+    padding: 15px 20px;
     text-align: center;
-    font-weight: bold;
+    font-size: 14px;
+
 }
 
 .none {
     display: none;
 }
-.logout {
-    color: #b7625c;
-} */

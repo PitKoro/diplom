@@ -9,7 +9,9 @@
     $email = $_POST['email'];
     $password = $_POST['password'];
     $password_confirm = $_POST['password_confirm'];
-    $status = 10;
+    $user_status = $_POST['user_status'];
+
+    $path_to_avatar = null;
 
     # проверяем введеный логин на наличие в БД
     $check_login = mysqli_query($connect, "SELECT * FROM `users` WHERE `login`='$login'"); # Запрос в БД на выборку записи с таким же логином
@@ -50,9 +52,13 @@
     }
 
     if( !$_FILES['avatar']) {
-        $error_fields[] = 'avatar';
+        #$error_fields[] = 'avatar';
+        $path_to_avatar = 'public/img/uploads/default.jpg';
     }
 
+    if( $user_status === '' ) {
+        $error_fields[] = 'user_status';
+    }
     # Если хотя бы одно поле оказалось пустым
     if( !empty($error_fields) ) {
         #формируем ответ с ошибкой
@@ -69,25 +75,27 @@
 
     # проверяем введеные пароли на соответствие друг к другу
     if ($password === $password_confirm) {
+        if($path_to_avatar != 'public/img/uploads/default.jpg'){
 
-        $path = 'public/img/uploads/' . time() . $_FILES['avatar']['name']; # добавляем в название аватарки числа текущего времени (чтобы не возникал конфликт имен)
-
-        # перемещяем загруженное изображение в public/img/uploads/
-        if (!move_uploaded_file($_FILES['avatar']['tmp_name'], '../../' . $path)) {
-            # Если не удалось переместить, то формируем ответ с ошибкой
-            $response = [
-                "status" => false,
-                "message" => "ошибка при загрузке изображения",
-                "type" => 2
-            ];
-    
-            echo json_encode($response); # Возвращаем ответ в формате json
+            $path_to_avatar = 'public/img/uploads/' . time() . $_FILES['avatar']['name']; # добавляем в название аватарки числа текущего времени (чтобы не возникал конфликт имен)
+            # перемещяем загруженное изображение в public/img/uploads/
+            if (!move_uploaded_file($_FILES['avatar']['tmp_name'], '../../' . $path_to_avatar)) {
+                # Если не удалось переместить, то формируем ответ с ошибкой
+                $response = [
+                    "status" => false,
+                    "message" => "ошибка при загрузке изображения",
+                    "type" => 2
+                ];
+        
+                echo json_encode($response); # Возвращаем ответ в формате json
+            }
         }
+        
 
         # шифруем пароль
         $password = md5($password);
         # вставляем в БД новую запись (добавляем нового пользователя)
-        mysqli_query($connect, "INSERT INTO `users` (`id`, `login`, `email`, `password`, `full_name`, `avatar`, `status`) VALUES (NULL, '$login', '$email', '$password', '$full_name', '$path', '$status')");
+        mysqli_query($connect, "INSERT INTO `users` (`id`, `login`, `email`, `password`, `full_name`, `avatar`, `status`) VALUES (NULL, '$login', '$email', '$password', '$full_name', '$path_to_avatar', '$user_status')");
         
         # формируем ответ
         $response = [

@@ -60,11 +60,13 @@
         die(); # Останавливаем выполнение скрипта
 
     } else { # Если в БД запись с таким логином и паролем не нашлась, то
-
+        $error_fields = ['login', 'password'];
         # формируем ответ с сообщение об ошибке
         $response = [
             "status" => false,
-            "message" => 'Неверный логин или пароль'
+            "message" => 'Неверный логин или пароль',
+            "type" => 1,
+            "fields" => $error_fields
         ];
 
         echo json_encode($response); # Возвращаем ответ в формате json

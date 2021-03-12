@@ -1,10 +1,9 @@
-//php/signin.php
 
 // Авторизация
 $('.login-btn').click(function(e){
     e.preventDefault();
 
-    $('input').removeClass("error");
+    $('input').removeClass("is-invalid");
 
     let login = $('input[name="login"]').val();
     let password = $('input[name="password"]').val();
@@ -24,11 +23,11 @@ $('.login-btn').click(function(e){
 
                 if(data.type === 1) {
                     data.fields.forEach(field => {
-                        $(`input[name="${field}"]`).addClass("error");
+                        $(`input[name="${field}"]`).addClass("is-invalid");
                     });
                 }
 
-                $('.msg').removeClass('none').text(data.message);
+                $('.auth-error').removeClass('none').text(data.message);
             }
             
         }
@@ -37,7 +36,6 @@ $('.login-btn').click(function(e){
 
 
 // Получение изображения с поля
-
 let avatar = false;
 
 $('input[name="avatar"]').change(e => {
@@ -46,18 +44,18 @@ $('input[name="avatar"]').change(e => {
 });
 
 
-
 // Регистрация
 $('.register-btn').click(function(e){
     e.preventDefault();
 
-    $('input').removeClass("error");
+    $('input').removeClass("is-invalid");
 
     let login = $('input[name="login"]').val();
     let password = $('input[name="password"]').val();
     let full_name = $('input[name="full_name"]').val();
     let email = $('input[name="email"]').val();
     let password_confirm = $('input[name="password_confirm"]').val();
+    let user_status = $('select[name="user_status"]').val();
 
     let formData = new FormData();
     formData.append('login', login);
@@ -66,7 +64,7 @@ $('.register-btn').click(function(e){
     formData.append('full_name', full_name);
     formData.append('email', email);
     formData.append('avatar', avatar);
-    
+    formData.append('user_status', user_status);
 
     $.ajax({
         url: '../php/signup.php',
@@ -80,14 +78,16 @@ $('.register-btn').click(function(e){
             if(data.status) {
                 document.location.href = '../index.php';
             } else {
-
                 if(data.type === 1) {
                     data.fields.forEach(field => {
-                        $(`input[name="${field}"]`).addClass("error");
+                        if(field === 'user_status'){
+                            $(`select[name="${field}"]`).addClass("is-invalid");
+                        } else {
+                            $(`input[name="${field}"]`).addClass("is-invalid");
+                        }
                     });
                 }
-
-                $('.msg').removeClass('none').text(data.message);
+                $('.auth-error').removeClass('none').text(data.message);
             }
             
         }
