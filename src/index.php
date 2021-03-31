@@ -40,9 +40,9 @@ if ($_SESSION['user']) {
             </form>
         </div>
 
-        <div class="form-footer mt-3">
+        <!-- <div class="form-footer mt-3">
             У вас нет аккаунта? - <a href="templates/register.php">зарегистрируйтесь</a>!
-        </div>
+        </div> -->
     </div>
 
     <!-- Bootstrap and jQuery JS -->
