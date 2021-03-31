@@ -16,20 +16,29 @@ if (!$_SESSION['user']) {
     <!-- Bootstrap CSS -->
     <link type="text/css" rel="stylesheet" href="../../public/vendor/bootstrap/css/bootstrap.min.css">
 
-    <title>Главная</title>
+    <title>Проекты</title>
 
 </head>
 <body>
 
     <? require "blocks/navbar.php"; ?>
 
-
     <div class="container mt-5">
-        <h1>Это главная страница</h1>
+        <h1>Страница с проектами</h1>
     </div>
 
     <!-- Bootstrap and jQuery JS -->
     <script src="../../public/vendor/jquery/jquery-3.5.1.min.js"></script>
     <script src="../../public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $('#add_project_button').click(e => {
+            e.preventDefault();
+            $.get(
+                '../php/newProject.php',
+
+            );
+        });
+    </script>
+
 </body>
 </html>

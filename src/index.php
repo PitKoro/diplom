@@ -2,7 +2,7 @@
 session_start();
 
 if ($_SESSION['user']) {
-    header('Location: templates/profile.php');
+    header('Location: templates/main.php');
 }
 
 ?>
@@ -22,7 +22,6 @@ if ($_SESSION['user']) {
 
 </head>
 <body>
-    
     <div class="auth-form px-3 mt-5">
         <div class="form-header">
             <p>Авторизация</p>
@@ -49,6 +48,6 @@ if ($_SESSION['user']) {
     <!-- Bootstrap and jQuery JS -->
     <script src="../public/vendor/jquery/jquery-3.5.1.min.js"></script>
     <script src="../public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
 </body>
 </html>
