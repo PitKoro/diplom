@@ -77,7 +77,7 @@
     
 
     # вставляем в БД новую запись (добавляем новый проект)
-    mysqli_query($connect, "INSERT INTO `project` (`id`, `name`, `description`, `address`, `photo`, `start_date`, `end_date`) VALUES (NULL, '$name', '$description', '$address', '$path_to_project_photo', '$start_date', '$end_date')");
+    mysqli_query($connect, "INSERT INTO `projects` (`id`, `name`, `description`, `address`, `photo`, `start_date`, `end_date`) VALUES (NULL, '$name', '$description', '$address', '$path_to_project_photo', '$start_date', '$end_date')");
     
     # формируем ответ
     $response = [

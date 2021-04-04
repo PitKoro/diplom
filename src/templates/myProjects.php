@@ -25,7 +25,7 @@ if (!$_SESSION['user']) {
 
 
     <div class="container mt-5">
-        <table class="table table-bordered table-hover text-center" id="project_table"></table>
+        <table class="table table-bordered table-hover text-center" id="projects_table"></table>
     </div>
 
     <!-- Bootstrap and jQuery JS -->
@@ -36,9 +36,9 @@ if (!$_SESSION['user']) {
             $.ajax({
                 type: "POST",
                 url: "../php/get_db_table.php",
-                data: {table: "project"},
+                data: {table: "projects"},
                 success: function(html){
-                    $("#project_table").html(html);
+                    $("#projects_table").html(html);
                 } 
             });
         });
