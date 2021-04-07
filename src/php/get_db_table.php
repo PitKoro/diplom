@@ -1,9 +1,11 @@
 <?
+session_start();
 require_once 'connect.php'; # Подключаем скрипт connect.php, таким образом устанавливаем соединение с сервером MySQL
 
 if($_POST['table']=='projects') {
     /* Вывод таблицы из БД */
-    $sql = mysqli_query($connect, "SELECT * FROM projects");
+    $user_id = $_SESSION['user']['id'];
+    $sql = mysqli_query($connect, "SELECT A.* FROM projects A LEFT JOIN users_in_projects B ON A.id=B.project_id WHERE user_id='".$user_id."'");
 
     $table_data = "
     <thead>
@@ -31,6 +33,8 @@ if($_POST['table']=='projects') {
         <td> {$result['end_date']}</td>
         </tr>";
     }
+
+
 
     $table_data = $table_data."</tbody>";
     mysqli_free_result($sql);

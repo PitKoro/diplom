@@ -27,6 +27,7 @@ if (!$_SESSION['user']) {
         <form>
             <img src="<?= '../../'.$_SESSION['user']['avatar'] ?>" width="200" alt="">
             <h2 style="margin: 10px 0;"><?= $_SESSION['user']['full_name'] ?></h2>
+            <h2>id: <?= $_SESSION['user']['id'] ?></h2></br>
             <h2>Статус: <?= $_SESSION['user']['status'] ?></h2></br>
             <h6>user: <? print_r( $_SESSION['user'])?></h6></br>
             <a href="#"><?= $_SESSION['user']['email'] ?></a>

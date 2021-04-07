@@ -78,7 +78,13 @@
 
     # вставляем в БД новую запись (добавляем новый проект)
     mysqli_query($connect, "INSERT INTO `projects` (`id`, `name`, `description`, `address`, `photo`, `start_date`, `end_date`) VALUES (NULL, '$name', '$description', '$address', '$path_to_project_photo', '$start_date', '$end_date')");
-    
+
+    # id добавленной записи
+    $project_id = mysqli_insert_id($connect);
+
+    $user_id = $_SESSION['user']['id'];
+
+    mysqli_query($connect, "INSERT INTO `users_in_projects` (`user_id`,`project_id`) VALUES ('$user_id', '$project_id')");
     # формируем ответ
     $response = [
         "status" => true,
