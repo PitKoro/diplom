@@ -3,6 +3,9 @@ session_start();
 if (!$_SESSION['user']) {
     header('Location: /');
 }
+include '../php/connect.php';
+include '../php/lib.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -25,23 +28,14 @@ if (!$_SESSION['user']) {
 
 
     <div class="container mt-5">
-        <table class="table table-bordered table-hover text-center" id="projects_table"></table>
+        <div class="">
+        <?  $a=get_all_user_projects($connect, $_SESSION['user']['id']);
+            echo($a[0]['name']);?>
+        </div>
     </div>
 
     <!-- Bootstrap and jQuery JS -->
     <script src="../../public/vendor/jquery/jquery-3.5.1.min.js"></script>
     <script src="../../public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $.ajax({
-                type: "POST",
-                url: "../php/get_db_table.php",
-                data: {table: "projects"},
-                success: function(html){
-                    $("#projects_table").html(html);
-                } 
-            });
-        });
-    </script>
 </body>
 </html>
