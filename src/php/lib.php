@@ -1,4 +1,6 @@
 <?
+
+
 # аргументы:    $connect - дескриптор подключения к БД
 #               $user_id - id авторизованного пользователя
 # возвращает: массив проектов авторизованного пользователя
@@ -10,7 +12,9 @@ function get_all_user_projects($connect, $user_id){
     while($result = mysqli_fetch_assoc($sql)){
         array_push($all_projects, $result);
     }
-    return json_encode($all_projects);
+    return $all_projects;
 }
+
+
 
 ?>
