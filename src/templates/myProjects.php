@@ -19,7 +19,7 @@ include '../php/lib.php';
     <!-- Bootstrap CSS -->
     <link type="text/css" rel="stylesheet" href="../../public/vendor/bootstrap/css/bootstrap.min.css">
 
-    <title>Главная</title>
+    <title>Проекты</title>
 
 </head>
 <body>
@@ -38,13 +38,16 @@ include '../php/lib.php';
                     if($all_user_projects[$i]['end_date'] == ''){
                         $all_user_projects[$i]['end_date'] = 'Не указано';
                     }
+                    if($all_user_projects[$i]['description'] == ''){
+                        $all_user_projects[$i]['description'] = 'Не указано';
+                    }
                     echo "
                     <div class='card mb-3'>
                         <div class='row g-0'>
-                            <div class='col-md-4'>
-                                <img src='../../{$all_user_projects[$i]['photo']}' style='width: 100%; height:100%;'>
+                            <div class='col-sm-4 col-md-3'>
+                                <img src='../../{$all_user_projects[$i]['photo']}' class='rounded mx-auto d-block img-thumbnail' style='width: 200px; height:200px;'>
                             </div>
-                            <div class='col-md-8'>
+                            <div class='col-sm-8 col-md-9'>
                                 <div class='card-header text-white bg-primary'>
                                     <h5 class='card-title'>Имя: {$all_user_projects[$i]['name']} id: {$all_user_projects[$i]['id']}</h5>
                                 </div>
@@ -52,7 +55,17 @@ include '../php/lib.php';
                                     <p class='card-text'>Описание: {$all_user_projects[$i]['description']}</p>
                                     <p class='card-text'><small class='text-muted'>С {$all_user_projects[$i]['start_date']} по {$all_user_projects[$i]['end_date']}</small></p>
                                 </div>
-                                <div class='card-footer'></div>
+                                <div class='card-footer'>
+                                    <div class='row'>
+                                        <div class='col'>
+                                            <a href='./project.php?id={$all_user_projects[$i]['id']}' class='btn btn-primary'>Подробнее</a>
+                                        </div>
+                                        <div class='col'>
+                                            <button class='btn btn-danger'>Удалить</button>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>";

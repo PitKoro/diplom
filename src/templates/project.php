@@ -3,6 +3,7 @@ session_start();
 if (!$_SESSION['user']) {
     header('Location: /');
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +17,7 @@ if (!$_SESSION['user']) {
     <!-- Bootstrap CSS -->
     <link type="text/css" rel="stylesheet" href="../../public/vendor/bootstrap/css/bootstrap.min.css">
 
-    <title>Проекты</title>
+    <title>Проект</title>
 
 </head>
 <body>
@@ -24,21 +25,15 @@ if (!$_SESSION['user']) {
     <? require "blocks/navbar.php"; ?>
 
     <div class="container mt-5">
-        <h1>Страница с проектами</h1>
+        <div class="row">
+            <div class="col"></div>
+            <div class="col"></div>
+        </div>
     </div>
 
     <!-- Bootstrap and jQuery JS -->
     <script src="../../public/vendor/jquery/jquery-3.5.1.min.js"></script>
     <script src="../../public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $('#add_project_button').click(e => {
-            e.preventDefault();
-            $.get(
-                '../php/newProject.php',
-
-            );
-        });
-    </script>
 
 </body>
 </html>

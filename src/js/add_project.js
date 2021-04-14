@@ -38,7 +38,7 @@ $('.add-project-btn').click(function(e){
         success (response){
             // console.log(`Новый проект: ${response}`);
             if(response.status) {
-                document.location.href = './projects.php';
+                document.location.href = './myProjects.php';
                 console.log(response);
             } else {
                 if(response.type === 1) {
