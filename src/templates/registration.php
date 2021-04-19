@@ -1,8 +1,11 @@
 <?php
-    session_start();
-    if ($_SESSION['user']) {
-        header('Location: templates/profile.php');
-    }
+session_start();
+if (!$_SESSION['user']) {
+    header('Location: ../index.php');
+}
+if ($_SESSION['user']['status'] != 10) {
+    header('Location: ../index.php');
+}
 ?>
 
 <!DOCTYPE html>
@@ -16,18 +19,20 @@
     <!-- Bootstrap CSS -->
     <link type="text/css" rel="stylesheet" href="../../public/vendor/bootstrap/css/bootstrap.min.css">
 
-    <title>Регистрация</title>
+    <title>Новый пользователь</title>
 
 </head>
 <body>
 
+    <? require "blocks/navbar.php"; ?>
+
     <div class="container-sm mt-5">
         <div class="reg-form px-3">
             <div class="form-header">
-                <p>Регистрация</p>
+                <p>Регистрация нового пользователя</p>
             </div>
             <div class="auth-error mb-3 none "></div>
-            <div class="form-body">
+            <div class="form-body mb-4">
                 <form>
                     <label for="reg_fullname_field" class="form-label">ФИО</label>
                     <input type="text" name="full_name" class="form-control mb-3" id="reg_fullname_field" placeholder="Введите свое полное имя">
@@ -53,13 +58,13 @@
                         <option value="1">Обычный пользователь</option>
                     </select>
 
-                    <button type="submit" class="register-btn btn btn-success mt-3">Зарегистрироваться</button>
+                    <button type="submit" class="register-btn btn btn-success mt-3">Зарегистрировать</button>
                 </form>
             </div>
 
-            <div class="form-footer my-3">
+            <!-- <div class="form-footer my-3">
                 У вас уже есть аккаунт? - <a href="../index.php">авторизируйтесь</a>!
-            </div>
+            </div> -->
         </div>
     </div>
 
@@ -67,6 +72,7 @@
     <!-- Bootstrap and jQuery JS -->
     <script src="../../public/vendor/jquery/jquery-3.5.1.min.js"></script>
     <script src="../../public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/main.js"></script>
+
+    <script src="../js/registration.js"></script>
 </body>
 </html>

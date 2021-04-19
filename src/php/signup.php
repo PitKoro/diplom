@@ -1,5 +1,5 @@
 <? # скипт для регистрации
-
+    header('Content-Type: application/json; charset=utf-8');
     session_start(); # Создаем сессию
     require_once 'connect.php'; # Подключаем скрипт connect.php, таким образом устанавливаем соединение с сервером MySQL
 
@@ -53,7 +53,7 @@
 
     if( !$_FILES['avatar']) {
         #$error_fields[] = 'avatar';
-        $path_to_avatar = 'public/img/uploads/default.jpg';
+        $path_to_avatar = 'public/img/uploads/default/default.jpg';
     }
 
     if( $user_status === '' ) {
@@ -75,9 +75,9 @@
 
     # проверяем введеные пароли на соответствие друг к другу
     if ($password === $password_confirm) {
-        if($path_to_avatar != 'public/img/uploads/default.jpg'){
+        if($path_to_avatar != 'public/img/uploads/default/default.jpg'){
 
-            $path_to_avatar = 'public/img/uploads/' . time() . $_FILES['avatar']['name']; # добавляем в название аватарки числа текущего времени (чтобы не возникал конфликт имен)
+            $path_to_avatar = 'public/img/uploads/avatar/' . time() . $_FILES['avatar']['name']; # добавляем в название аватарки числа текущего времени (чтобы не возникал конфликт имен)
             # перемещяем загруженное изображение в public/img/uploads/
             if (!move_uploaded_file($_FILES['avatar']['tmp_name'], '../../' . $path_to_avatar)) {
                 # Если не удалось переместить, то формируем ответ с ошибкой

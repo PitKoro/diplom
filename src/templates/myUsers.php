@@ -16,28 +16,32 @@ if (!$_SESSION['user']) {
     <!-- Bootstrap CSS -->
     <link type="text/css" rel="stylesheet" href="../../public/vendor/bootstrap/css/bootstrap.min.css">
 
-    <title>Профиль</title>
+    <title>Главная</title>
 
 </head>
 <body>
+
     <? require "blocks/navbar.php"; ?>
-    
+
+
     <div class="container mt-5">
-        <!-- Профиль -->
-        <form>
-            <img src="<?= '../../'.$_SESSION['user']['avatar'] ?>" width="200" alt="">
-            <h2 style="margin: 10px 0;"><?= $_SESSION['user']['full_name'] ?></h2>
-            <h2>id: <?= $_SESSION['user']['id'] ?></h2></br>
-            <h2>Статус: <?= $_SESSION['user']['status'] ?></h2></br>
-            <h6>user: <? print_r( $_SESSION['user'])?></h6></br>
-            <a href="#"><?= $_SESSION['user']['email'] ?></a>
-            <a href="../php/logout.php" class="logout">Выход</a>
-        </form>
+        <table class="table table-bordered table-hover text-center" id="projects_table"></table>
     </div>
-    
 
     <!-- Bootstrap and jQuery JS -->
     <script src="../../public/vendor/jquery/jquery-3.5.1.min.js"></script>
     <script src="../../public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.ajax({
+                type: "POST",
+                url: "../php/get_db_table.php",
+                data: {table: "user"},
+                success: function(html){
+                    $("#projects_table").html(html);
+                } 
+            });
+        });
+    </script>
 </body>
 </html>

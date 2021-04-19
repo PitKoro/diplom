@@ -63,3 +63,29 @@ body {
 .none {
     display: none;
 }
+
+.logout:hover {
+    border-radius: 6px;
+    /* background-color: rgb(189, 0, 0);
+    color: #ffffff !important; */
+}
+
+.nav-link {
+    color: #ffffff !important;
+}
+
+.nav-link:hover {
+    color: #e0e0e0 !important;
+}
+
+.dropdown-menu > li > a:hover {
+    background-image: none;
+    background-color: #2188ff;
+    color: #ffffff;
+}
+
+.background-box{
+    background-color: #f3f3f3;
+    border: 1px;
+    border-radius: 10px;
+}
