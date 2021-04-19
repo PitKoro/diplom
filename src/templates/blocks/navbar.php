@@ -37,10 +37,7 @@
                 <? endif; ?>
 
                 <li class="nav-item px-1">
-                    <div class="logout">
-                        <a class="nav-link" href="../php/logout.php">Выйти</a>
-                    </div>
-                    
+                    <a class="nav-link" href="../php/logout.php">Выйти</a>   
                 </li>
             </ul>
 

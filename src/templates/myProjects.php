@@ -44,10 +44,10 @@ include '../php/lib.php';
                     echo "
                     <div class='card mb-3'>
                         <div class='row g-0'>
-                            <div class='col-sm-4 col-md-3'>
+                            <div class='col-xs-4 col-md-3'>
                                 <img src='../../{$all_user_projects[$i]['photo']}' class='rounded mx-auto d-block img-thumbnail' style='width: 200px; height:200px;'>
                             </div>
-                            <div class='col-sm-8 col-md-9'>
+                            <div class='col-xs-8 col-md-9'>
                                 <div class='card-header text-white bg-primary'>
                                     <h5 class='card-title'>Имя: {$all_user_projects[$i]['name']} id: {$all_user_projects[$i]['id']}</h5>
                                 </div>
