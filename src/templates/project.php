@@ -5,6 +5,11 @@ if (!$_SESSION['user']) {
 }
 include '../php/connect.php';
 include '../php/lib.php';
+
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
 ?>
 
 <!DOCTYPE html>
@@ -62,8 +67,8 @@ include '../php/lib.php';
 
                 <div class="row mb-2">
                     <div class="col">
-                        <div class="test">
-                            <button class="btn btn-success float-end js-add-project-task-btn" id="add-to-project-btn" data-bs-toggle='modal' data-bs-target='#add-project-task-modal'>Добавить</button>
+                        <div id="test" class="float-end add-task-btn-block" style="height: 38px; width: 97px;">
+                            <button class="btn btn-success js-add-project-task-btn" id="add-to-project-btn" data-bs-toggle='modal' data-bs-target='#add-project-task-modal'>Добавить</button>
                         </div>
                         
                     </div>
@@ -93,10 +98,24 @@ include '../php/lib.php';
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-body">
-                        <label for="task-name-field" class="form-label">Название</label>
-                        <input type="text" name="task_name" class="form-control mb-3" id="task-name-field" aria-describedby="validation_project_task_name" placeholder="Введите название задачи">
+                    <div class="form-body js-add-task-modal-body">
+                        <!-- <label for="task-name-field" class="form-label">Название</label>
+                        <input type="text" name="task_name" class="form-control" id="task-name-field" aria-describedby="validation_project_task_name" placeholder="Введите название задачи">
                         <div class="invalid-feedback" id="validation_project_task_name">Пожалуйста, введите название для задачи.</div>
+
+                        <select class="form-select mt-3" name="user" aria-label="Default select example">
+                            <option value="" selected>Ответственный за выполнение</option>
+                        <?
+                            // $project_id = $_GET['id'];
+                            // $all_users = get_all_users_in_project($connect,$project_id);
+                            // for($i = 0; $i < count($all_users); $i++){
+                            //     echo "
+                            //         <option value='{$all_users[$i]['id']}'>{$all_users[$i]['full_name']}</option>
+                            //     ";
+                            // }
+
+                        ?>
+                        </select> -->
                     </div>
 
                 </div>
@@ -118,28 +137,13 @@ include '../php/lib.php';
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-body js-add-users-modal-body">
-                    <?
-                        // $project_id = $_GET['id'];
-                        // $users_out_project = get_all_users_not_participating_in_the_project($connect, $project_id);
-
-                        // for($i = 0; $i < count($users_out_project); $i++){
-                        //     echo "
-                        //     <div class='form-check'>
-                        //         <input class='form-check-input' type='checkbox' name='user_id[]' value='{$users_out_project[$i]['id']}' id='check-user-{$users_out_project[$i]['id']}'>
-                        //         <label class='form-check-label' for='check-user-{$users_out_project[$i]['id']}'>
-                        //             {$users_out_project[$i]['login']} | {$users_out_project[$i]['full_name']} 
-                        //         </label>
-                        //     </div>
-                        //     ";
-                        // }
-                    ?>
-
+                    <div class="auth-error mb-3 none "></div>
+                    <div class="form-body js-add-users-to-project-modal-body">
 
                     </div>
 
                 </div>
-                <div class="modal-footer justify-content-between">
+                <div class="modal-footer justify-content-between js-add-users-to-project-modal-footer">
                     <button type="button" class="btn btn-danger js-add-project-user-close-btn" data-bs-dismiss="modal">Отмена</button>
                     <button type="button" class="btn btn-success js-add-project-user-submit-btn">Добавить</button>
                 </div>
@@ -190,14 +194,14 @@ include '../php/lib.php';
         });
 
         $(".js-project-tasks-btn").on('click', function(event){
-            event.preventDefault();
 
+            $("#test").attr("class", "float-end add-task-btn-block");
+            event.preventDefault();
             $('#add-to-project-btn').attr('data-bs-target','#add-project-task-modal');
             $("#add-to-project-btn").removeClass('js-add-project-user-btn').addClass('js-add-project-task-btn');
             $(".js-project-users-btn").removeClass('active');
             $(".js-project-tasks-btn").addClass('active');
             
-
             let project_id = $('input[name="project_id"]').val();
 
             $.ajax({
@@ -219,11 +223,13 @@ include '../php/lib.php';
 
         $(".js-add-project-task-submit-btn").on('click', function(event){
             event.preventDefault();
-            
+            $('input').removeClass("is-invalid");
+            $('select').removeClass("is-invalid");
             let project_id = $('input[name="project_id"]').val();
             let task_name = $('input[name="task_name"]').val();
+            let user_id = $('select[name=user]').val();
 
-            $('input[name="task_name"]').val('');
+            
 
             $.ajax({
                 method: 'POST',
@@ -231,11 +237,14 @@ include '../php/lib.php';
                 data: {
                     add: 'task',
                     project_id: project_id,
-                    task_name: task_name
+                    task_name: task_name,
+                    user_id: user_id
                 },
                 success: function(response){
                     if(response.status){
+                        
                         console.log(response.message);
+
                         $.ajax({
                             method: 'POST',
                             url: '../php/get_db_table.php',
@@ -247,12 +256,17 @@ include '../php/lib.php';
                                 $(".js-project-table").empty().append(response);
                             }
                         });
-
+                        
+                        $('input[name="task_name"]').val('');
                         $('.js-add-project-task-close-btn').trigger('click');
                     } else {
                         if(response.type === 1) {
                             response.fields.forEach(field => {
-                                $(`input[name="${field}"]`).addClass("is-invalid");                        
+                                if(field === 'user'){
+                                    $(`select[name="${field}"]`).addClass("is-invalid");
+                                } else {
+                                    $(`input[name="${field}"]`).addClass("is-invalid");
+                                }
                             });
                         }
                     }
@@ -263,6 +277,7 @@ include '../php/lib.php';
 
         $(".js-project-users-btn").on('click', function(event){
             event.preventDefault();
+            $("#test").attr("class", "float-end add-users-btn-block");
             $('#add-to-project-btn').attr('data-bs-target','#add-project-user-modal');
             let project_id = $('input[name="project_id"]').val();
             $(".js-project-tasks-btn").removeClass('active');
@@ -282,7 +297,8 @@ include '../php/lib.php';
             });
         });
 
-        $('.test').on('click', function(){
+        $(document).on('click','.add-users-btn-block', function(){
+            $('.auth-error').addClass('none')
             let project_id = $('input[name="project_id"]').val();
             $.ajax({
                 method: 'POST',
@@ -292,7 +308,30 @@ include '../php/lib.php';
                 },
                 url:'../php/modal.php',
                 success: function(response){
-                    $('.js-add-users-modal-body').empty().append(response);
+                    if(response.status){
+                        $('.js-add-users-to-project-modal-body').empty().append(response.html);
+                    } else {
+                        $('.js-add-users-to-project-modal-body').empty().append(response.html);
+                        $('.js-add-users-to-project-modal-footer').empty();
+                    }
+                    
+                }
+            });
+        });
+
+        $(document).on('click','.add-task-btn-block', function(){
+            $("select option[value='']").prop("selected", true);
+            let project_id = $('input[name="project_id"]').val();
+            $.ajax({
+                method: 'POST',
+                data:{
+                    modal: 'add_task',
+                    project_id: project_id
+                },
+                url:'../php/modal.php',
+                success: function(response){
+                    
+                    $('.js-add-task-modal-body').empty().append(response);
                 }
             });
         });
@@ -318,20 +357,25 @@ include '../php/lib.php';
                     users_id: checked_users_id,
                     project_id: project_id
                 },
-                success: function(){
-                    $.ajax({
-                        method: 'POST',
-                        url: '../php/get_db_table.php',
-                        data: {
-                            show: 'project_users',
-                            project_id: project_id
-                        },
-                        success: function(response){
-                            $(".js-project-table").empty().append(response);
-                        }
-                    });
+                success: function(response){
+                    if(response.status){
+                        $.ajax({
+                            method: 'POST',
+                            url: '../php/get_db_table.php',
+                            data: {
+                                show: 'project_users',
+                                project_id: project_id
+                            },
+                            success: function(response){
+                                $(".js-project-table").empty().append(response);
+                            }
+                        });
 
-                    $('.js-add-project-user-close-btn').trigger('click');
+                        $('.js-add-project-user-close-btn').trigger('click');
+                    } else {
+                        $('.auth-error').removeClass('none').text(response.message);
+                    }
+                    
                 }
             });
         });

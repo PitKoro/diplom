@@ -44,4 +44,16 @@ function get_all_users_not_participating_in_the_project($connect, $project_id){
 }
 
 
+# аргументы:    $connect - дескриптор подключения к БД
+# возвращает: массив со всеми пользователями проекта
+function get_all_users_in_project($connect, $project_id){
+    $sql = mysqli_query($connect, "SELECT A.* FROM users A LEFT JOIN users_in_projects B ON A.id=B.user_id WHERE project_id=$project_id ORDER BY full_name");
+
+    $all_users = array();
+    while($result = mysqli_fetch_assoc($sql)){
+        array_push($all_users, $result);
+    }
+    return $all_users;
+}
+
 ?>

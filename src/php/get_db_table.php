@@ -44,31 +44,36 @@ if($_POST['show']=='project_tasks'){
     header('Content-Type: text/html; charset=utf-8');
     $project_id = $_POST['project_id'];
 
-    $sql = mysqli_query($connect, "SELECT * FROM projects_tasks WHERE project_id=$project_id");
+    $sql = mysqli_query($connect, "SELECT A.*, U.full_name FROM projects_tasks A LEFT JOIN users U ON A.user_id=U.id WHERE A.project_id='{$project_id}' ORDER BY A.id DESC");
+    
+    //"SELECT * FROM projects_tasks WHERE project_id='{$project_id}'"
 
     $table_data = "
     <thead>
         <tr>
-        <th scope=\"col\">id</th>
-        <th scope=\"col\">project_id</th>
-        <th scope=\"col\">name</th>
-        <th scope=\"col\">Удалить</th>
-        <th scope=\"col\">Изменить</th>
-        <th scope=\"col\">Подробнее</th>
+        <th scope='col'>№</th>
+        <th scope='col'>Название</th>
+        <th scope='col'>Ответственный</th>
+        <th scope='col'>Удалить</th>
+        <th scope='col'>Изменить</th>
+        <th scope='col'>Подробнее</th>
         </tr>
     </thead>
     <tbody>";
 
     while($result = mysqli_fetch_array($sql))#функция вывода таблицы 
     {
+        //$sql = mysqli_query($connect, "SELECT full_name FROM users WHERE id={$result['user_id']}");
+        //$user_full_name = mysqli_fetch_array($sql);
         $table_data = $table_data."<tr>
         <td> {$result['id']} </td>
-        <td> {$result['project_id']} </td>
         <td> {$result['name']}</td>
+        <td>{$result['full_name']}</td>
         <td> <button class='delItem btn btn-danger' id='{$result['id']}'> Delete</button></td>
         <td><button class='editItem btn btn-primary' id='{$result['id']}'> Edit</button></td>
         <td><button type='button' class='moreButton btn btn-primary' id='{$result['id']}'>Подробнее</button></td>
         </tr>";
+        //mysqli_free_result($sql);
     }
 
     $table_data = $table_data."</tbody>";
