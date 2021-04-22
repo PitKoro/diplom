@@ -53,6 +53,7 @@ if($_POST['show']=='project_tasks'){
             <th scope='col'>№</th>
             <th scope='col'>Название</th>
             <th scope='col'>Ответственный</th>
+            <th scope='col'>Дата завершения</th>
             <th scope='col'>Удалить</th>
             <th scope='col'>Изменить</th>
             <th scope='col'>Подробнее</th>
@@ -67,6 +68,7 @@ if($_POST['show']=='project_tasks'){
                 <td> {$result['id']} </td>
                 <td> {$result['name']}</td>
                 <td>{$result['full_name']}</td>
+                <td>{$result['end_date']}</td>
                 <td> <button class='js-delete-project-task-btn btn btn-danger' value='{$result['id']}'>Удалить</button></td>
                 <td><button class='editItem btn btn-primary' value='{$result['id']}'>Изменить</button></td>
                 <td><button type='button' class='moreButton btn btn-primary' value='{$result['id']}'>Подробнее</button></td>
@@ -76,6 +78,7 @@ if($_POST['show']=='project_tasks'){
                 <td> {$result['id']} </td>
                 <td> {$result['name']}</td>
                 <td>{$result['full_name']}</td>
+                <td>{$result['end_date']}</td>
                 <td>Недоступно</td>
                 <td>Недоступно</td>
                 <td><button type='button' class='moreButton btn btn-primary' value='{$result['id']}'>Подробнее</button></td>

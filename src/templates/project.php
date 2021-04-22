@@ -211,9 +211,10 @@ ini_set('display_startup_errors', 1);
         });
 
 
-        // ОЧИСТКА ОШИБОК ПРИ НАЖАТИИ НА КНОПКУ "ДОБАВИТЬ" НАД ТАБЛИЦЕЙ С ЗАДАЧАМИ ПРОЕКТА
+        //ОЧИСТКА ОШИБОК ПРИ НАЖАТИИ НА КНОПКУ "ДОБАВИТЬ" НАД ТАБЛИЦЕЙ С ЗАДАЧАМИ ПРОЕКТА
         $('.js-add-project-task-btn').on('click', function(){
-            $('input[name="task_name"]').removeClass("is-invalid"); 
+            $('input[name="task_name"]').removeClass("is-invalid");
+            $('input[name="task_end_date"]').removeClass("is-invalid");
         });
 
 
@@ -222,9 +223,11 @@ ini_set('display_startup_errors', 1);
             event.preventDefault();
             $('input').removeClass("is-invalid");
             $('select').removeClass("is-invalid");
+            
             let project_id = $('input[name="project_id"]').val();
             let task_name = $('input[name="task_name"]').val();
-            let user_id = $('select[name=user]').val();
+            let user_id = $('select[name=task_user]').val();
+            let end_date = $('input[name="task_end_date"]').val();
 
             $.ajax({
                 method: 'POST',
@@ -233,31 +236,20 @@ ini_set('display_startup_errors', 1);
                     add: 'task',
                     project_id: project_id,
                     task_name: task_name,
-                    user_id: user_id
+                    user_id: user_id,
+                    end_date: end_date
                 },
                 success: function(response){
                     if(response.status){
                         
                         console.log(response.message);
-                        $(".js-project-tasks-btn").trigger('click');
-                        // $.ajax({
-                        //     method: 'POST',
-                        //     url: '../php/get_db_table.php',
-                        //     data: {
-                        //         show: 'project_tasks',
-                        //         project_id: project_id
-                        //     },
-                        //     success: function(response){
-                        //         $(".js-project-table").empty().append(response);
-                        //     }
-                        // });
-                        
+                        $(".js-project-tasks-btn").trigger('click');                        
                         $('input[name="task_name"]').val('');
                         $('.js-add-project-task-close-btn').trigger('click');
                     } else {
                         if(response.type === 1) {
                             response.fields.forEach(field => {
-                                if(field === 'user'){
+                                if(field === 'task_user'){
                                     $(`select[name="${field}"]`).addClass("is-invalid");
                                 } else {
                                     $(`input[name="${field}"]`).addClass("is-invalid");

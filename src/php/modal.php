@@ -57,22 +57,30 @@ if(isset($_POST['modal'])){
         $users_in_project = get_all_users_in_project($connect, $project_id);
 
         $response = "
-            <div class='form-floating'>
-                <input type='text' name='task_name' class='form-control' id='task-name-field' aria-describedby='validation_project_task_name' placeholder='Введите название задачи'>
-                <label for='task-name-field' class='form-label'>Название задачи</label>
-            </div>
+            <label for='task-name-field' class='form-label'>Название задачи</label>
+            <input type='text' name='task_name' class='form-control' id='task-name-field' aria-describedby='validation_project_task_name' placeholder='Введите название задачи' required>
             
-            
-            <div class='invalid-feedback' id='validation_project_task_name'>Пожалуйста, введите название для задачи.</div>
-            <select class='form-select mt-3' name='user' aria-label='Default select example'>
-            <option value='' selected>Ответственный за выполнение</option>
+
+            <label for='task-executor-field' class='form-label mt-3'>Исполнитель</label>
+            <select class='form-select ' name='task_user' id='task-executor-field' aria-describedby='validation_project_task_executor' required>
+                <option value='' selected>Ответственный за выполнение</option>
         ";
+        //<div class='invalid-feedback' id='validation_project_task_name'>Пожалуйста, введите название для задачи.</div>
 
         for($i = 0; $i < count($users_in_project); $i++){
             $response = $response."<option value='{$users_in_project[$i]['id']}'>{$users_in_project[$i]['full_name']}</option>";
         }
 
-        $response = $response."</select>";
+        $response = $response."</select>
+        ";
+        //<div class='invalid-feedback' id='validation_project_task_executor'>Пожалуйста, выберите исполнителя.</div>
+
+        $response = $response."        
+        <label for='task-end-date-field' class='form-label mt-3'>Дата завершения</label>
+        <input type='date' name='task_end_date' class='form-control' id='task-end-date-field' aria-describedby='validation_project_task_end_date'>
+        <div class='invalid-feedback'>Пожалуйста, введите данные во все поля.</div>";
+        //<div class='invalid-feedback' id='validation_project_task_end_date'>Пожалуйста, введите дату сдачи задания.</div>
+
 
         echo $response;
         die();

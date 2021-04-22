@@ -11,14 +11,19 @@ if(isset($_POST['add'])){
         $project_id = $_POST['project_id'];
         $task_name = $_POST['task_name'];
         $user_id = $_POST['user_id'];
+        $end_date = $_POST['end_date'];
 
         #Если пользователь отправил пустое поле, то добавляем название поля в конец массива $error_fields
         if( $task_name === '' ) {
             $error_fields[] = 'task_name';
         }
         if( $user_id === '' ){
-            $error_fields[] = 'user';
+            $error_fields[] = 'task_user';
         }
+        if( $end_date === '' ){
+            $error_fields[] = 'task_end_date';
+        }
+
 
         # Если хотя бы одно поле оказалось пустым
         if( !empty($error_fields) ) {
@@ -34,7 +39,7 @@ if(isset($_POST['add'])){
             die(); # Останавливаем выполнение скрипта
         }
 
-        mysqli_query($connect, "INSERT INTO projects_tasks (id, project_id, name, user_id) VALUES (NULL, $project_id, '{$task_name}', '{$user_id}')");
+        mysqli_query($connect, "INSERT INTO projects_tasks (id, project_id, name, user_id, end_date) VALUES (NULL, $project_id, '{$task_name}', '{$user_id}','{$end_date}')");
         # формируем ответ
         $response = [
             "status" => true,
