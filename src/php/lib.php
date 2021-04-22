@@ -1,4 +1,6 @@
 <?
+
+# Функция - получение всех проектов пользователя
 # аргументы:    $connect - дескриптор подключения к БД
 #               $user_id - id авторизованного пользователя
 # возвращает: массив проектов авторизованного пользователя
@@ -13,6 +15,7 @@ function get_all_user_projects($connect, $user_id){
 }
 
 
+# Функция - получение всех пользователей, не учавствующих в проекте
 # аргументы:    $connect - дескриптор подключения к БД
 #               $project_id - id проекта
 # возвращает: массив пользователей, не участвующих в проекте
@@ -44,7 +47,9 @@ function get_all_users_not_participating_in_the_project($connect, $project_id){
 }
 
 
+# Функция - получение всех пользователей проекта
 # аргументы:    $connect - дескриптор подключения к БД
+#               $project_id - id проекта
 # возвращает: массив со всеми пользователями проекта
 function get_all_users_in_project($connect, $project_id){
     $sql = mysqli_query($connect, "SELECT A.* FROM users A LEFT JOIN users_in_projects B ON A.id=B.user_id WHERE project_id=$project_id ORDER BY full_name");
@@ -55,5 +60,91 @@ function get_all_users_in_project($connect, $project_id){
     }
     return $all_users;
 }
+
+
+# Функция - удаление проекта
+# аргументы:    $connect - дескриптор подключения к БД
+#               $project_id - id проекта
+# возвращает: массив [$status => boolean, $msg => string]
+function delete_project($connect, $project_id){
+    mysqli_query($connect, "DELETE FROM users_in_projects WHERE project_id='{$project_id}'");
+    mysqli_query($connect, "DELETE FROM projects_tasks WHERE project_id='{$project_id}'");
+    $sql = mysqli_query($connect, "DELETE FROM projects WHERE id='{$project_id}'");
+
+    if($sql){
+        $status = true;
+        $msg = "project with id={$project_id} successfully deleted!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    } else {
+        $status = false;
+        $msg = "Failed to delete project with id ={$project_id}!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    }
+}
+
+
+# Функция - удаление задачи из проекта
+# аргументы:    $connect - дескриптор подключения к БД
+#               $project_id - id проекта
+#               $task_id - id задачи
+# возвращает: массив [$status => boolean, $msg => string]
+function delete_project_task($connect, $project_id, $task_id){
+    $sql = mysqli_query($connect, "DELETE FROM projects_tasks WHERE id = '{$task_id}' AND project_id = '{$project_id}'");
+    if($sql){
+        $status = true;
+        $msg = "project task with id={$task_id} successfully deleted!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    } else {
+        $status = false;
+        $msg = "Failed to delete project task with id ={$task_id}!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    }
+} 
+
+
+# Функция - удаление пользователя из проекта
+# аргументы:    $connect - дескриптор подключения к БД
+#               $project_id - id проекта
+#               $user_id - id пользователя
+# возвращает: массив [$status => boolean, $msg => string]
+function delete_project_user($connect, $project_id, $user_id){
+    mysqli_query($connect, "DELETE FROM projects_tasks WHERE project_id='{$project_id}' AND user_id='{$user_id}'"); # Удаляем задачи пользователя из проекта
+    $sql = mysqli_query($connect, "DELETE FROM users_in_projects WHERE project_id='{$project_id}' AND user_id='{$user_id}'"); # Удаляем пользователя из проекта
+    
+    if($sql){
+        $status = true;
+        $msg = "project user with id={$user_id} successfully deleted!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    } else {
+        $status = false;
+        $msg = "Failed to delete project user with id ={$task_id}!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    }
+}
+
 
 ?>

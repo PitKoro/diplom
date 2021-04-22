@@ -44,10 +44,12 @@ ini_set('display_startup_errors', 1);
                             <label for="project-start-date">Дата начала</label><li id="project-start-date" class="list-group-item js-project-start-date"><span>An item</span></li>
                             <label for="project-end-date">Дата окончания</label><li id="project-end-date" class="list-group-item js-project-end-date">A second item</li>
                         </ul>
-                        <div class="card-body">
-                            <a href="#" class="card-link">Редактировать</a>
-                            <a href="#" class="card-link">Удалить проект</a>
-                        </div>
+                        <?if($_SESSION['user']['status']=='10'): ?>
+                            <div class="card-body">
+                                <a href="#" class="btn btn-primary">Редактировать</a>
+                                <button class="btn btn-danger js-delete-project-btn" value="" >Удалить проект</button>
+                            </div>
+                        <?endif;?>
                     </div>
                 </div>
             </div>
@@ -64,15 +66,17 @@ ini_set('display_startup_errors', 1);
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="row mb-2">
                     <div class="col">
-                        <div id="test" class="float-end add-task-btn-block" style="height: 38px; width: 97px;">
-                            <button class="btn btn-success js-add-project-task-btn" id="add-to-project-btn" data-bs-toggle='modal' data-bs-target='#add-project-task-modal'>Добавить</button>
-                        </div>
-                        
+                        <?if($_SESSION['user']['status']=='10'): ?>
+                            <div id="test" class="float-end add-task-btn-block" style="height: 38px; width: 97px;">
+                                <button class="btn btn-success js-add-project-task-btn" id="add-to-project-btn" data-bs-toggle='modal' data-bs-target='#add-project-task-modal'>Добавить</button>
+                            </div>
+                        <?endif;?>
                     </div>
                 </div>
+                
 
                 <div class="row mb-2">
                     <div class="col">
@@ -94,28 +98,12 @@ ini_set('display_startup_errors', 1);
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="add-project-task-modal-label">Modal title</h5>
+                    <h5 class="modal-title" id="add-project-task-modal-label">Добавление задачи</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-body js-add-task-modal-body">
-                        <!-- <label for="task-name-field" class="form-label">Название</label>
-                        <input type="text" name="task_name" class="form-control" id="task-name-field" aria-describedby="validation_project_task_name" placeholder="Введите название задачи">
-                        <div class="invalid-feedback" id="validation_project_task_name">Пожалуйста, введите название для задачи.</div>
 
-                        <select class="form-select mt-3" name="user" aria-label="Default select example">
-                            <option value="" selected>Ответственный за выполнение</option>
-                        <?
-                            // $project_id = $_GET['id'];
-                            // $all_users = get_all_users_in_project($connect,$project_id);
-                            // for($i = 0; $i < count($all_users); $i++){
-                            //     echo "
-                            //         <option value='{$all_users[$i]['id']}'>{$all_users[$i]['full_name']}</option>
-                            //     ";
-                            // }
-
-                        ?>
-                        </select> -->
                     </div>
 
                 </div>
@@ -133,7 +121,7 @@ ini_set('display_startup_errors', 1);
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="add-project-user-modal-label">Modal title</h5>
+                    <h5 class="modal-title" id="add-project-user-modal-label">Добавление пользователя</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -172,8 +160,11 @@ ini_set('display_startup_errors', 1);
                     $('.js-project-description').empty().append(response.project_description==='' ? 'Описание не указано' : response.project_description);
                     $('.js-project-start-date').empty().append(response.project_start_date);
                     $('.js-project-end-date').empty().append(response.project_end_date);
+                    $('.js-delete-project-btn').attr('value', response.project_id);
                 }
             });
+
+
 
             let tasksBtnClasses = document.querySelector(".js-project-tasks-btn").classList;
             let usersBtnClasses = document.querySelector(".js-project-users-btn").classList;
@@ -193,6 +184,8 @@ ini_set('display_startup_errors', 1);
             }
         });
 
+
+        // ВЫВОД ТАБЛИЦЫ С ЗАДАЧАМИ ПРОЕКТА
         $(".js-project-tasks-btn").on('click', function(event){
 
             $("#test").attr("class", "float-end add-task-btn-block");
@@ -217,10 +210,14 @@ ini_set('display_startup_errors', 1);
             });
         });
 
+
+        // ОЧИСТКА ОШИБОК ПРИ НАЖАТИИ НА КНОПКУ "ДОБАВИТЬ" НАД ТАБЛИЦЕЙ С ЗАДАЧАМИ ПРОЕКТА
         $('.js-add-project-task-btn').on('click', function(){
             $('input[name="task_name"]').removeClass("is-invalid"); 
         });
 
+
+        // ДОБАВЛЕНИЕ ЗАДАЧИ В ПРОЕКТ ПОСЛЕ НАЖАТИЯ НА КНОПКУ "ДОБАВИТЬ" В МОДАЛЬНОМ ОКНЕ
         $(".js-add-project-task-submit-btn").on('click', function(event){
             event.preventDefault();
             $('input').removeClass("is-invalid");
@@ -228,8 +225,6 @@ ini_set('display_startup_errors', 1);
             let project_id = $('input[name="project_id"]').val();
             let task_name = $('input[name="task_name"]').val();
             let user_id = $('select[name=user]').val();
-
-            
 
             $.ajax({
                 method: 'POST',
@@ -244,18 +239,18 @@ ini_set('display_startup_errors', 1);
                     if(response.status){
                         
                         console.log(response.message);
-
-                        $.ajax({
-                            method: 'POST',
-                            url: '../php/get_db_table.php',
-                            data: {
-                                show: 'project_tasks',
-                                project_id: project_id
-                            },
-                            success: function(response){
-                                $(".js-project-table").empty().append(response);
-                            }
-                        });
+                        $(".js-project-tasks-btn").trigger('click');
+                        // $.ajax({
+                        //     method: 'POST',
+                        //     url: '../php/get_db_table.php',
+                        //     data: {
+                        //         show: 'project_tasks',
+                        //         project_id: project_id
+                        //     },
+                        //     success: function(response){
+                        //         $(".js-project-table").empty().append(response);
+                        //     }
+                        // });
                         
                         $('input[name="task_name"]').val('');
                         $('.js-add-project-task-close-btn').trigger('click');
@@ -275,6 +270,8 @@ ini_set('display_startup_errors', 1);
             })
         });
 
+
+        // ВЫВОД ТАБЛИЦЫ С ПОЛЬЗОВАТЕЛЯМИ ПРОЕКТА
         $(".js-project-users-btn").on('click', function(event){
             event.preventDefault();
             $("#test").attr("class", "float-end add-users-btn-block");
@@ -337,6 +334,7 @@ ini_set('display_startup_errors', 1);
         });
 
 
+        // ДОБАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯ В ПРОЕКТ ПОСЛЕ НАЖАТИЯ НА КНОПКУ "ДОБАВИТЬ" В МОДАЛЬНОМ ОКНЕ
         $('.js-add-project-user-submit-btn').on('click', function(){
             let project_id = $('input[name="project_id"]').val();
 
@@ -359,17 +357,19 @@ ini_set('display_startup_errors', 1);
                 },
                 success: function(response){
                     if(response.status){
-                        $.ajax({
-                            method: 'POST',
-                            url: '../php/get_db_table.php',
-                            data: {
-                                show: 'project_users',
-                                project_id: project_id
-                            },
-                            success: function(response){
-                                $(".js-project-table").empty().append(response);
-                            }
-                        });
+
+                        $(".js-project-users-btn").trigger('click');
+                        // $.ajax({
+                        //     method: 'POST',
+                        //     url: '../php/get_db_table.php',
+                        //     data: {
+                        //         show: 'project_users',
+                        //         project_id: project_id
+                        //     },
+                        //     success: function(response){
+                        //         $(".js-project-table").empty().append(response);
+                        //     }
+                        // });
 
                         $('.js-add-project-user-close-btn').trigger('click');
                     } else {
@@ -383,6 +383,110 @@ ini_set('display_startup_errors', 1);
         // $('.allow-focus').on('click', function (e) {
         //     e.stopPropagation();
         // });
+        
+
+        // УДАЛЕНИЕ ЗАДАЧИ ИЗ ПРОЕКТА
+        $('.js-project-table').on('click', '.js-delete-project-task-btn', function(event){
+            event.preventDefault();
+            let isDelete = confirm("Вы точно хотите удалить эту задачу'?");
+            if(isDelete){
+                let project_id = $('input[name="project_id"]').val();
+                let task_id = $(this).val();
+
+                $.ajax({
+                    method: 'POST',
+                    url: '../php/delete.php',
+                    data: {
+                        action: 'delete_project_task',
+                        project_id: project_id,
+                        task_id: task_id
+                    },
+                    success: function(response){
+                        if(response.status){
+                            console.log(response.msg);
+
+                            $(".js-project-tasks-btn").trigger('click');
+                            // $.ajax({
+                            //     method: 'POST',
+                            //     url: '../php/get_db_table.php',
+                            //     data: {
+                            //         show: 'project_tasks',
+                            //         project_id: project_id
+                            //     },
+                            //     success: function(response){
+                            //         $(".js-project-table").empty().append(response);
+                            //     }
+                            // });
+                                
+                        } else {
+                            console.log(response.msg);
+                        }
+                    }
+                });
+            }
+
+
+        });
+
+
+        // УДАЛЕНИЕ ПОЛЬЗОВАТЕЛЯ ИЗ ПРОЕКТА
+        $('.js-project-table').on('click', '.js-delete-project-user-btn', function(event){
+            event.preventDefault();
+            let isDelete = confirm("Вы точно хотите удалить этого пользователя?");
+            if(isDelete){
+                let project_id = $('input[name="project_id"]').val();
+                let user_id = $(this).val();
+
+                $.ajax({
+                    method: 'POST',
+                    url: '../php/delete.php',
+                    data: {
+                        action: 'delete_project_user',
+                        project_id: project_id,
+                        user_id: user_id
+                    },
+                    success: function(response){
+                        if(response.status){
+                            console.log(response.msg);
+                            $('.js-project-users-btn').trigger('click');
+                        } else {
+                            console.log(response.msg);
+                        }
+                    }
+                });
+            }
+        });
+
+
+        // УДАЛЕНИЕ ПРОЕКТА
+        $('.js-delete-project-btn').on('click', function(event){
+            event.preventDefault();
+            let isDelete = confirm("Вы точно хотите удалить проект?");
+            if(isDelete){
+                let project_id = $(this).val();
+                console.log(project_id);
+
+                $.ajax({
+                    method: 'POST',
+                    url: '../php/delete.php',
+                    data: {
+                        action: 'delete_project',
+                        project_id: project_id
+                    },
+                    success: function(response){
+                        if(response.status){
+                            console.log(response.msg);
+                            document.location.href = './myProjects.php';
+                            
+                        } else {
+                            console.log(response.msg);
+                        }
+                        
+                    }
+                });
+            }
+            
+        });
 
 
     </script>
