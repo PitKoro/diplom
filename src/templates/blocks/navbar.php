@@ -35,7 +35,9 @@
                         </ul>
                     </li>
                 <? endif; ?>
-
+            </ul>
+            
+            <ul class="ms-auto navbar-nav">
                 <li class="nav-item px-1">
                     <a class="nav-link" href="../php/logout.php">Выйти</a>   
                 </li>

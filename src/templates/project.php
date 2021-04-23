@@ -19,6 +19,7 @@ ini_set('display_startup_errors', 1);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 
     <!-- Bootstrap CSS -->
     <link type="text/css" rel="stylesheet" href="../../public/vendor/bootstrap/css/bootstrap.min.css">
@@ -27,9 +28,10 @@ ini_set('display_startup_errors', 1);
 
 </head>
 <body>
-    <?echo"<input name='project_id' value='{$_GET['id']}' hidden>";?>
-    <? require "blocks/navbar.php"; ?>
 
+    <?echo"<input name='project_id' value='{$_GET['id']}' hidden>";?>
+
+    <? require "blocks/navbar.php"; ?>
     <div class="container mt-5">
         <div class="row gy-0">
             <div class="col-sm-4">
@@ -142,9 +144,19 @@ ini_set('display_startup_errors', 1);
 
     <!-- Bootstrap and jQuery JS -->
     <script src="../../public/vendor/jquery/jquery-3.5.1.min.js"></script>
+    <script src="../../public/vendor/popper/popper.min.js"></script>
     <script src="../../public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
+        function start_all_tooltip(){
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        }
+
         $(document).ready(function(){
+            $("[data-bs-toggle='popover']").popover();
+
             let project_id = $('input[name="project_id"]').val();
 
             $.ajax({
@@ -179,6 +191,7 @@ ini_set('display_startup_errors', 1);
                     },
                     success: function(response){
                         $(".js-project-table").empty().append(response);
+                        start_all_tooltip();
                     }
                 });
             }
@@ -206,6 +219,7 @@ ini_set('display_startup_errors', 1);
                     },
                     success: function(response){
                         $(".js-project-table").empty().append(response);
+                        start_all_tooltip();
                     }
             });
         });
