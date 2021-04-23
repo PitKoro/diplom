@@ -147,4 +147,32 @@ function delete_project_user($connect, $project_id, $user_id){
 }
 
 
+# Функция - выполнение задачи в проекте
+# аргументы:    $connect - дескриптор подключения к БД
+#               $task_id - id задачи
+# возвращает: массив [$status => boolean, $msg => string]
+function complete_project_task($connect, $task_id){
+    $current_date = date("Y-m-d");
+    $sql = mysqli_query($connect, "UPDATE projects_tasks SET status = '1', `finish_date` = '{$current_date}' WHERE `projects_tasks`.`id` = '{$task_id}'"); 
+    
+    
+    if($sql){
+        $status = true;
+        $msg = "project task with id={$task_id} successfully updated!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    } else {
+        $status = false;
+        $msg = "Failed to update project task with id ={$task_id}!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    }
+}
+
 ?>

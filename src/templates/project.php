@@ -412,17 +412,7 @@ ini_set('display_startup_errors', 1);
                             console.log(response.msg);
 
                             $(".js-project-tasks-btn").trigger('click');
-                            // $.ajax({
-                            //     method: 'POST',
-                            //     url: '../php/get_db_table.php',
-                            //     data: {
-                            //         show: 'project_tasks',
-                            //         project_id: project_id
-                            //     },
-                            //     success: function(response){
-                            //         $(".js-project-table").empty().append(response);
-                            //     }
-                            // });
+
                                 
                         } else {
                             console.log(response.msg);
@@ -432,6 +422,33 @@ ini_set('display_startup_errors', 1);
             }
 
 
+        });
+
+
+        // КНОПКА ВЫПОЛНЕНИЯ ЗАДАЧИ
+        $('.js-project-table').on('click', '.js-done-project-task-btn', function(event){
+            event.preventDefault();
+            let project_id = $('input[name="project_id"]').val();
+            let task_id = $(this).val();
+
+            $.ajax({
+                method: 'POST',
+                url: '../php/edit.php',
+                data: {
+                    action: 'complete_project_task',
+                    project_id: project_id,
+                    task_id: task_id
+                },
+                success: function(response){
+                    if(response.status){
+                        $(".js-project-tasks-btn").trigger('click');
+                        $('.js-project-table').remove('.js-done-project-task-btn');
+                        console.log(response.msg);  
+                    } else {
+                        console.log(response.msg);
+                    }
+                }
+            });
         });
 
 
