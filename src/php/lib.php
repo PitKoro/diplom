@@ -62,6 +62,20 @@ function get_all_users_in_project($connect, $project_id){
 }
 
 
+# Функция - получение информации о проекте
+# аргументы:    $connect - дескриптор подключения к БД
+#               $project_id - id проекта
+# возвращает: массив со всей информацией о проекте
+function get_project_data($connect, $project_id){
+    $sql = mysqli_query($connect, "SELECT * FROM projects WHERE id='{$project_id}'");
+    $project_data = array();
+    while($result = mysqli_fetch_assoc($sql)){
+        array_push($project_data, $result);
+    }
+
+    return $project_data;
+}
+
 # Функция - удаление проекта
 # аргументы:    $connect - дескриптор подключения к БД
 #               $project_id - id проекта

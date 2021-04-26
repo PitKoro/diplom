@@ -85,5 +85,33 @@ if(isset($_POST['modal'])){
         echo $response;
         die();
     }
+
+    if($_POST['modal']=='edit_project_data'){
+        header('Content-Type: text/html; charset=utf-8');
+        $project_id = $_POST['project_id'];
+        $project_data = get_project_data($connect, $project_id);
+
+        $response = "
+            <label for='project-name-field' class='form-label mt-3'>Название проекта</label>
+            <input type='text' name='project_name' class='form-control' id='project-name-field' placeholder='Введите название проекта' value='{$project_data[0]['name']}' required>
+
+            <label for='project-description-field' class='form-label mt-3'>Описание проекта</label>
+            <input type='text' name='project_description' class='form-control' id='project-description-field' placeholder='Введите описание проекта' value='{$project_data[0]['description']}'>
+
+            <label for='project-address-field' class='form-label mt-3'>Адрес проекта</label>
+            <input type='text' name='project_address' class='form-control' id='project-address-field' placeholder='Введите адрес проекта' value='{$project_data[0]['address']}'>
+
+            <label for='project-photo-field' class='form-label'>Изображение профиля</label>
+            <input class='form-control' type='file' id='project-photo-field' name='project_photo' value='{$project_data[0]['photo']}'>
+
+            <label for='project-start-date-field' class='form-label mt-3'>Дата начала</label>
+            <input type='date' name='project_start_date' class='form-control' id='project-start-date-field' value='{$project_data[0]['start_date']}' required>
+
+            <label for='project-end-date-field' class='form-label mt-3'>Дата окончания</label>
+            <input type='date' name='project_end_date' class='form-control' id='project-end-date-field' value='{$project_data[0]['end_date']}' required>
+        ";
+        echo $response;
+        die();
+    }
 }
 

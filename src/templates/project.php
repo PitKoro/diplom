@@ -48,7 +48,7 @@ ini_set('display_startup_errors', 1);
                         </ul>
                         <?if($_SESSION['user']['status']=='10'): ?>
                             <div class="card-body">
-                                <a href="#" class="btn btn-primary">Редактировать</a>
+                                <button class="btn btn-primary js-edit-project-data-btn" value="" data-bs-toggle='modal' data-bs-target='#edit-project-data-modal'>Редактировать</button>
                                 <button class="btn btn-danger js-delete-project-btn" value="" >Удалить проект</button>
                             </div>
                         <?endif;?>
@@ -142,6 +142,29 @@ ini_set('display_startup_errors', 1);
     </div>
     <!-- Modal -->
 
+    <!-- Modal for add task -->
+    <div class="modal fade" id="edit-project-data-modal" tabindex="-1" aria-labelledby="edit-project-data-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="edit-project-data-modal-label">Редактирование проекта</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-body js-edit-project-data-modal-body">
+
+                    </div>
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-danger js-edit-project-data-close-btn" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-success js-edit-project-data-submit-btn">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+
     <!-- Bootstrap and jQuery JS -->
     <script src="../../public/vendor/jquery/jquery-3.5.1.min.js"></script>
     <script src="../../public/vendor/popper/popper.min.js"></script>
@@ -173,6 +196,7 @@ ini_set('display_startup_errors', 1);
                     $('.js-project-start-date').empty().append(response.project_start_date);
                     $('.js-project-end-date').empty().append(response.project_end_date);
                     $('.js-delete-project-btn').attr('value', response.project_id);
+                    $('.js-edit-project-btn').attr('value', response.project_id);
                 }
             });
 
@@ -337,6 +361,24 @@ ini_set('display_startup_errors', 1);
                     $('.js-add-task-modal-body').empty().append(response);
                 }
             });
+        });
+
+        $('.js-edit-project-data-btn').on('click', function(event){
+            let project_id = $('input[name="project_id"]').val();
+            event.preventDefault();
+            $.ajax({
+                method: 'POST',
+                url: '../php/modal.php',
+                data: {
+                    modal: 'edit_project_data',
+                    project_id: project_id
+                },
+                success: function(response){
+                    console.log(response);
+                    $('.js-edit-project-data-modal-body').empty().append(response);
+                }
+            });
+
         });
 
 
