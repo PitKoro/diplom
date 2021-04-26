@@ -189,4 +189,34 @@ function complete_project_task($connect, $task_id){
     }
 }
 
+
+function edit_project_data($connect, $project_data){#TODO добавить изменение изображения для проекта
+    
+    $sql = null;
+    if( $project_data['photo'] != 'false'){
+        $sql = mysqli_query($connect, "UPDATE projects SET name = '{$project_data['name']}', `description` = '{$project_data['description']}', `address` = '{$project_data['address']}',`photo`= '{$project_data['photo']}', `start_date` = '{$project_data['start_date']}', `end_date` = '{$project_data['end_date']}' WHERE `projects`.`id` = '{$project_data['id']}'");
+    } else {
+        $sql = mysqli_query($connect, "UPDATE projects SET name = '{$project_data['name']}', `description` = '{$project_data['description']}', `address` = '{$project_data['address']}', `start_date` = '{$project_data['start_date']}', `end_date` = '{$project_data['end_date']}' WHERE `projects`.`id` = '{$project_data['id']}'");
+    }
+    
+    
+    if($sql){
+        $status = true;
+        $msg = "project data updated!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    } else {
+        $status = false;
+        $msg = "Failed to update project data!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    }
+}
+
 ?>

@@ -142,7 +142,7 @@ ini_set('display_startup_errors', 1);
     </div>
     <!-- Modal -->
 
-    <!-- Modal for add task -->
+    <!-- Modal for edit project data -->
     <div class="modal fade" id="edit-project-data-modal" tabindex="-1" aria-labelledby="edit-project-data-modal-label" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -374,7 +374,6 @@ ini_set('display_startup_errors', 1);
                     project_id: project_id
                 },
                 success: function(response){
-                    console.log(response);
                     $('.js-edit-project-data-modal-body').empty().append(response);
                 }
             });
@@ -550,6 +549,90 @@ ini_set('display_startup_errors', 1);
                     }
                 });
             }
+            
+        });
+
+
+        // РЕДАКТИРОВАНИЕ ИНФОРМАЦИИ О ПРОЕКТЕ
+        
+        // Получение изображения с поля
+        let project_photo = false;
+
+        $(document).on('change', 'input[name="project_photo"]', function(e){
+            project_photo = e.target.files[0];
+            console.log(project_photo);
+        });
+
+
+
+        $('.js-edit-project-data-submit-btn').on('click', function(event){
+            event.preventDefault();
+
+
+
+            let project_id = $("input[name='project_id']").val();
+            let project_name = $("input[name='project_name']").val();
+            let project_description = $("input[name='project_description']").val();
+            let project_address = $("input[name='project_address']").val();
+            let project_start_date = $("input[name='project_start_date']").val();
+            let project_end_date = $("input[name='project_end_date']").val();
+
+            
+            let formData = new FormData();
+            formData.append('action', 'edit_project_data');
+            formData.append('project_id', project_id);
+            formData.append('project_name', project_name);
+            formData.append('project_description', project_description);
+            formData.append('project_address', project_address);
+            formData.append('project_photo', project_photo);
+            formData.append('project_start_date', project_start_date);
+            formData.append('project_end_date', project_end_date);
+
+            if(project_photo){
+                formData.append('is_change_photo', 'true');
+            } else if(!project_photo){
+                formData.append('is_change_photo', 'false');
+            }
+
+            console.log(project_photo);
+
+            $.ajax({
+                method: 'POST',
+                url: '../php/edit.php',
+                dataType: 'json',
+                processData: false, // Не обрабатываем файлы
+                contentType: false, // Так jQuery скажет серверу, что это строковый запрос
+                cache: false,
+                data: formData,
+                success: function(response){
+                    if(response.status){
+                        console.log(response.msg);
+                        $('.js-edit-project-data-close-btn').trigger('click');
+                        $.ajax({
+                            method: 'POST',
+                            url: '../php/get_db_table.php',
+                            data: {
+                                show: 'project_data',
+                                project_id: project_id
+                            },
+                            success: function(response){
+                                $('.js-project-photo').attr('src', `../../${response.project_photo}`);
+                                $('.js-project-name').empty().append(response.project_name);
+                                $('.js-project-description').empty().append(response.project_description==='' ? 'Описание не указано' : response.project_description);
+                                $('.js-project-start-date').empty().append(response.project_start_date);
+                                $('.js-project-end-date').empty().append(response.project_end_date);
+                                $('.js-delete-project-btn').attr('value', response.project_id);
+                                $('.js-edit-project-btn').attr('value', response.project_id);
+                            }
+                        });
+                        
+                    } else {
+                        console.log(response.msg);
+                    }
+                    
+                }
+            });
+            
             
         });
 

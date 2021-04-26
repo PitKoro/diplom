@@ -101,7 +101,7 @@ if(isset($_POST['modal'])){
             <label for='project-address-field' class='form-label mt-3'>Адрес проекта</label>
             <input type='text' name='project_address' class='form-control' id='project-address-field' placeholder='Введите адрес проекта' value='{$project_data[0]['address']}'>
 
-            <label for='project-photo-field' class='form-label'>Изображение профиля</label>
+            <label for='project-photo-field' class='form-label mt-3'>Изображение профиля</label>
             <input class='form-control' type='file' id='project-photo-field' name='project_photo' value='{$project_data[0]['photo']}'>
 
             <label for='project-start-date-field' class='form-label mt-3'>Дата начала</label>
@@ -110,6 +110,7 @@ if(isset($_POST['modal'])){
             <label for='project-end-date-field' class='form-label mt-3'>Дата окончания</label>
             <input type='date' name='project_end_date' class='form-control' id='project-end-date-field' value='{$project_data[0]['end_date']}' required>
         ";
+
         echo $response;
         die();
     }
