@@ -60,7 +60,7 @@ ini_set('display_startup_errors', 1);
 
                 <div class="row mb-2">
                     <div class="col">
-                        <div class="mx-auto" style="width:210px;">
+                        <div class="mx-auto" style="width:280px;">
                             <div class="btn-group" role="group" aria-label="Basic outlined example">
                                 <button type="button" class="btn btn-outline-primary js-project-tasks-btn active">Задачи</button>
                                 <button type="button" class="btn btn-outline-primary js-project-users-btn">Пользователи</button>
@@ -143,7 +143,7 @@ ini_set('display_startup_errors', 1);
     </div>
     <!-- Modal -->
 
-    <!-- Modal for add user -->
+    <!-- Modal for add file -->
     <div class="modal fade" id="add-project-file-modal" tabindex="-1" aria-labelledby="add-project-file-modal-label" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -152,7 +152,6 @@ ini_set('display_startup_errors', 1);
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="auth-error mb-3 none "></div>
                     <div class="form-body js-add-file-to-project-modal-body">
                             <h1>тут добавление файлов</h1>
                     </div>
@@ -524,6 +523,7 @@ ini_set('display_startup_errors', 1);
                     if(response.status){
                         console.log(response.msg);
                         $('.js-add-project-file-close-btn').trigger('click');
+                        $('.js-project-files-btn').trigger('click');
                     } else {
                         console.log(response.msg);
                     }

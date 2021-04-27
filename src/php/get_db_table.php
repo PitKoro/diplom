@@ -240,15 +240,50 @@ if($_POST['show'] == 'project_files'){
     header('Content-Type: text/html; charset=utf-8');
     $project_id = $_POST['project_id'];
 
-    $sql = mysqli_query($connect, "SELECT * FROM files WHERE project_id='{$project_id}'");
+    $sql = mysqli_query($connect, "SELECT * FROM project_files WHERE project_id='{$project_id}'");
     $row_cnt = mysqli_num_rows($sql);
     if($row_cnt>0){
-        $response = "
-        <div class='form-footer mt-3'>
-            <h4>Файлы в проекте есть, но пока они не отображаются.</h4>
-        </div>";
-        echo $response;
+        $table_data = "
+            <thead>
+                <tr>
+                <th scope='col'>Имя</th>
+                <th scope='col'>Размер</th>
+                <th scope='col'>Удалить</th>
+                <th scope='col'>Скачать</th>
+                </tr>
+            </thead>
+            <tbody>";
+
+        while($result = mysqli_fetch_array($sql)){
+            $size = round(floatval($result['size'])/1024, 2);
+            if($_SESSION['user']['status'] == '10'){
+                $table_data = $table_data."
+                <tr>
+                    <td> {$result['name']} </td>
+                    <td> {$size} КБ</td>     
+                    <td> <button class='js-delete-project-file-btn btn btn-danger' value='{$result['id']}'> Удалить</button></td>
+                    <td><a href='../../{$result['path']}' class='btn btn-success' id='{$result['id']}' download>Скачать</a></td>
+                </tr>";
+            } else {
+                $table_data = $table_data."
+                <tr>
+                    <td> {$result['name']} </td>
+                    <td> {$size} КБ</td>
+                    <td> {$result['full_name']}</td>        
+                    <td> Недоступно</td>
+                    <td><a href='#' class='btn btn-success' id='{$result['id']}'>Скачать</a></td>
+                </tr>";
+            }
+        }
+
+        $table_data = $table_data."</tbody>";
+        mysqli_free_result($sql);
+        echo $table_data;
         die();
+        
+
+
+
     } else {
         $response = "
         <div class='form-footer mt-3'>
