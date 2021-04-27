@@ -86,6 +86,16 @@ if(isset($_POST['modal'])){
         die();
     }
 
+    if($_POST['modal']=='add_file'){
+        $response = "
+            <label for='add_project_file_field' class='form-label'>Файл проекта</label>
+            <input class='form-control mb-3' type='file' id='add_project_file_field' name='project_file'>
+        ";
+
+        echo $response;
+        die();
+    }
+
     if($_POST['modal']=='edit_project_data'){
         header('Content-Type: text/html; charset=utf-8');
         $project_id = $_POST['project_id'];
@@ -114,5 +124,7 @@ if(isset($_POST['modal'])){
         echo $response;
         die();
     }
+
+    
 }
 

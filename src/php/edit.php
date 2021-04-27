@@ -28,13 +28,6 @@ if(isset($_POST)){
             $project_start_date = $_POST['project_start_date'];
             $project_end_date = $_POST['project_end_date'];
 
-            // $response = [
-            //     'POST_photo' => $_POST['project_photo']
-            // ];
-            // echo json_encode($response);
-            // die();
-            
-
             $path_to_photo = null;
             if($_POST['is_change_photo']=='true'){
                 

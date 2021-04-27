@@ -93,5 +93,51 @@ if(isset($_POST['add'])){
         echo json_encode($response); # Возвращаем ответ в формате json
         die(); # Останавливаем выполнение скрипта
     }
+
+    if($_POST['add'] == 'project_file'){
+        $project_id = $_POST['project_id'];
+
+        $path_to_project_file = null;
+
+        if(!$_FILES['project_file']){
+            $error_fields[] = 'project_file';
+        }
+
+        if( !empty($error_fields) ){
+            #формируем ответ с ошибкой
+            $response = [
+                "status" => false,
+                "message" => "Файл не выбран",
+                "type" => 1,
+                "fields" => $error_fields
+            ];
+    
+            echo json_encode($response); # Возвращаем ответ в формате json
+            die(); # Останавливаем выполнение скрипта
+        }
+
+        $path_to_project_file = 'public/project_files/' . time() . $_FILES['project_file']['name']; # добавляем в название файла числа текущего времени (чтобы не возникал конфликт имен)
+        # перемещяем загруженный файл в public/project_files/
+        if (!move_uploaded_file($_FILES['project_file']['tmp_name'], '../../' . $path_to_project_file)) {
+            # Если не удалось переместить, то формируем ответ с ошибкой
+            $response = [
+                "status" => false,
+                "message" => "ошибка при загрузке файла",
+                "type" => 2
+            ];
+    
+            echo json_encode($response); # Возвращаем ответ в формате json
+        }
+
+        mysqli_query($connect, "INSERT INTO project_files (id, name, size, path, project_id) VALUES (NULL, '{$_FILES['project_file']['name']}', '{$_FILES['project_file']['size']}', '{$path_to_project_file}', '{$project_id}')");
+        # формируем ответ
+        $response = [
+            "status" => true,
+            "message" => "filename={$_FILES['project_file']['name']} | filesize={$_FILES['project_file']['size']} | path={$path_to_project_file} | project_id={$project_id}"
+        ];
+
+        echo json_encode($response); # Возвращаем ответ в формате json
+        die(); # Останавливаем выполнение скрипта
+    }
 }
 ?>

@@ -64,6 +64,7 @@ ini_set('display_startup_errors', 1);
                             <div class="btn-group" role="group" aria-label="Basic outlined example">
                                 <button type="button" class="btn btn-outline-primary js-project-tasks-btn active">Задачи</button>
                                 <button type="button" class="btn btn-outline-primary js-project-users-btn">Пользователи</button>
+                                <button type="button" class="btn btn-outline-primary js-project-files-btn">Файлы</button>
                             </div>
                         </div>
                     </div>
@@ -142,6 +143,30 @@ ini_set('display_startup_errors', 1);
     </div>
     <!-- Modal -->
 
+    <!-- Modal for add user -->
+    <div class="modal fade" id="add-project-file-modal" tabindex="-1" aria-labelledby="add-project-file-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="add-project-file-modal-label">Добавление файла</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="auth-error mb-3 none "></div>
+                    <div class="form-body js-add-file-to-project-modal-body">
+                            <h1>тут добавление файлов</h1>
+                    </div>
+
+                </div>
+                <div class="modal-footer justify-content-between js-add-file-to-project-modal-footer">
+                    <button type="button" class="btn btn-danger js-add-project-file-close-btn" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-success js-add-project-file-submit-btn">Добавить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+
     <!-- Modal for edit project data -->
     <div class="modal fade" id="edit-project-data-modal" tabindex="-1" aria-labelledby="edit-project-data-modal-label" aria-hidden="true">
         <div class="modal-dialog">
@@ -204,8 +229,9 @@ ini_set('display_startup_errors', 1);
 
             let tasksBtnClasses = document.querySelector(".js-project-tasks-btn").classList;
             let usersBtnClasses = document.querySelector(".js-project-users-btn").classList;
+            let filesBtnClasses = document.querySelector(".js-project-files-btn").classList;
 
-            if((tasksBtnClasses['value'].indexOf('active') != -1) && (usersBtnClasses['value'].indexOf('active') == -1)){
+            if((tasksBtnClasses['value'].indexOf('active') != -1) && (usersBtnClasses['value'].indexOf('active') == -1) && (filesBtnClasses['value'].indexOf('active') == -1)){
                 $.ajax({
                     method: 'POST',
                     url: '../php/get_db_table.php',
@@ -228,9 +254,10 @@ ini_set('display_startup_errors', 1);
             $("#test").attr("class", "float-end add-task-btn-block");
             event.preventDefault();
             $('#add-to-project-btn').attr('data-bs-target','#add-project-task-modal');
-            $("#add-to-project-btn").removeClass('js-add-project-user-btn').addClass('js-add-project-task-btn');
+            $("#add-to-project-btn").attr('class', 'btn btn-success js-add-project-task-btn');
             $(".js-project-users-btn").removeClass('active');
             $(".js-project-tasks-btn").addClass('active');
+            $(".js-project-files-btn").removeClass('active');
             
             let project_id = $('input[name="project_id"]').val();
 
@@ -253,6 +280,172 @@ ini_set('display_startup_errors', 1);
         $('.js-add-project-task-btn').on('click', function(){
             $('input[name="task_name"]').removeClass("is-invalid");
             $('input[name="task_end_date"]').removeClass("is-invalid");
+        });
+
+
+        // ВЫВОД ТАБЛИЦЫ С ПОЛЬЗОВАТЕЛЯМИ ПРОЕКТА
+        $(".js-project-users-btn").on('click', function(event){
+            event.preventDefault();
+            $("#test").attr("class", "float-end add-users-btn-block");
+            $('#add-to-project-btn').attr('data-bs-target','#add-project-user-modal');
+            let project_id = $('input[name="project_id"]').val();
+            $(".js-project-tasks-btn").removeClass('active');
+            $(".js-project-files-btn").removeClass('active');
+            $(".js-project-users-btn").addClass('active');
+            $("#add-to-project-btn").attr('class', 'btn btn-success js-add-project-user-btn');
+
+            $.ajax({
+                method: 'POST',
+                url: '../php/get_db_table.php',
+                data: {
+                    show: 'project_users',
+                    project_id: project_id
+                },
+                success: function(response){
+                    $(".js-project-table").empty().append(response);
+                }
+            });
+        });
+
+        // ВЫВОД ТАБЛИЦЫ С ФАЙЛАМИ ПРОЕКТА
+        $(".js-project-files-btn").on('click', function(event){
+            event.preventDefault();
+            let project_id = $('input[name="project_id"]').val();
+
+            $("#test").attr("class", "float-end add-file-btn-block");
+            $('#add-to-project-btn').attr('data-bs-target','#add-project-file-modal');
+            $(".js-project-tasks-btn").removeClass('active');
+            $(".js-project-users-btn").removeClass('active');
+            $(".js-project-files-btn").addClass('active');
+            $("#add-to-project-btn").attr('class','btn btn-success js-add-project-file-btn');
+
+            $.ajax({
+                method: 'POST',
+                url: '../php/get_db_table.php',
+                data: {
+                    show: 'project_files',
+                    project_id: project_id
+                },
+                success: function(response){
+                    $(".js-project-table").empty().append(response);
+                }
+            });
+        });
+
+
+        // ДОБАЛЕНИЕ ПОЛЕЙ В МОДАЛЬНОЕ ОКНО ДЛЯ ДОБАВЛЕНИЯ ПОЛЬЗОВАТЕЛЕЙ В ПРОЕКТ
+        $(document).on('click','.add-users-btn-block', function(){
+            $('.auth-error').addClass('none')
+            let project_id = $('input[name="project_id"]').val();
+            $.ajax({
+                method: 'POST',
+                data:{
+                    modal: 'add_users',
+                    project_id: project_id
+                },
+                url:'../php/modal.php',
+                success: function(response){
+                    if(response.status){
+                        $('.js-add-users-to-project-modal-body').empty().append(response.html);
+                    } else {
+                        $('.js-add-users-to-project-modal-body').empty().append(response.html);
+                        $('.js-add-users-to-project-modal-footer').empty();
+                    }
+                    
+                }
+            });
+        });
+
+
+        // ДОБАЛЕНИЕ ПОЛЕЙ В МОДАЛЬНОЕ ОКНО ДЛЯ ДОБАВЛЕНИЯ ЗАДАЧИ В ПРОЕКТ
+        $(document).on('click','.add-task-btn-block', function(){
+            $("select option[value='']").prop("selected", true);
+            let project_id = $('input[name="project_id"]').val();
+            $.ajax({
+                method: 'POST',
+                data:{
+                    modal: 'add_task',
+                    project_id: project_id
+                },
+                url:'../php/modal.php',
+                success: function(response){
+                    
+                    $('.js-add-task-modal-body').empty().append(response);
+                }
+            });
+        });
+
+
+        // ДОБАЛЕНИЕ ПОЛЕЙ В МОДАЛЬНОЕ ОКНО ДЛЯ ДОБАВЛЕНИЯ ФАЙЛА В ПРОЕКТ
+        $(document).on('click','.add-file-btn-block', function(){
+            let project_id = $('input[name="project_id"]').val();
+            $.ajax({
+                method: 'POST',
+                data:{
+                    modal: 'add_file',
+                    project_id: project_id
+                },
+                url:'../php/modal.php',
+                success: function(response){
+                    
+                    $('.js-add-file-to-project-modal-body').empty().append(response);
+                }
+            });
+        });
+
+
+        // ДОБАЛЕНИЕ ПОЛЕЙ В МОДАЛЬНОЕ ОКНО ДЛЯ РЕДАКТИРОВАНИЯ ИНФОРМАЦИИ О ПРОЕКТЕ
+        $('.js-edit-project-data-btn').on('click', function(event){
+            let project_id = $('input[name="project_id"]').val();
+            event.preventDefault();
+            $.ajax({
+                method: 'POST',
+                url: '../php/modal.php',
+                data: {
+                    modal: 'edit_project_data',
+                    project_id: project_id
+                },
+                success: function(response){
+                    $('.js-edit-project-data-modal-body').empty().append(response);
+                }
+            });
+
+        });
+
+
+        // ДОБАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯ В ПРОЕКТ ПОСЛЕ НАЖАТИЯ НА КНОПКУ "ДОБАВИТЬ" В МОДАЛЬНОМ ОКНЕ
+        $('.js-add-project-user-submit-btn').on('click', function(){
+            let project_id = $('input[name="project_id"]').val();
+
+            //создаём массив для значений флажков
+            var checked_users_id = [];
+            $('input:checkbox:checked').each(function(){
+                //добавляем значение каждого флажка в этот массив
+                checked_users_id.push(this.value);
+            });
+            /*объединяем массив в строку с разделителем-запятой. Но лучше подобные вещи хранить в массиве. Для наглядности - вывод в консоль.*/
+            checked_users_id = checked_users_id.join(',');
+
+            $.ajax({
+                method: 'POST',
+                url: '../php/add_to_project.php',
+                data: {
+                    add: 'users',
+                    users_id: checked_users_id,
+                    project_id: project_id
+                },
+                success: function(response){
+                    if(response.status){
+
+                        $(".js-project-users-btn").trigger('click');
+                        $('.js-add-project-user-close-btn').trigger('click');
+
+                    } else {
+                        $('.auth-error').removeClass('none').text(response.message);
+                    }
+                    
+                }
+            });
         });
 
 
@@ -301,135 +494,42 @@ ini_set('display_startup_errors', 1);
         });
 
 
-        // ВЫВОД ТАБЛИЦЫ С ПОЛЬЗОВАТЕЛЯМИ ПРОЕКТА
-        $(".js-project-users-btn").on('click', function(event){
+        // ДОБАВЛЕНИЕ ФАЙЛА В ПРОЕКТ ПОСЛЕ НАЖАТИЯ НА КНОПКУ "ДОБАВИТЬ" В МОДАЛЬНОМ ОКНЕ
+        // Получение файла с поля
+        let project_file = false;
+
+        $(document).on('change', 'input[name="project_file"]', function(e){
+            project_file = e.target.files[0];
+            console.log(project_file);
+        });
+
+        $(".js-add-project-file-submit-btn").on('click', function(event){
             event.preventDefault();
-            $("#test").attr("class", "float-end add-users-btn-block");
-            $('#add-to-project-btn').attr('data-bs-target','#add-project-user-modal');
-            let project_id = $('input[name="project_id"]').val();
-            $(".js-project-tasks-btn").removeClass('active');
-            $(".js-project-users-btn").addClass('active');
-            $("#add-to-project-btn").removeClass('js-add-project-task-btn').addClass('js-add-project-user-btn');
-
-            $.ajax({
-                method: 'POST',
-                url: '../php/get_db_table.php',
-                data: {
-                    show: 'project_users',
-                    project_id: project_id
-                },
-                success: function(response){
-                    $(".js-project-table").empty().append(response);
-                }
-            });
-        });
-
-        $(document).on('click','.add-users-btn-block', function(){
-            $('.auth-error').addClass('none')
-            let project_id = $('input[name="project_id"]').val();
-            $.ajax({
-                method: 'POST',
-                data:{
-                    modal: 'add_users',
-                    project_id: project_id
-                },
-                url:'../php/modal.php',
-                success: function(response){
-                    if(response.status){
-                        $('.js-add-users-to-project-modal-body').empty().append(response.html);
-                    } else {
-                        $('.js-add-users-to-project-modal-body').empty().append(response.html);
-                        $('.js-add-users-to-project-modal-footer').empty();
-                    }
-                    
-                }
-            });
-        });
-
-        $(document).on('click','.add-task-btn-block', function(){
-            $("select option[value='']").prop("selected", true);
-            let project_id = $('input[name="project_id"]').val();
-            $.ajax({
-                method: 'POST',
-                data:{
-                    modal: 'add_task',
-                    project_id: project_id
-                },
-                url:'../php/modal.php',
-                success: function(response){
-                    
-                    $('.js-add-task-modal-body').empty().append(response);
-                }
-            });
-        });
-
-        $('.js-edit-project-data-btn').on('click', function(event){
-            let project_id = $('input[name="project_id"]').val();
-            event.preventDefault();
-            $.ajax({
-                method: 'POST',
-                url: '../php/modal.php',
-                data: {
-                    modal: 'edit_project_data',
-                    project_id: project_id
-                },
-                success: function(response){
-                    $('.js-edit-project-data-modal-body').empty().append(response);
-                }
-            });
-
-        });
-
-
-        // ДОБАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯ В ПРОЕКТ ПОСЛЕ НАЖАТИЯ НА КНОПКУ "ДОБАВИТЬ" В МОДАЛЬНОМ ОКНЕ
-        $('.js-add-project-user-submit-btn').on('click', function(){
             let project_id = $('input[name="project_id"]').val();
 
-            //создаём массив для значений флажков
-            var checked_users_id = [];
-            $('input:checkbox:checked').each(function(){
-                //добавляем значение каждого флажка в этот массив
-                checked_users_id.push(this.value);
-            });
-            /*объединяем массив в строку с разделителем-запятой. Но лучше подобные вещи хранить в массиве. Для наглядности - вывод в консоль.*/
-            checked_users_id = checked_users_id.join(',');
+            let formData = new FormData();
+            formData.append('add', 'project_file');
+            formData.append('project_file', project_file);
+            formData.append('project_id', project_id);
 
             $.ajax({
-                method: 'POST',
                 url: '../php/add_to_project.php',
-                data: {
-                    add: 'users',
-                    users_id: checked_users_id,
-                    project_id: project_id
-                },
+                type: 'POST',
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                cache: false,
+                data: formData,
                 success: function(response){
                     if(response.status){
-
-                        $(".js-project-users-btn").trigger('click');
-                        // $.ajax({
-                        //     method: 'POST',
-                        //     url: '../php/get_db_table.php',
-                        //     data: {
-                        //         show: 'project_users',
-                        //         project_id: project_id
-                        //     },
-                        //     success: function(response){
-                        //         $(".js-project-table").empty().append(response);
-                        //     }
-                        // });
-
-                        $('.js-add-project-user-close-btn').trigger('click');
+                        console.log(response.msg);
+                        $('.js-add-project-file-close-btn').trigger('click');
                     } else {
-                        $('.auth-error').removeClass('none').text(response.message);
+                        console.log(response.msg);
                     }
-                    
                 }
             });
         });
-
-        // $('.allow-focus').on('click', function (e) {
-        //     e.stopPropagation();
-        // });
         
 
         // УДАЛЕНИЕ ЗАДАЧИ ИЗ ПРОЕКТА

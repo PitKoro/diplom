@@ -236,4 +236,29 @@ if($_POST['show'] == 'project_users'){
 }
 
 
+if($_POST['show'] == 'project_files'){
+    header('Content-Type: text/html; charset=utf-8');
+    $project_id = $_POST['project_id'];
+
+    $sql = mysqli_query($connect, "SELECT * FROM files WHERE project_id='{$project_id}'");
+    $row_cnt = mysqli_num_rows($sql);
+    if($row_cnt>0){
+        $response = "
+        <div class='form-footer mt-3'>
+            <h4>Файлы в проекте есть, но пока они не отображаются.</h4>
+        </div>";
+        echo $response;
+        die();
+    } else {
+        $response = "
+        <div class='form-footer mt-3'>
+            <h4>Файлов в проекте пока нет.</h4>
+        </div>";
+        echo $response;
+        die();
+    }
+
+}
+
+
 ?>
