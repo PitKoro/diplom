@@ -133,22 +133,22 @@ if(isset($_POST['modal'])){
         $project_task = get_project_task($connect, $task_id);
 
         $response = "
-        <input type='text' name='task_id' value='{$task_id}' hidden>
+        <input type='text' name='edit_task_id' value='{$task_id}' hidden>
 
         <label for='task-name-field' class='form-label mt-3'>Название задачи</label>
-        <input type='text' name='task_name' class='form-control' id='task-name-field' placeholder='Введите название задачи' value='{$project_task[0]['name']}' required>
+        <input type='text' name='edit_task_name' class='form-control' id='task-name-field' placeholder='Введите название задачи' value='{$project_task[0]['name']}' required>
 
         <label for='task-status-field' class='form-label mt-3'>Статус задачи</label>
-        <select class='form-select' name='task_status' id='task-status-field'>
+        <select class='form-select' name='edit_task_status' id='task-status-field'>
             <option value='0' ".(($project_task[0]['status'] == '0') ? 'selected':'').">Не выполнено</option>
             <option value='1' ".(($project_task[0]['status'] == '1') ? 'selected':'').">Выполнено</option>
         </select>
 
         <label for='task-end-date-field' class='form-label mt-3'>Дата завершения</label>
-        <input type='date' name='task_end_date' class='form-control' id='task-end-date-field' value='{$project_task[0]['end_date']}'>
+        <input type='date' name='edit_task_end_date' class='form-control' id='task-end-date-field' value='{$project_task[0]['end_date']}'>
 
         <label for='task-executor-field' class='form-label mt-3'>Исполнитель</label>
-        <select class='form-select ' name='task_user' id='task-executor-field' aria-describedby='validation_project_task_executor' required>";
+        <select class='form-select ' name='edit_task_user' id='task-executor-field' aria-describedby='validation_project_task_executor' required>";
         for($i = 0; $i < count($users_in_project); $i++){
             $response = $response."<option value='{$users_in_project[$i]['id']}' ".(($project_task[0]['user_id'] == $users_in_project[$i]['id']) ? 'selected':'').">{$users_in_project[$i]['full_name']}</option>";
         }

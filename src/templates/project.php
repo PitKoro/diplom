@@ -449,7 +449,7 @@ ini_set('display_startup_errors', 1);
                     project_id: project_id
                 },
                 success: function(response){
-                    console.log(response);
+                    //console.log(response);
                     $('.js-edit-project-task-modal-body').empty().append(response);
                 }
             });
@@ -804,11 +804,11 @@ ini_set('display_startup_errors', 1);
 
         //РЕДАКТИРОВАНИЕ ЗАДАЧИ В ПРОЕКТЕ
         $('.js-edit-project-task-submit-btn').on('click', function(event){
-            let task_id = $('input[name="task_id"]').val();
-            let task_name = $('input[name="task_name"]').val();
-            let task_status = $('select[name="task_status"]').val();
-            let task_end_date = $('input[name="task_end_date"]').val();
-            let task_user = $('select[name="task_user"]').val();
+            let task_id = $('input[name="edit_task_id"]').val();
+            let task_name = $('input[name="edit_task_name"]').val();
+            let task_status = $('select[name="edit_task_status"]').val();
+            let task_end_date = $('input[name="edit_task_end_date"]').val();
+            let task_user = $('select[name="edit_task_user"]').val();
 
             $.ajax({
                 method: 'POST',
