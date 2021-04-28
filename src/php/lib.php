@@ -207,9 +207,14 @@ function delete_project_file($connect, $file_id){
 # аргументы:    $connect - дескриптор подключения к БД
 #               $task_id - id задачи
 # возвращает: массив [$status => boolean, $msg => string]
-function complete_project_task($connect, $task_id){
+function complete_project_task($connect, $task_id, $task_comment){
     $current_date = date("Y-m-d");
-    $sql = mysqli_query($connect, "UPDATE projects_tasks SET status = '1', `finish_date` = '{$current_date}' WHERE `projects_tasks`.`id` = '{$task_id}'"); 
+    if($task_comment == ''){
+        $sql = mysqli_query($connect, "UPDATE projects_tasks SET status = '1', `finish_date` = '{$current_date}' WHERE `projects_tasks`.`id` = '{$task_id}'"); 
+    } else {
+        $sql = mysqli_query($connect, "UPDATE projects_tasks SET status = '1', finish_date = '{$current_date}', comment = '{$task_comment}' WHERE `projects_tasks`.`id` = '{$task_id}'"); 
+    }
+    
     
     
     if($sql){

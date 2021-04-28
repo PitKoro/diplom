@@ -608,12 +608,21 @@ ini_set('display_startup_errors', 1);
 
         });
 
+        // ПЕРВАЯ КНОПКА ВЫПОЛНЕНИЯ ЗАДАЧИ
+        $('.js-project-table').on('click', '.js-add-comment-to-project-task-btn', function(){
+            let task_id = $(this).val();
+            $(`#add-comment-to-project-task-${task_id}`).attr('hidden', true);
+            $(`#done-project-task-btn-${task_id}`).removeAttr('hidden');
+            $(`textarea[name="task${task_id}_comment"]`).removeAttr('hidden');
+        });
 
-        // КНОПКА ВЫПОЛНЕНИЯ ЗАДАЧИ
+
+        // ВТОРАЯ КНОПКА ВЫПОЛНЕНИЯ ЗАДАЧИ
         $('.js-project-table').on('click', '.js-done-project-task-btn', function(event){
             event.preventDefault();
             let project_id = $('input[name="project_id"]').val();
             let task_id = $(this).val();
+            let task_comment = $(`textarea[name="task${task_id}_comment"]`).val();
 
             $.ajax({
                 method: 'POST',
@@ -621,7 +630,8 @@ ini_set('display_startup_errors', 1);
                 data: {
                     action: 'complete_project_task',
                     project_id: project_id,
-                    task_id: task_id
+                    task_id: task_id,
+                    task_comment: task_comment
                 },
                 success: function(response){
                     if(response.status){

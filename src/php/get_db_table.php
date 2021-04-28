@@ -103,7 +103,13 @@ if($_POST['show']=='project_tasks'){
                     <td> <button class='js-delete-project-task-btn btn btn-danger' value='{$result['id']}'>Удалить</button></td>
                     <td> <button class='js-edit-project-task-btn btn btn-warning' value='{$result['id']}' data-bs-toggle='modal' data-bs-target='#edit-project-task-modal'>Изменить</button></td>";
                 if($result['status']=='0'){
-                    $table_data= $table_data."<td> <button class='js-done-project-task-btn btn btn-success' value='{$result['id']}'>Выполнено</button></td>";
+                    $table_data= $table_data."
+                    <td>
+                        <textarea class='form-control mb-2' type='text' name='task{$result['id']}_comment' placeholder='Комментарий (необязательно)' hidden></textarea>
+                        <button class='js-add-comment-to-project-task-btn btn btn-success' id='add-comment-to-project-task-{$result['id']}' value='{$result['id']}'>Выполнено</button>
+                        <button class='js-done-project-task-btn btn btn-success' id='done-project-task-btn-{$result['id']}' value='{$result['id']}' hidden>Выполнено</button>
+                    </td>";
+
                     if(($days_to_finish<=5) && ($days_to_finish>=0)){
                         if($days_to_finish == '-0'){ $days_to_finish=0; }
                         $table_data= $table_data."
@@ -137,7 +143,12 @@ if($_POST['show']=='project_tasks'){
                 if($result['status']=='0'){
 
                     if($result['user_id'] == $_SESSION['user']['id']){
-                        $table_data = $table_data."<td> <button class='js-done-project-task-btn btn btn-success' value='{$result['id']}'>Выполнено</button></td>";
+                        $table_data = $table_data."
+                        <td>
+                            <textarea class='form-control mb-2' type='text' name='task{$result['id']}_comment' placeholder='Комментарий (необязательно)' hidden></textarea>
+                            <button class='js-add-comment-to-project-task-btn btn btn-success' id='add-comment-to-project-task-{$result['id']}' value='{$result['id']}'>Выполнено</button>
+                            <button class='js-done-project-task-btn btn btn-success' id='done-project-task-btn-{$result['id']}' value='{$result['id']}' hidden>Выполнено</button>
+                        </td>";
                         if(($days_to_finish<=5) && ($days_to_finish>=0)){
 
                             if($days_to_finish == '-0'){ $days_to_finish=0; }

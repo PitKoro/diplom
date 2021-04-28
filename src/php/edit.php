@@ -15,7 +15,8 @@ if(isset($_POST)){
 
         if($_POST['action']=='complete_project_task'){
             $task_id = $_POST['task_id'];
-            $response = complete_project_task($connect, $task_id);
+            $task_comment = $_POST['task_comment'];
+            $response = complete_project_task($connect, $task_id, $task_comment);
             echo json_encode($response);
             die();
         }
