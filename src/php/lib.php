@@ -76,6 +76,22 @@ function get_project_data($connect, $project_id){
     return $project_data;
 }
 
+
+# Функция - получение информации о задаче в проекте
+# аргументы:    $connect - дескриптор подключения к БД
+#               $task_id - id задачи
+# возвращает: массив со всей информацией о задаче
+function get_project_task($connect, $task_id){
+    $sql = mysqli_query($connect, "SELECT * FROM projects_tasks WHERE id='{$task_id}'");
+    $project_task = array();
+    while($result = mysqli_fetch_assoc($sql)){
+        array_push($project_task, $result);
+    }
+
+    return $project_task;
+}
+
+
 # Функция - удаление проекта
 # аргументы:    $connect - дескриптор подключения к БД
 #               $project_id - id проекта
@@ -216,7 +232,11 @@ function complete_project_task($connect, $task_id){
 }
 
 
-function edit_project_data($connect, $project_data){#TODO добавить изменение изображения для проекта
+# Функция - изменение информации о проекте в БД
+# аргументы:    $connect - дескриптор подключения к БД
+#               $project_data - массив с данными о проекте
+# возвращает: массив [$status => boolean, $msg => string]
+function edit_project_data($connect, $project_data){
     
     $sql = null;
     if( $project_data['photo'] != 'false'){
@@ -237,6 +257,41 @@ function edit_project_data($connect, $project_data){#TODO добавить из�
     } else {
         $status = false;
         $msg = "Failed to update project data!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    }
+}
+
+
+# Функция - изменение информации о задаче проекта в БД
+# аргументы:    $connect - дескриптор подключения к БД
+#               $task_data - массив с данными о задаче
+# возвращает: массив [$status => boolean, $msg => string]
+function edit_project_task($connect, $task_data){
+
+    $sql = null;
+    if( $task_data['status'] == '0'){
+        $sql = mysqli_query($connect, "UPDATE projects_tasks SET user_id = '{$task_data['user_id']}', name = '{$task_data['name']}', end_date = '{$task_data['end_date']}', status = '{$task_data['status']}', finish_date = NULL WHERE id = '{$task_data['id']}'");
+    } else {
+        $current_date = date("Y-m-d");
+        $sql = mysqli_query($connect, "UPDATE projects_tasks SET user_id = '{$task_data['user_id']}', name = '{$task_data['name']}', end_date = '{$task_data['end_date']}', status = '{$task_data['status']}', finish_date = '{$current_date}' WHERE id = '{$task_data['id']}'");
+    }
+    
+    
+    if($sql){
+        $status = true;
+        $msg = "task data updated!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    } else {
+        $status = false;
+        $msg = "Failed to update task data!";
         $response = [
             'status' => $status,
             'msg' => $msg

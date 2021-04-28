@@ -188,6 +188,29 @@ ini_set('display_startup_errors', 1);
         </div>
     </div>
     <!-- Modal -->
+    
+    <!-- Modal for edit project task -->
+    <div class="modal fade" id="edit-project-task-modal" tabindex="-1" aria-labelledby="edit-project-task-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="edit-project-task-modal-label">Редактирование задачи</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-body js-edit-project-task-modal-body">
+
+                    </div>
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-danger js-edit-project-task-close-btn" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-success js-edit-project-task-submit-btn">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
 
     <!-- Bootstrap and jQuery JS -->
     <script src="../../public/vendor/jquery/jquery-3.5.1.min.js"></script>
@@ -269,6 +292,7 @@ ini_set('display_startup_errors', 1);
                     },
                     success: function(response){
                         $(".js-project-table").empty().append(response);
+
                         start_all_tooltip();
                     }
             });
@@ -411,6 +435,28 @@ ini_set('display_startup_errors', 1);
 
         });
 
+        // ДОБАЛЕНИЕ ПОЛЕЙ В МОДАЛЬНОЕ ОКНО ДЛЯ РЕДАКТИРОВАНИЯ ЗАДАЧИ В ПРОЕКТЕ
+        $(document).on('click', '.js-edit-project-task-btn', function(event){
+            let project_id = $('input[name="project_id"]').val();
+            let task_id = $(this).val();
+
+            $.ajax({
+                method: 'POST',
+                url: '../php/modal.php',
+                data: {
+                    modal: 'edit_project_task',
+                    task_id: task_id,
+                    project_id: project_id
+                },
+                success: function(response){
+                    console.log(response);
+                    $('.js-edit-project-task-modal-body').empty().append(response);
+                }
+            });
+
+
+        });
+
 
         // ДОБАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯ В ПРОЕКТ ПОСЛЕ НАЖАТИЯ НА КНОПКУ "ДОБАВИТЬ" В МОДАЛЬНОМ ОКНЕ
         $('.js-add-project-user-submit-btn').on('click', function(){
@@ -521,7 +567,7 @@ ini_set('display_startup_errors', 1);
                 data: formData,
                 success: function(response){
                     if(response.status){
-                        console.log(response.msg);
+                        //console.log(response.msg);
                         $('.js-add-project-file-close-btn').trigger('click');
                         $('.js-project-files-btn').trigger('click');
                     } else {
@@ -550,11 +596,8 @@ ini_set('display_startup_errors', 1);
                     },
                     success: function(response){
                         if(response.status){
-                            console.log(response.msg);
-
-                            $(".js-project-tasks-btn").trigger('click');
-
-                                
+                            //console.log(response.msg);
+                            $(".js-project-tasks-btn").trigger('click');                                
                         } else {
                             console.log(response.msg);
                         }
@@ -584,7 +627,7 @@ ini_set('display_startup_errors', 1);
                     if(response.status){
                         $(".js-project-tasks-btn").trigger('click');
                         $('.js-project-table').remove('.js-done-project-task-btn');
-                        console.log(response.msg);  
+                        //console.log(response.msg);  
                     } else {
                         console.log(response.msg);
                     }
@@ -611,7 +654,7 @@ ini_set('display_startup_errors', 1);
                     },
                     success: function(response){
                         if(response.status){
-                            console.log(response.msg);
+                            //console.log(response.msg);
                             $('.js-project-users-btn').trigger('click');
                         } else {
                             console.log(response.msg);
@@ -640,7 +683,7 @@ ini_set('display_startup_errors', 1);
                     },
                     success: function(response){
                         if(response.status){
-                            console.log(response.msg);
+                            //console.log(response.msg);
                             $('.js-project-files-btn').trigger('click');
                         } else {
                             console.log(response.msg);
@@ -667,9 +710,8 @@ ini_set('display_startup_errors', 1);
                     },
                     success: function(response){
                         if(response.status){
-                            console.log(response.msg);
-                            document.location.href = './myProjects.php';
-                            
+                            //console.log(response.msg);
+                            document.location.href = './myProjects.php';                            
                         } else {
                             console.log(response.msg);
                         }
@@ -682,16 +724,12 @@ ini_set('display_startup_errors', 1);
 
 
         // РЕДАКТИРОВАНИЕ ИНФОРМАЦИИ О ПРОЕКТЕ
-        
         // Получение изображения с поля
         let project_photo = false;
-
         $(document).on('change', 'input[name="project_photo"]', function(e){
             project_photo = e.target.files[0];
             console.log(project_photo);
         });
-
-
 
         $('.js-edit-project-data-submit-btn').on('click', function(event){
             event.preventDefault();
@@ -734,7 +772,7 @@ ini_set('display_startup_errors', 1);
                 data: formData,
                 success: function(response){
                     if(response.status){
-                        console.log(response.msg);
+                        //console.log(response.msg);
                         $('.js-edit-project-data-close-btn').trigger('click');
                         $.ajax({
                             method: 'POST',
@@ -762,6 +800,36 @@ ini_set('display_startup_errors', 1);
             });
             
             
+        });
+
+        //РЕДАКТИРОВАНИЕ ЗАДАЧИ В ПРОЕКТЕ
+        $('.js-edit-project-task-submit-btn').on('click', function(event){
+            let task_id = $('input[name="task_id"]').val();
+            let task_name = $('input[name="task_name"]').val();
+            let task_status = $('select[name="task_status"]').val();
+            let task_end_date = $('input[name="task_end_date"]').val();
+            let task_user = $('select[name="task_user"]').val();
+
+            $.ajax({
+                method: 'POST',
+                url: '../php/edit.php',
+                data: {
+                    action: 'edit_project_task',
+                    task_id: task_id,
+                    task_name: task_name,
+                    task_status: task_status,
+                    task_end_date: task_end_date,
+                    task_user: task_user
+                },
+                success: function(response){
+                    if(response.status){
+                        //console.log(response.msg);
+                        $('.js-edit-project-task-close-btn').trigger('click');
+                        $('.js-project-tasks-btn').trigger('click');
+                    }
+                }
+                
+            });
         });
 
 

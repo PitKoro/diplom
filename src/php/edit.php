@@ -54,9 +54,6 @@ if(isset($_POST)){
                 $path_to_photo = 'false';
             }
             
-            
-            
-            
             $project_data=[
                 'id' => $project_id,
                 'name' => $project_name,
@@ -68,6 +65,26 @@ if(isset($_POST)){
             ];
 
             $response = edit_project_data($connect, $project_data);
+            echo json_encode($response);
+            die();
+        }
+
+        if($_POST['action']=='edit_project_task'){
+            $task_id = $_POST['task_id'];
+            $task_name = $_POST['task_name'];
+            $task_status = $_POST['task_status'];
+            $task_end_date = $_POST['task_end_date'];
+            $task_user = $_POST['task_user'];
+
+            $task_data=[
+                'id' => $task_id,
+                'name' => $task_name,
+                'status' => $task_status,
+                'end_date' => $task_end_date,
+                'user_id' => $task_user              
+            ];
+
+            $response = edit_project_task($connect, $task_data);
             echo json_encode($response);
             die();
         }

@@ -43,8 +43,13 @@ if($_POST['show']=='project_data') {
 if($_POST['show']=='project_tasks'){
     header('Content-Type: text/html; charset=utf-8');
     $project_id = $_POST['project_id'];
+    if($_SESSION['user']['status'] == '10'){
+        $sql = mysqli_query($connect, "SELECT A.*, U.full_name FROM projects_tasks A LEFT JOIN users U ON A.user_id=U.id WHERE A.project_id='{$project_id}' ORDER BY A.id DESC");
+    } else {
+        $user_id = $_SESSION['user']['id'];
+        $sql = mysqli_query($connect, "SELECT A.*, U.full_name FROM projects_tasks A LEFT JOIN users U ON A.user_id=U.id WHERE A.project_id='{$project_id}' AND A.user_id='{$user_id}' ORDER BY A.id DESC");
+    }
 
-    $sql = mysqli_query($connect, "SELECT A.*, U.full_name FROM projects_tasks A LEFT JOIN users U ON A.user_id=U.id WHERE A.project_id='{$project_id}' ORDER BY A.id DESC");
     $row_cnt = mysqli_num_rows($sql);
 
     if($row_cnt > 0){
@@ -57,7 +62,9 @@ if($_POST['show']=='project_tasks'){
             <th scope='col'>Дата завершения</th>
             <th scope='col'>Статус</th>";
             if($_SESSION['user']['status'] == '10'){
-                $table_data = $table_data."<th scope='col'>Удалить</th>";
+                $table_data = $table_data."
+                <th scope='col'>Удалить</th>
+                <th scope='col'>Изменить</th>";
             }
 
 
@@ -93,7 +100,8 @@ if($_POST['show']=='project_tasks'){
                     <td>{$result['full_name']}</td>
                     <td>{$task_end_date}</td>
                     <td>{$result['status']}</td>
-                    <td> <button class='js-delete-project-task-btn btn btn-danger' value='{$result['id']}'>Удалить</button></td>";
+                    <td> <button class='js-delete-project-task-btn btn btn-danger' value='{$result['id']}'>Удалить</button></td>
+                    <td> <button class='js-edit-project-task-btn btn btn-warning' value='{$result['id']}' data-bs-toggle='modal' data-bs-target='#edit-project-task-modal'>Изменить</button></td>";
                 if($result['status']=='0'){
                     $table_data= $table_data."<td> <button class='js-done-project-task-btn btn btn-success' value='{$result['id']}'>Выполнено</button></td>";
                     if(($days_to_finish<=5) && ($days_to_finish>=0)){
