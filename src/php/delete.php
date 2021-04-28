@@ -31,6 +31,14 @@ if(isset($_POST)){
             $response = delete_project_user($connect, $project_id, $user_id);
             echo json_encode($response);
         }
+
+        if($_POST['action'] == 'delete_project_file'){
+            #$project_id = $_POST['project_id'];
+            $file_id = $_POST['file_id'];
+
+            $response = delete_project_file($connect, $file_id);
+            echo json_encode($response);
+        }
     }
 }
 

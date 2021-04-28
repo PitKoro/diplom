@@ -622,6 +622,34 @@ ini_set('display_startup_errors', 1);
         });
 
 
+        // УДАЛЕНИЕ ФАЙЛА ИЗ ПРОЕКТА
+        $('.js-project-table').on('click', '.js-delete-project-file-btn', function(event){
+            event.preventDefault();
+            let isDelete = confirm("Вы точно хотите удалить этот файл из проекта?");
+            if(isDelete){
+                //let project_id = $('input[name="project_id"]').val();
+                let file_id = $(this).val();
+
+                $.ajax({
+                    method: 'POST',
+                    url: '../php/delete.php',
+                    data: {
+                        action: 'delete_project_file',
+                        //project_id: project_id,
+                        file_id: file_id
+                    },
+                    success: function(response){
+                        if(response.status){
+                            console.log(response.msg);
+                            $('.js-project-files-btn').trigger('click');
+                        } else {
+                            console.log(response.msg);
+                        }
+                    }
+                });
+            }
+        });
+
         // УДАЛЕНИЕ ПРОЕКТА
         $('.js-delete-project-btn').on('click', function(event){
             event.preventDefault();

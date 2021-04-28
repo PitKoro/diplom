@@ -161,6 +161,32 @@ function delete_project_user($connect, $project_id, $user_id){
 }
 
 
+# Функция - удаление файла из БД
+# аргументы:    $connect - дескриптор подключения к БД
+#               $file_id - id файла
+# возвращает: массив [$status => boolean, $msg => string]
+function delete_project_file($connect, $file_id){
+    $sql = mysqli_query($connect, "DELETE FROM project_files WHERE id = '{$file_id}'"); # Удаляем файл из БД
+    
+    if($sql){
+        $status = true;
+        $msg = "project fiel with id={$file_id} successfully deleted!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    } else {
+        $status = false;
+        $msg = "Failed to delete project file with id ={$file_id}!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    }
+}
+
 # Функция - выполнение задачи в проекте
 # аргументы:    $connect - дескриптор подключения к БД
 #               $task_id - id задачи

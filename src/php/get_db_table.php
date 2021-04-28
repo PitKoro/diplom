@@ -95,7 +95,7 @@ if($_POST['show']=='project_tasks'){
                     <td>{$result['status']}</td>
                     <td> <button class='js-delete-project-task-btn btn btn-danger' value='{$result['id']}'>Удалить</button></td>";
                 if($result['status']=='0'){
-                    $table_data= $table_data."<td> <button class='js-done-project-task-btn btn btn-success' value='{$result['id']}'>Выполнить</button></td>";
+                    $table_data= $table_data."<td> <button class='js-done-project-task-btn btn btn-success' value='{$result['id']}'>Выполнено</button></td>";
                     if(($days_to_finish<=5) && ($days_to_finish>=0)){
                         if($days_to_finish == '-0'){ $days_to_finish=0; }
                         $table_data= $table_data."
@@ -129,7 +129,7 @@ if($_POST['show']=='project_tasks'){
                 if($result['status']=='0'){
 
                     if($result['user_id'] == $_SESSION['user']['id']){
-                        $table_data = $table_data."<td> <button class='js-done-project-task-btn btn btn-success' value='{$result['id']}'>Выполнить</button></td>";
+                        $table_data = $table_data."<td> <button class='js-done-project-task-btn btn btn-success' value='{$result['id']}'>Выполнено</button></td>";
                         if(($days_to_finish<=5) && ($days_to_finish>=0)){
 
                             if($days_to_finish == '-0'){ $days_to_finish=0; }
@@ -268,8 +268,7 @@ if($_POST['show'] == 'project_files'){
                 $table_data = $table_data."
                 <tr>
                     <td> {$result['name']} </td>
-                    <td> {$size} КБ</td>
-                    <td> {$result['full_name']}</td>        
+                    <td> {$size} КБ</td>      
                     <td> Недоступно</td>
                     <td><a href='#' class='btn btn-success' id='{$result['id']}'>Скачать</a></td>
                 </tr>";
