@@ -89,3 +89,7 @@ body {
     border: 1px;
     border-radius: 10px;
 }
+
+.card{
+    box-shadow: 0 7px 14px 0 rgb(65 69 88 / 10%), 0 3px 6px 0 rgb(0 0 0 / 7%);
+}

@@ -26,9 +26,16 @@ if (!$_SESSION['user']) {
 
 
     <div class="container mt-5">
-        <h1>Это главная страница</h1>
-        <div class="row">
-            <div class="col" id="chart"></div>
+        <div class="row no-gutters">
+            <div class="col-md-6 col-xl-4 col-xxl-3 mb-3 pe-md-2">
+                <div class="card h-md-100">
+                    <div class="card-body">
+
+                        <div id="task-chart-donut"></div>
+
+                    </div>
+                </div>
+            </div>
         </div>
        
     </div>
@@ -39,27 +46,69 @@ if (!$_SESSION['user']) {
     <script src="../../public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../../public/vendor/apexcharts/apexcharts.js"></script>
     <script>
-
-        var options = {
-            series: [44, 55, 41, 17, 15],
-            chart: {
-            type: 'donut',
-            },
-            responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                width: 350
+        $(document).ready(function(){
+            $.ajax({
+                method: 'POST',
+                url: '../php/charts.php',
+                data: {
+                    show: 'tasks'
                 },
-                legend: {
-                position: 'right'
-                }
-            }
-            }]
-        };
+                success: function(response){
+                    let complited = Number(response.completed_tasks);
+                    let notComplited = Number(response.not_completed_tasks);
+                    let options = {
+                        chart: {
+                            type: 'donut',
+                            width: '100%',
+                            height: 200
+                        },
+                        dataLabels: {
+                            enabled: false
+                        },
+                        plotOptions: {
+                            pie: {
+                                donut: {
+                                    size: '75%',
+                                    labels: {
+                                        show: true,
+                                        name: {
+                                            show: false
+                                        },
+                                        value: {
+                                            show: true
+                                        },
+                                        total: {
+                                            show: true,
+                                            fontSize: '20px',
+                                            fontWeight: 600,
+                                            label: 'Всего'
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        title: {
+                            text: 'Задачи',
+                            style: {
+                            fontSize: '18px'
+                            }
+                        },
+                        series: [complited, notComplited],
+                        labels: ['Выполнено','Не выполнено'],
+                        colors:['#32CD32', '#B22222']
+                        
+                    };
 
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
+                    var chart = new ApexCharts(document.querySelector("#task-chart-donut"), options);
+                    chart.render();
+                }
+            });
+        });
+    </script>
+
+    <script>
+    
+
 
     </script>
 </body>
