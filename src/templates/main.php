@@ -27,16 +27,71 @@ if (!$_SESSION['user']) {
 
     <div class="container mt-5">
         <div class="row no-gutters">
-            <div class="col-md-6 col-xl-4 col-xxl-3 mb-3 pe-md-2">
-                <div class="card h-md-100">
+            <div class="col-sm-12 col-md-6 mb-3">
+              <div class="row no-gutters">
+                <div class="col-sm-12 mb-3">
+                  <div class="card h-md-100">
                     <div class="card-body">
 
-                        <div id="task-chart-donut"></div>
+                      <h1 id='overdue_projects'></h1>
 
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-12 mb-3">
+                  <div class="card h-md-100">
+                    <div class="card-body">
+
+                      <h1>Тут будут текущие проекты</h1>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-12 mb-3">
+                  <div class="card h-md-100">
+                    <div class="card-body">
+
+                      <h1>Тут будут проекты в работе</h1>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+
+            <div class="col-sm-12 col-md-6">
+                <div class="row no-gutters">
+                    <div class="col-md-12 col-xl-10 col-xxl-9 mb-3 pe-md-2">
+                        <div class="card h-md-100">
+                            <div class="card-body">
+
+                                <div id="task-chart-donut"></div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 col-xl-10 col-xxl-9 mb-3 pe-md-2">
+                        <div class="card h-md-100">
+                            <div class="card-body">
+
+                                <div id="users-chart-bar"></div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+        
+        
+        
         </div>
+
        
     </div>
 
@@ -47,6 +102,21 @@ if (!$_SESSION['user']) {
     <script src="../../public/vendor/apexcharts/apexcharts.js"></script>
     <script>
         $(document).ready(function(){
+
+          // ВЫВОД ПРОСРОЧЕННЫХ ПРОЕКТОВ
+          $.ajax({
+            method: 'POST',
+            url: '../php/get_db_table.php',
+            data: {
+              show: 'overdue_projects'
+            },
+            success(response){
+              $('#overdue_projects').append(response);
+            }
+          });
+
+
+          // ВЫВОД ДИАГРАММЫ ДЛЯ ЗАДАЧ
             $.ajax({
                 method: 'POST',
                 url: '../php/charts.php',
@@ -88,7 +158,7 @@ if (!$_SESSION['user']) {
                             }
                         },
                         title: {
-                            text: 'Задачи',
+                            text: 'Все задачи',
                             style: {
                             fontSize: '18px'
                             }
@@ -103,7 +173,72 @@ if (!$_SESSION['user']) {
                     chart.render();
                 }
             });
+
+
+
+
         });
+
+        var options = {
+          series: [{
+          name: 'Сделано',
+          data: [44, 55, 41]
+        }, {
+          name: 'Просрочено',
+          data: [53, 32, 33]
+        }, {
+          name: 'Осталось менее 5 дней',
+          data: [12, 17, 11]
+        }],
+          chart: {
+          type: 'bar',
+          height: 350,
+          stacked: true,
+        },
+        plotOptions: {
+          bar: {
+            horizontal: true,
+          },
+        },
+        stroke: {
+          width: 1,
+          colors: ['#fff']
+        },
+        title: {
+          text: 'Пользователи'
+        },
+        xaxis: {
+          categories: ["Иванов", "Сидоров", "Петров"],
+          labels: {
+            formatter: function (val) {
+              return val + "задач"
+            }
+          }
+        },
+        yaxis: {
+          title: {
+            text: undefined
+          },
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val;
+            }
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        legend: {
+          position: 'top',
+          horizontalAlign: 'left',
+          offsetX: 40
+        }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#users-chart-bar"), options);
+        chart.render();
     </script>
 
     <script>
