@@ -33,7 +33,7 @@ if (!$_SESSION['user']) {
                   <div class="card h-md-100">
                     <div class="card-body">
 
-                      <h1 id='overdue_projects'></h1>
+                      <div id='overdue_projects'></div>
 
                     </div>
                   </div>
@@ -43,7 +43,7 @@ if (!$_SESSION['user']) {
                   <div class="card h-md-100">
                     <div class="card-body">
 
-                      <h1>Тут будут текущие проекты</h1>
+                      <div id='ongoing_projects'></div>
 
                     </div>
                   </div>
@@ -53,7 +53,7 @@ if (!$_SESSION['user']) {
                   <div class="card h-md-100">
                     <div class="card-body">
 
-                      <h1>Тут будут проекты в работе</h1>
+                    <div id='completed_projects'></div>
 
                     </div>
                   </div>
@@ -112,6 +112,30 @@ if (!$_SESSION['user']) {
             },
             success(response){
               $('#overdue_projects').append(response);
+            }
+          });
+
+          // ВЫВОД ТЕКУЩИХ ПРОЕКТОВ
+          $.ajax({
+            method: 'POST',
+            url: '../php/get_db_table.php',
+            data: {
+              show: 'ongoing_projects'
+            },
+            success(response){
+              $('#ongoing_projects').append(response);
+            }
+          });
+        
+          // ВЫВОД ЗАВЕРШЕННЫХ ПРОЕКТОВ
+          $.ajax({
+            method: 'POST',
+            url: '../php/get_db_table.php',
+            data: {
+              show: 'completed_projects'
+            },
+            success(response){
+              $('#completed_projects').append(response);
             }
           });
 

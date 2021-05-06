@@ -327,9 +327,6 @@ if($_POST['show'] == 'overdue_projects'){
 
 
     while($overdue_projects = mysqli_fetch_array($overdue_projects_query)){
-        $response = $response."
-        <div class='row mb-3'>
-            <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>";
 
         $overdue_project_tasks_query = mysqli_query($connect, "SELECT * FROM projects_tasks WHERE project_id={$overdue_projects['id']}");
 
@@ -350,15 +347,123 @@ if($_POST['show'] == 'overdue_projects'){
             $progress = round($count_completed_tasks/$count_project_tasks, 2) * 100;
         }
         
-        
-        $response = $response."
-            <div class='col-6'>
-                <div class='progress'>
-                    <div class='progress-bar' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+        if($progress != 100){
+            $response = $response."
+            <div class='row mb-3'>
+                <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
+                <div class='col-6'>
+                    <div class='progress'>
+                        <div class='progress-bar' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                    </div>
                 </div>
             </div>
-        </div>
-        ";
+            ";
+        }
+
+    }
+
+    echo $response;
+    die();
+}
+
+if($_POST['show'] == 'ongoing_projects'){
+    header('Content-Type: text/html; charset=utf-8');
+
+    $current_date = date("Y-m-d");
+    $ongoing_projects_query = mysqli_query($connect, "SELECT * FROM projects WHERE end_date>'{$current_date}'");
+    $response = "
+    <div class='row mb-3'>
+        <div class='col'><h5 style='font-size: 19px; font-weight: 900; fill: rgb(55, 61, 63);' '>Текущие проекты</h5></div>
+    </div>
+    ";
+
+
+
+    while($ongoing_projects = mysqli_fetch_array($ongoing_projects_query)){
+
+        $ongoing_project_tasks_query = mysqli_query($connect, "SELECT * FROM projects_tasks WHERE project_id={$ongoing_projects['id']}");
+
+        $count_completed_tasks = 0;
+        $count_project_tasks = 0;
+        $progress = 0;
+        while($ongoing_project_tasks = mysqli_fetch_array($ongoing_project_tasks_query)){
+            if($ongoing_project_tasks['status'] == '1'){
+                $count_completed_tasks += 1;
+            }
+
+            $count_project_tasks += 1;
+
+        }
+
+        if($count_project_tasks>0){
+            $progress = round($count_completed_tasks/$count_project_tasks, 2) * 100;
+        }
+        if($progress != 100){
+            $response = $response."
+            <div class='row mb-3'>
+                <div class='col-6'><h5>{$ongoing_projects['name']}</h5></div>
+            
+                <div class='col-6'>
+                    <div class='progress'>
+                        <div class='progress-bar' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                    </div>
+                </div>
+            </div>
+            ";
+        }
+
+    }
+
+    echo $response;
+    die();
+}
+
+if($_POST['show'] == 'completed_projects'){
+    header('Content-Type: text/html; charset=utf-8');
+
+    $current_date = date("Y-m-d");
+    $completed_projects_query = mysqli_query($connect, "SELECT * FROM projects");
+    $response = "
+    <div class='row mb-3'>
+        <div class='col'><h5 style='font-size: 19px; font-weight: 900; fill: rgb(55, 61, 63);' '>Завершенные проекты</h5></div>
+    </div>
+    ";
+
+
+
+    while($completed_projects = mysqli_fetch_array($completed_projects_query)){
+
+        $completed_project_tasks_query = mysqli_query($connect, "SELECT * FROM projects_tasks WHERE project_id={$completed_projects['id']}");
+
+        $count_completed_tasks = 0;
+        $count_project_tasks = 0;
+        $progress = 0;
+        while($completed_project_tasks = mysqli_fetch_array($completed_project_tasks_query)){
+            if($completed_project_tasks['status'] == '1'){
+                $count_completed_tasks += 1;
+            }
+
+            $count_project_tasks += 1;
+
+        }
+
+        if($count_project_tasks>0){
+            $progress = round($count_completed_tasks/$count_project_tasks, 2) * 100;
+        }
+        if($progress == 100){
+            $response = $response."
+            <div class='row mb-3'>
+                <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
+            
+                <div class='col-6'>
+                    <div class='progress'>
+                        <div class='progress-bar' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                    </div>
+                </div>
+            </div>
+            ";
+        }
+
     }
 
     echo $response;
