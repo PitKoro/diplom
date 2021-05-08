@@ -615,7 +615,7 @@ if($_POST['show'] == 'completed_projects'){
     if($project_count == 0){
         $response = $response."
             <div class='row mb-3'>
-                <div class='col'><h5>Текущих проектов нет</h5></div>
+                <div class='col'><h5>Завершенных проектов нет</h5></div>
             </div>
         ";
 

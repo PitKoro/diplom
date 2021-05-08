@@ -64,7 +64,7 @@ if (!$_SESSION['user']) {
 
 
             <div class="col-sm-12 col-md-6">
-                <div class="row no-gutters">
+                <div class="row no-gutters js-project-charts">
                     <div class="col-md-12 col-xl-10 col-xxl-9 mb-3 pe-md-2">
                         <div class="card h-md-100">
                             <div class="card-body">
@@ -141,128 +141,157 @@ if (!$_SESSION['user']) {
 
 
           // ВЫВОД ДИАГРАММЫ ДЛЯ ЗАДАЧ
-            $.ajax({
-                method: 'POST',
-                url: '../php/charts.php',
-                data: {
-                    show: 'tasks'
+          $.ajax({
+              method: 'POST',
+              url: '../php/charts.php',
+              data: {
+                  show: 'tasks'
+              },
+              success: function(response){
+                  let complited = Number(response.completed_tasks);
+                  let notComplited = Number(response.not_completed_tasks);
+                  let options = {
+                      chart: {
+                          type: 'donut',
+                          width: '100%',
+                          height: 200
+                      },
+                      dataLabels: {
+                          enabled: false
+                      },
+                      plotOptions: {
+                          pie: {
+                              donut: {
+                                  size: '75%',
+                                  labels: {
+                                      show: true,
+                                      name: {
+                                          show: false
+                                      },
+                                      value: {
+                                          show: true
+                                      },
+                                      total: {
+                                          show: true,
+                                          fontSize: '20px',
+                                          fontWeight: 600,
+                                          label: 'Всего'
+                                      }
+                                  }
+                              }
+                          }
+                      },
+                      title: {
+                          text: 'Задачи всех проектов',
+                          style: {
+                          fontSize: '16px'
+                          }
+                      },
+                      series: [complited, notComplited],
+                      labels: ['Выполнено','Не выполнено'],
+                      colors:['#32CD32', '#B22222']
+                      
+                  };
+
+                  var tasksChart = new ApexCharts(document.querySelector("#task-chart-donut"), options);
+                  tasksChart.render();
+              }
+          });
+
+          // ВЫВОД ДИАГРАММЫ ДЛЯ ПОЛЬЗОВАТЕЛЕЙ
+          $.ajax({
+            method: 'POST',
+            url: '../php/charts.php',
+            data: {
+              show: 'users'
+            },
+            success: function(response){
+
+              let users = Object.keys(response);
+              let completed_tasks_cnt = [];
+              let completing_soon_tasks_cnt = [];
+              let current_tasks_cnt = [];
+              let overdue_tasks_cnt = [];
+
+              for(let key in response){
+                completed_tasks_cnt.push(response[key]['completed_tasks']);
+                completing_soon_tasks_cnt.push(response[key]['completing_soon_tasks']);
+                current_tasks_cnt.push(response[key]['current_tasks']);
+                overdue_tasks_cnt.push(response[key]['overdue_tasks']);
+              }
+
+              console.log(completed_tasks_cnt);
+
+              var options = {
+                series: [{
+                name: 'Текущие',
+                data: current_tasks_cnt
+              }, {
+                name: 'Сделано',
+                data: completed_tasks_cnt
+              }, {
+                name: 'Осталось менее 5 дней',
+                data: completing_soon_tasks_cnt
+              }, {
+                name: 'Просроченные',
+                data: overdue_tasks_cnt
+              }],
+                chart: {
+                type: 'bar',
+                height: 350,
+                stacked: true,
+              },
+              plotOptions: {
+                bar: {
+                  horizontal: true,
                 },
-                success: function(response){
-                    let complited = Number(response.completed_tasks);
-                    let notComplited = Number(response.not_completed_tasks);
-                    let options = {
-                        chart: {
-                            type: 'donut',
-                            width: '100%',
-                            height: 200
-                        },
-                        dataLabels: {
-                            enabled: false
-                        },
-                        plotOptions: {
-                            pie: {
-                                donut: {
-                                    size: '75%',
-                                    labels: {
-                                        show: true,
-                                        name: {
-                                            show: false
-                                        },
-                                        value: {
-                                            show: true
-                                        },
-                                        total: {
-                                            show: true,
-                                            fontSize: '20px',
-                                            fontWeight: 600,
-                                            label: 'Всего'
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        title: {
-                            text: 'Все задачи',
-                            style: {
-                            fontSize: '18px'
-                            }
-                        },
-                        series: [complited, notComplited],
-                        labels: ['Выполнено','Не выполнено'],
-                        colors:['#32CD32', '#B22222']
-                        
-                    };
-
-                    var chart = new ApexCharts(document.querySelector("#task-chart-donut"), options);
-                    chart.render();
+              },
+              stroke: {
+                width: 1,
+                colors: ['#fff']
+              },
+              title: {
+                text: 'Пользователи всех проектов'
+              },
+              xaxis: {
+                categories: users,
+                labels: {
+                  formatter: function (val) {
+                    return val
+                  }
                 }
-            });
+              },
+              yaxis: {
+                title: {
+                  text: undefined
+                },
+              },
+              tooltip: {
+                y: {
+                  formatter: function (val) {
+                    return val;
+                  }
+                }
+              },
+              fill: {
+                opacity: 1
+              },
+              legend: {
+                position: 'top',
+                horizontalAlign: 'left',
+                offsetX: 40
+              }
+              };
 
-
+              var usersChart = new ApexCharts(document.querySelector("#users-chart-bar"), options);
+              usersChart.render();
+            }
+          });
 
 
         });
 
-        var options = {
-          series: [{
-          name: 'Сделано',
-          data: [44, 55, 41]
-        }, {
-          name: 'Просрочено',
-          data: [53, 32, 33]
-        }, {
-          name: 'Осталось менее 5 дней',
-          data: [12, 17, 11]
-        }],
-          chart: {
-          type: 'bar',
-          height: 350,
-          stacked: true,
-        },
-        plotOptions: {
-          bar: {
-            horizontal: true,
-          },
-        },
-        stroke: {
-          width: 1,
-          colors: ['#fff']
-        },
-        title: {
-          text: 'Пользователи'
-        },
-        xaxis: {
-          categories: ["Иванов", "Сидоров", "Петров"],
-          labels: {
-            formatter: function (val) {
-              return val + "задач"
-            }
-          }
-        },
-        yaxis: {
-          title: {
-            text: undefined
-          },
-        },
-        tooltip: {
-          y: {
-            formatter: function (val) {
-              return val;
-            }
-          }
-        },
-        fill: {
-          opacity: 1
-        },
-        legend: {
-          position: 'top',
-          horizontalAlign: 'left',
-          offsetX: 40
-        }
-        };
 
-        var chart = new ApexCharts(document.querySelector("#users-chart-bar"), options);
-        chart.render();
     </script>
 
     <script>
