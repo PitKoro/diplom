@@ -324,8 +324,8 @@ if($_POST['show'] == 'overdue_projects'){
     </div>
     ";
 
-
-
+    $project_count = 0;
+    $i = 0;
     while($overdue_projects = mysqli_fetch_array($overdue_projects_query)){
 
         $overdue_project_tasks_query = mysqli_query($connect, "SELECT * FROM projects_tasks WHERE project_id={$overdue_projects['id']}");
@@ -333,33 +333,84 @@ if($_POST['show'] == 'overdue_projects'){
         $count_completed_tasks = 0;
         $count_project_tasks = 0;
         $progress = 0;
+        
         while($overdue_project_tasks = mysqli_fetch_array($overdue_project_tasks_query)){
             if($overdue_project_tasks['status'] == '1'){
                 $count_completed_tasks += 1;
             }
 
             $count_project_tasks += 1;
-            
-
         }
 
         if($count_project_tasks>0){
             $progress = round($count_completed_tasks/$count_project_tasks, 2) * 100;
         }
-        
-        if($progress != 100){
-            $response = $response."
-            <div class='row mb-3'>
-                <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
-                <div class='col-6'>
-                    <div class='progress'>
-                        <div class='progress-bar' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
-                    </div>
-                </div>
-            </div>
-            ";
-        }
 
+        if($progress != 100){
+            $project_count += 1;
+            $i+=1;
+            if($i<5){
+                $response = $response."
+                    <div class='row mb-3'>
+                        <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
+                    
+                        <div class='col-6'>
+                            <div class='progress'>
+                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                            </div>
+                        </div>
+                    </div>
+                ";
+            } else if($i==5){
+                $response = $response."
+                    <a class='mb-3' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOngoingProject' aria-expanded='false' aria-controls='collapseOngoingProject'>
+                        Больше <i class='fas fa-angle-down'></i>
+                    </a>
+                ";
+            
+                $response = $response."
+                    <div class='collapse' id='collapseOngoingProject'>
+                ";
+                $response = $response."
+                    <div class='row mb-3'>
+                        <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
+                    
+                        <div class='col-6'>
+                            <div class='progress'>
+                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                            </div>
+                        </div>
+                    </div>
+                ";
+            } else if($i>5){
+                $response = $response."
+                    <div class='row mb-3'>
+                        <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
+                    
+                        <div class='col-6'>
+                            <div class='progress'>
+                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                            </div>
+                        </div>
+                    </div>
+                ";
+            }
+        }
+    }
+
+    if($i > 4){
+        $response = $response."</div>";
+    }
+
+    if($project_count == 0){
+        $response = $response."
+            <div class='row mb-3'>
+                <div class='col'><h5>Просроченных проектов нет</h5></div>
+            </div>
+        ";
+
+        echo $response;
+        die();
     }
 
     echo $response;
@@ -378,7 +429,8 @@ if($_POST['show'] == 'ongoing_projects'){
     ";
 
 
-
+    $project_count = 0;
+    $i = 0;
     while($ongoing_projects = mysqli_fetch_array($ongoing_projects_query)){
 
         $ongoing_project_tasks_query = mysqli_query($connect, "SELECT * FROM projects_tasks WHERE project_id={$ongoing_projects['id']}");
@@ -386,32 +438,85 @@ if($_POST['show'] == 'ongoing_projects'){
         $count_completed_tasks = 0;
         $count_project_tasks = 0;
         $progress = 0;
+        
         while($ongoing_project_tasks = mysqli_fetch_array($ongoing_project_tasks_query)){
             if($ongoing_project_tasks['status'] == '1'){
                 $count_completed_tasks += 1;
             }
 
             $count_project_tasks += 1;
-
         }
 
         if($count_project_tasks>0){
             $progress = round($count_completed_tasks/$count_project_tasks, 2) * 100;
         }
-        if($progress != 100){
-            $response = $response."
-            <div class='row mb-3'>
-                <div class='col-6'><h5>{$ongoing_projects['name']}</h5></div>
-            
-                <div class='col-6'>
-                    <div class='progress'>
-                        <div class='progress-bar' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
-                    </div>
-                </div>
-            </div>
-            ";
-        }
 
+        if($progress != 100){
+            $project_count += 1;
+            $i+=1;
+            if($i<5){
+                $response = $response."
+                    <div class='row mb-3'>
+                        <div class='col-6'><h5>{$ongoing_projects['name']}</h5></div>
+                    
+                        <div class='col-6'>
+                            <div class='progress'>
+                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                            </div>
+                        </div>
+                    </div>
+                ";
+            } else if($i==5){
+                $response = $response."
+                    <a class='mb-3' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOngoingProject' aria-expanded='false' aria-controls='collapseOngoingProject'>
+                        Больше <i class='fas fa-angle-down'></i>
+                    </a>
+                ";
+            
+                $response = $response."
+                    <div class='collapse' id='collapseOngoingProject'>
+                ";
+                $response = $response."
+                    <div class='row mb-3'>
+                        <div class='col-6'><h5>{$ongoing_projects['name']}</h5></div>
+                    
+                        <div class='col-6'>
+                            <div class='progress'>
+                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                            </div>
+                        </div>
+                    </div>
+                ";
+            } else if($i>5){
+                $response = $response."
+                    <div class='row mb-3'>
+                        <div class='col-6'><h5>{$ongoing_projects['name']}</h5></div>
+                    
+                        <div class='col-6'>
+                            <div class='progress'>
+                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                            </div>
+                        </div>
+                    </div>
+                ";
+            }
+        }
+    }
+
+    if($i > 4){
+        $response = $response."</div>";
+    }
+
+
+    if($project_count == 0){
+        $response = $response."
+            <div class='row mb-3'>
+                <div class='col'><h5>Текущих проектов нет</h5></div>
+            </div>
+        ";
+
+        echo $response;
+        die();
     }
 
     echo $response;
@@ -429,8 +534,8 @@ if($_POST['show'] == 'completed_projects'){
     </div>
     ";
 
-
-
+    $project_count = 0;
+    $i = 0;
     while($completed_projects = mysqli_fetch_array($completed_projects_query)){
 
         $completed_project_tasks_query = mysqli_query($connect, "SELECT * FROM projects_tasks WHERE project_id={$completed_projects['id']}");
@@ -438,32 +543,84 @@ if($_POST['show'] == 'completed_projects'){
         $count_completed_tasks = 0;
         $count_project_tasks = 0;
         $progress = 0;
+        
         while($completed_project_tasks = mysqli_fetch_array($completed_project_tasks_query)){
             if($completed_project_tasks['status'] == '1'){
                 $count_completed_tasks += 1;
             }
 
             $count_project_tasks += 1;
-
         }
 
         if($count_project_tasks>0){
             $progress = round($count_completed_tasks/$count_project_tasks, 2) * 100;
         }
+
         if($progress == 100){
-            $response = $response."
-            <div class='row mb-3'>
-                <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
-            
-                <div class='col-6'>
-                    <div class='progress'>
-                        <div class='progress-bar' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+            $project_count += 1;
+            $i+=1;
+            if($i<5){
+                $response = $response."
+                    <div class='row mb-3'>
+                        <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
+                    
+                        <div class='col-6'>
+                            <div class='progress'>
+                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            ";
+                ";
+            } else if($i==5){
+                $response = $response."
+                    <a class='mb-3' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOngoingProject' aria-expanded='false' aria-controls='collapseOngoingProject'>
+                        Больше <i class='fas fa-angle-down'></i>
+                    </a>
+                ";
+            
+                $response = $response."
+                    <div class='collapse' id='collapseOngoingProject'>
+                ";
+                $response = $response."
+                    <div class='row mb-3'>
+                        <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
+                    
+                        <div class='col-6'>
+                            <div class='progress'>
+                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                            </div>
+                        </div>
+                    </div>
+                ";
+            } else if($i>5){
+                $response = $response."
+                    <div class='row mb-3'>
+                        <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
+                    
+                        <div class='col-6'>
+                            <div class='progress'>
+                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                            </div>
+                        </div>
+                    </div>
+                ";
+            }
         }
 
+    }
+    if($i > 4){
+        $response = $response."</div>";
+    }
+
+    if($project_count == 0){
+        $response = $response."
+            <div class='row mb-3'>
+                <div class='col'><h5>Текущих проектов нет</h5></div>
+            </div>
+        ";
+
+        echo $response;
+        die();
     }
 
     echo $response;
