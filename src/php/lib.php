@@ -279,7 +279,7 @@ function edit_project_task($connect, $task_data){
 
     $sql = null;
     if( $task_data['status'] == '0'){
-        $sql = mysqli_query($connect, "UPDATE projects_tasks SET user_id = '{$task_data['user_id']}', name = '{$task_data['name']}', end_date = '{$task_data['end_date']}', status = '{$task_data['status']}', finish_date = NULL WHERE id = '{$task_data['id']}'");
+        $sql = mysqli_query($connect, "UPDATE projects_tasks SET user_id = '{$task_data['user_id']}', name = '{$task_data['name']}', end_date = '{$task_data['end_date']}', status = '{$task_data['status']}', finish_date = NULL, comment = NULL WHERE id = '{$task_data['id']}'");
     } else {
         $current_date = date("Y-m-d");
         $sql = mysqli_query($connect, "UPDATE projects_tasks SET user_id = '{$task_data['user_id']}', name = '{$task_data['name']}', end_date = '{$task_data['end_date']}', status = '{$task_data['status']}', finish_date = '{$current_date}' WHERE id = '{$task_data['id']}'");

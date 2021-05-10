@@ -101,7 +101,8 @@ if($_POST['show']=='project_tasks'){
                     <td>{$task_end_date}</td>
                     <td>{$result['status']}</td>
                     <td> <button class='js-delete-project-task-btn btn btn-danger' value='{$result['id']}'>Удалить</button></td>
-                    <td> <button class='js-edit-project-task-btn btn btn-warning' value='{$result['id']}' data-bs-toggle='modal' data-bs-target='#edit-project-task-modal'>Изменить</button></td>";
+                    <td> <button class='js-edit-project-task-btn btn btn-warning' value='{$result['id']}' data-bs-toggle='modal' data-bs-target='#edit-project-task-modal'>Изменить</button></td>
+                    ";
                 if($result['status']=='0'){
                     $table_data= $table_data."
                     <td>
@@ -127,6 +128,11 @@ if($_POST['show']=='project_tasks'){
                             </span>
                         </td>";
                     }
+                } else {
+                    if($result['comment']!=''){
+                        $table_data = $table_data."<td><b>Комметрарий:</b> {$result['comment']}</td>";
+                    }
+                    
                 }
 
                 $table_data = $table_data."</tr>";
@@ -136,7 +142,8 @@ if($_POST['show']=='project_tasks'){
                 <td> {$result['name']}</td>
                 <td>{$result['full_name']}</td>
                 <td>{$result['end_date']}</td>
-                <td>{$result['status']}</td>";
+                <td>{$result['status']}</td>
+                ";
 
 
 
@@ -172,6 +179,11 @@ if($_POST['show']=='project_tasks'){
 
 
 
+                } else {
+                    if($result['comment']!=''){
+                        $table_data = $table_data."<td><b>Комметрарий:</b> {$result['comment']}</td>";
+                    }
+                    
                 }
 
 
