@@ -44,10 +44,10 @@ if($_POST['show']=='project_tasks'){
     header('Content-Type: text/html; charset=utf-8');
     $project_id = $_POST['project_id'];
     if($_SESSION['user']['status'] == '10'){
-        $sql = mysqli_query($connect, "SELECT A.*, U.full_name FROM projects_tasks A LEFT JOIN users U ON A.user_id=U.id WHERE A.project_id='{$project_id}' ORDER BY A.id DESC");
+        $sql = mysqli_query($connect, "SELECT A.*, U.full_name FROM projects_tasks A LEFT JOIN users U ON A.user_id=U.id WHERE A.project_id='{$project_id}' ORDER BY A.status ");
     } else {
         $user_id = $_SESSION['user']['id'];
-        $sql = mysqli_query($connect, "SELECT A.*, U.full_name FROM projects_tasks A LEFT JOIN users U ON A.user_id=U.id WHERE A.project_id='{$project_id}' AND A.user_id='{$user_id}' ORDER BY A.id DESC");
+        $sql = mysqli_query($connect, "SELECT A.*, U.full_name FROM projects_tasks A LEFT JOIN users U ON A.user_id=U.id WHERE A.project_id='{$project_id}' AND A.user_id='{$user_id}' ORDER BY A.status ");
     }
 
     $row_cnt = mysqli_num_rows($sql);
@@ -61,11 +61,11 @@ if($_POST['show']=='project_tasks'){
             <th scope='col'>Ответственный</th>
             <th scope='col'>Дата завершения</th>
             <th scope='col'>Статус</th>";
-            if($_SESSION['user']['status'] == '10'){
-                $table_data = $table_data."
-                <th scope='col'>Удалить</th>
-                <th scope='col'>Изменить</th>";
-            }
+            // if($_SESSION['user']['status'] == '10'){
+            //     $table_data = $table_data."
+            //     <th scope='col'>Удалить</th>
+            //     <th scope='col'>Изменить</th>";
+            // }
 
 
             
@@ -94,21 +94,39 @@ if($_POST['show']=='project_tasks'){
             
 
             if($_SESSION['user']['status'] == '10'){
+                $status = (($result['status']=='1') ? "Выполнено" : "Не выполнено");
                 $table_data = $table_data."                
                     <td> {$result['id']} </td>
                     <td> {$result['name']}</td>
                     <td>{$result['full_name']}</td>
                     <td>{$task_end_date}</td>
-                    <td>{$result['status']}</td>
-                    <td> <button class='js-delete-project-task-btn btn btn-danger' value='{$result['id']}'>Удалить</button></td>
-                    <td> <button class='js-edit-project-task-btn btn btn-warning' value='{$result['id']}' data-bs-toggle='modal' data-bs-target='#edit-project-task-modal'>Изменить</button></td>
+                    <td>{$status}</td>";
+                    if($result['comment']!=''){
+                        $table_data = $table_data."<td  class='text-start'><b>Комметрарий:</b> {$result['comment']}</td>";
+                    }
+
+                    if(($result['status']=='1') && ($result['comment']=='')){
+                        $table_data = $table_data."<td class='text-start'><b>Комметрарий:</b> <em>не указан</em></td>";
+                    }
+                    $table_data = $table_data."<td class='text-start'> 
+                        <button style='width: 42px' class='js-delete-project-task-btn btn btn-danger mb-2' title='Удалить' value='{$result['id']}'><i class='fas fa-trash-alt'></i></button>
+                        <button style='width: 42px' class='js-edit-project-task-btn btn btn-warning  mb-2' value='{$result['id']}' title='Изменить' data-bs-toggle='modal' data-bs-target='#edit-project-task-modal'><i class='fas fa-edit'></i></button>
                     ";
                 if($result['status']=='0'){
                     $table_data= $table_data."
-                    <td>
-                        <textarea class='form-control mb-2' type='text' name='task{$result['id']}_comment' placeholder='Комментарий (необязательно)' hidden></textarea>
-                        <button class='js-add-comment-to-project-task-btn btn btn-success' id='add-comment-to-project-task-{$result['id']}' value='{$result['id']}'>Выполнено</button>
-                        <button class='js-done-project-task-btn btn btn-success' id='done-project-task-btn-{$result['id']}' value='{$result['id']}' hidden>Выполнено</button>
+                    
+                        <textarea style='width: 220px; height:60px;' class='form-control mb-2' type='text' name='task{$result['id']}_comment' placeholder='Комментарий (необязательно)' hidden></textarea>
+                        <button style='width: 42px' class='js-add-comment-to-project-task-btn btn btn-success mb-2' id='add-comment-to-project-task-{$result['id']}' value='{$result['id']}' title='Выполнено'><i class='fas fa-check'></i></button>
+                        <div class='row justify-content-between'>
+                            <div class='col text-end'>
+                                <button style='width: 42px' class='js-close-done-project-task-btn btn btn-danger mb-2' id='close-done-project-task-btn-{$result['id']}' value='{$result['id']}' title='Отмена' hidden><i class='fas fa-times'></i></button>
+                                
+                            </div>
+                            <div class='col text-start'>
+                                <button style='width: 42px' class='js-done-project-task-btn btn btn-success mb-2' id='done-project-task-btn-{$result['id']}' value='{$result['id']}' hidden title='Выполнено'><i class='fas fa-check'></i></button>
+                            </div>
+                        </div>
+
                     </td>";
 
                     if(($days_to_finish<=5) && ($days_to_finish>=0)){
@@ -129,32 +147,44 @@ if($_POST['show']=='project_tasks'){
                         </td>";
                     }
                 } else {
-                    if($result['comment']!=''){
-                        $table_data = $table_data."<td><b>Комметрарий:</b> {$result['comment']}</td>";
-                    }
+                    // if($result['comment']!=''){
+                    //     $table_data = $table_data."<td><b>Комметрарий:</b> {$result['comment']}</td>";
+                    // }
                     
                 }
 
                 $table_data = $table_data."</tr>";
             } else {
+                $status = (($result['status']=='1') ? "Выполнено" : "Не выполнено");
                 $table_data = $table_data."
                 <td> {$result['id']} </td>
                 <td> {$result['name']}</td>
                 <td>{$result['full_name']}</td>
                 <td>{$result['end_date']}</td>
-                <td>{$result['status']}</td>
+                <td>{$status}</td>
                 ";
 
+                if($result['comment']!=''){
+                    $table_data = $table_data."<td  class='text-start'><b>Комметрарий:</b> {$result['comment']}</td>";
+                }
 
+                if(($result['status']=='1') && ($result['comment']=='')){
+                    $table_data = $table_data."<td class='text-start'><b>Комметрарий:</b> <em>не указан</em></td>";
+                }
+
+                $table_data = $table_data."
+                <td class='text-start'>
+                    <button style='width: 42px' class='js-edit-project-task-btn btn btn-warning  mb-2' value='{$result['id']}' title='Изменить' data-bs-toggle='modal' data-bs-target='#edit-project-task-modal'><i class='fas fa-edit'></i></button>
+                ";
 
                 if($result['status']=='0'){
 
                     if($result['user_id'] == $_SESSION['user']['id']){
                         $table_data = $table_data."
-                        <td>
-                            <textarea class='form-control mb-2' type='text' name='task{$result['id']}_comment' placeholder='Комментарий (необязательно)' hidden></textarea>
-                            <button class='js-add-comment-to-project-task-btn btn btn-success' id='add-comment-to-project-task-{$result['id']}' value='{$result['id']}'>Выполнено</button>
-                            <button class='js-done-project-task-btn btn btn-success' id='done-project-task-btn-{$result['id']}' value='{$result['id']}' hidden>Выполнено</button>
+                            <textarea style='width: 220px; height:60px;' class='form-control my-2' type='text' name='task{$result['id']}_comment' placeholder='Комментарий (необязательно)' hidden></textarea>
+                            <button style='width: 42px' class=' mb-2 js-add-comment-to-project-task-btn btn btn-success' id='add-comment-to-project-task-{$result['id']}' title='Выполнено' value='{$result['id']}'><i class='fas fa-check'></i></button>
+                            <button style='width: 42px' class='mb-2 js-close-done-project-task-btn btn btn-danger' id='close-done-project-task-btn-{$result['id']}' title='Отмена' value='{$result['id']}' hidden><i class='fas fa-times'></i></button>
+                            <button style='width: 42px' class='mb-2 js-done-project-task-btn btn btn-success' id='done-project-task-btn-{$result['id']}' value='{$result['id']}' title='Выполнено' hidden><i class='fas fa-check'></i></button>
                         </td>";
                         if(($days_to_finish<=5) && ($days_to_finish>=0)){
 
@@ -180,9 +210,10 @@ if($_POST['show']=='project_tasks'){
 
 
                 } else {
-                    if($result['comment']!=''){
-                        $table_data = $table_data."<td><b>Комметрарий:</b> {$result['comment']}</td>";
-                    }
+                    // if($result['comment']!=''){
+                    //     $table_data = $table_data."<td><b>Комметрарий:</b> {$result['comment']}</td>";
+                    // }
+                    $table_data = $table_data."</td>";
                     
                 }
 
@@ -221,8 +252,6 @@ if($_POST['show'] == 'project_users'){
         <th scope='col'>#</th>
         <th scope='col'>Логин</th>
         <th scope='col'>ФИО</th>
-        <th scope='col'>Удалить</th>
-        <th scope='col'>Подробнее</th>
         </tr>
     </thead>
     <tbody>";
@@ -235,8 +264,6 @@ if($_POST['show'] == 'project_users'){
                 <td> {$result['id']} </td>
                 <td> {$result['login']} </td>
                 <td> {$result['full_name']}</td>        
-                <td> Недоступно</td>
-                <td><button type='button' class='moreButton btn btn-primary' id='{$result['id']}'>Подробнее</button></td>
             </tr>";
         } else if($_SESSION['user']['status'] == '10'){
             $table_data = $table_data."
@@ -244,8 +271,7 @@ if($_POST['show'] == 'project_users'){
                 <td> {$result['id']} </td>
                 <td> {$result['login']} </td>
                 <td> {$result['full_name']}</td>        
-                <td> <button class='js-delete-project-user-btn btn btn-danger' value='{$result['id']}'> Удалить</button></td>
-                <td><button type='button' class='moreButton btn btn-primary' id='{$result['id']}'>Подробнее</button></td>
+                <td> <button class='js-delete-project-user-btn btn btn-danger' value='{$result['id']}' title='Удалить'><i class='fas fa-trash-alt'></i></button></td>
             </tr>";
         } else {
             $table_data = $table_data."
@@ -253,8 +279,6 @@ if($_POST['show'] == 'project_users'){
                 <td> {$result['id']} </td>
                 <td> {$result['login']} </td>
                 <td> {$result['full_name']}</td>        
-                <td> Недоступно</td>
-                <td><button type='button' class='moreButton btn btn-primary' id='{$result['id']}'>Подробнее</button></td>
             </tr>";
         }
         
@@ -279,8 +303,6 @@ if($_POST['show'] == 'project_files'){
                 <tr>
                 <th scope='col'>Имя</th>
                 <th scope='col'>Размер</th>
-                <th scope='col'>Удалить</th>
-                <th scope='col'>Скачать</th>
                 </tr>
             </thead>
             <tbody>";
@@ -292,16 +314,19 @@ if($_POST['show'] == 'project_files'){
                 <tr>
                     <td> {$result['name']} </td>
                     <td> {$size} КБ</td>     
-                    <td> <button class='js-delete-project-file-btn btn btn-danger' value='{$result['id']}'> Удалить</button></td>
-                    <td><a href='../../{$result['path']}' class='btn btn-success' id='{$result['id']}' download>Скачать</a></td>
+                    <td>
+                        <button class='js-delete-project-file-btn btn btn-danger' title='Удалить' value='{$result['id']}'><i class='fas fa-trash-alt'></i></button>
+                        <a href='../../{$result['path']}' class='btn btn-success' id='{$result['id']}' title='Скачать' download><i class='fas fa-download'></i></a>
+                    </td>
                 </tr>";
             } else {
                 $table_data = $table_data."
                 <tr>
                     <td> {$result['name']} </td>
                     <td> {$size} КБ</td>      
-                    <td> Недоступно</td>
-                    <td><a href='#' class='btn btn-success' id='{$result['id']}'>Скачать</a></td>
+                    <td>
+                        <a href='../../{$result['path']}' class='btn btn-success' id='{$result['id']}' title='Скачать' download><i class='fas fa-download'></i></a>
+                    </td>
                 </tr>";
             }
         }
@@ -477,7 +502,7 @@ if($_POST['show'] == 'ongoing_projects'){
                             </div>
                         </div>
                         <div class='col-2 mx-auto'>
-                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$ongoing_projects['id']}'><i class='fas fa-angle-right'></i></button>
+                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$ongoing_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
                         </div>
                     </div>
 

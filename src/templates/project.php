@@ -34,29 +34,29 @@ ini_set('display_startup_errors', 1);
     <? require "blocks/navbar.php"; ?>
     <div class="container mt-5">
         <div class="row gy-0">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="col mb-5">
                     <div class="card">
-                        <img src="" class="card-img-top js-project-photo">
+                        <img src="" class="card-img-top js-project-photo p-2">
                         <div class="card-body">
                             <h4 class="card-title js-project-name">Card title</h4>
                             <p class="card-text js-project-description">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         </div>
-                        <ul class="list-group list-group-flush">
+                        <ul class="list-group list-group-flush px-3">
                             <label for="project-start-date">Дата начала</label><li id="project-start-date" class="list-group-item js-project-start-date"><span>An item</span></li>
                             <label for="project-end-date">Дата окончания</label><li id="project-end-date" class="list-group-item js-project-end-date">A second item</li>
                         </ul>
                         <?if($_SESSION['user']['status']=='10'): ?>
-                            <div class="card-body">
-                                <button class="btn btn-primary js-edit-project-data-btn" value="" data-bs-toggle='modal' data-bs-target='#edit-project-data-modal'>Редактировать</button>
-                                <button class="btn btn-danger js-delete-project-btn" value="" >Удалить проект</button>
+                            <div class="card-body text-center">
+                            <button style='width: 42px' class="btn btn-danger js-delete-project-btn" value="" title="Удалить проект"><i class="fas fa-trash-alt"></i></button>
+                                <button style='width: 42px' class="btn btn-warning js-edit-project-data-btn" value="" data-bs-toggle='modal' data-bs-target='#edit-project-data-modal' title="Редактировать проект"><i class="fas fa-edit"></i></button>
                             </div>
                         <?endif;?>
                     </div>
                 </div>
             </div>
             
-            <div class="col-sm-8">
+            <div class="col-sm-9">
 
                 <div class="row mb-2">
                     <div class="col">
@@ -84,9 +84,14 @@ ini_set('display_startup_errors', 1);
                 <div class="row mb-2">
                     <div class="col">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover pl-2 pr-2 text-center js-project-table">
+                            <div class="fixed-height-table">
+                                <table class="table table-bordered table-hover pl-2 pr-2 text-center js-project-table">
 
-                            </table>
+                                </table>
+                                
+                            </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -581,7 +586,7 @@ ini_set('display_startup_errors', 1);
         // УДАЛЕНИЕ ЗАДАЧИ ИЗ ПРОЕКТА
         $('.js-project-table').on('click', '.js-delete-project-task-btn', function(event){
             event.preventDefault();
-            let isDelete = confirm("Вы точно хотите удалить эту задачу'?");
+            let isDelete = confirm("Вы точно хотите удалить эту задачу?");
             if(isDelete){
                 let project_id = $('input[name="project_id"]').val();
                 let task_id = $(this).val();
@@ -613,6 +618,7 @@ ini_set('display_startup_errors', 1);
             let task_id = $(this).val();
             $(`#add-comment-to-project-task-${task_id}`).attr('hidden', true);
             $(`#done-project-task-btn-${task_id}`).removeAttr('hidden');
+            $(`#close-done-project-task-btn-${task_id}`).removeAttr('hidden');
             $(`textarea[name="task${task_id}_comment"]`).removeAttr('hidden');
         });
 
@@ -643,6 +649,15 @@ ini_set('display_startup_errors', 1);
                     }
                 }
             });
+        });
+
+        // КНОПКА ЗАКРЫВАЮЩАЯ КНОПКУ ВЫПОЛНЕНИЯ ЗАДАЧИ
+        $('.js-project-table').on('click', '.js-close-done-project-task-btn', function(event){
+            let task_id = $(this).val();
+            $(`#add-comment-to-project-task-${task_id}`).removeAttr('hidden');
+            $(`#close-done-project-task-btn-${task_id}`).attr('hidden', true);
+            $(`#done-project-task-btn-${task_id}`).attr('hidden', true);
+            $(`textarea[name="task${task_id}_comment"]`).attr('hidden', true);
         });
 
 
