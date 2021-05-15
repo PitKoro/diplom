@@ -280,7 +280,13 @@ if (!$_SESSION['user']) {
                     show: 'all_projects_charts'
                 },
                 success: function(response){
-                    show_project_charts(response);
+                    if(response.status == '0'){
+                        $('#task-chart-donut').empty().append("<h5>Задач нет</h5>");
+                        $('#users-chart-bar').empty().append("<h5>Задач нет</h5>");
+                    }else {
+                        show_project_charts(response);
+                    }
+                    
                 }
             });
 
@@ -298,7 +304,13 @@ if (!$_SESSION['user']) {
                     project_id: project_id
                 },
                 success: function(response){
-                    show_project_charts(response);
+                    if(response.status == '0'){
+                        $('#task-chart-donut').empty().append("<h5>Задач нет</h5>");
+                        $('#users-chart-bar').empty().append("<h5>Задач нет</h5>");
+                    }else {
+                        show_project_charts(response);
+                    }
+                    //show_project_charts(response);
                 }            
             });
 

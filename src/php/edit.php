@@ -38,7 +38,7 @@ if(isset($_POST)){
 
                 if($path_to_photo != 'public/img/uploads/default/default_project_photo.jpg'){
 
-                    $path_to_photo = 'public/img/uploads/avatar/' . time() . $_FILES['project_photo']['name']; # добавляем в название аватарки числа текущего времени (чтобы не возникал конфликт имен)
+                    $path_to_photo = 'public/img/uploads/project_photo/' . time() . $_FILES['project_photo']['name']; # добавляем в название аватарки числа текущего времени (чтобы не возникал конфликт имен)
                     # перемещяем загруженное изображение в public/img/uploads/
                     if (!move_uploaded_file($_FILES['project_photo']['tmp_name'], '../../' . $path_to_photo)) {
                         # Если не удалось переместить, то формируем ответ с ошибкой

@@ -389,12 +389,15 @@ if($_POST['show'] == 'overdue_projects'){
             if($i<5){
                 $response = $response."
                     <div class='row mb-3'>
-                        <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
+                        <div class='col-4'><h5>{$overdue_projects['name']}</h5></div>
                     
                         <div class='col-6'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
+                        </div>
+                        <div class='col-2 mx-auto'>
+                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$overdue_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
                         </div>
                     </div>
                 ";
@@ -410,24 +413,30 @@ if($_POST['show'] == 'overdue_projects'){
                 ";
                 $response = $response."
                     <div class='row mb-3'>
-                        <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
+                        <div class='col-4'><h5>{$overdue_projects['name']}</h5></div>
                     
                         <div class='col-6'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
                         </div>
+                        <div class='col-2 mx-auto'>
+                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$overdue_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
+                        </div>
                     </div>
                 ";
             } else if($i>5){
                 $response = $response."
                     <div class='row mb-3'>
-                        <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
+                        <div class='col-4'><h5>{$overdue_projects['name']}</h5></div>
                     
                         <div class='col-6'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
+                        </div>
+                        <div class='col-2 mx-auto'>
+                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$overdue_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
                         </div>
                     </div>
                 ";
@@ -519,24 +528,32 @@ if($_POST['show'] == 'ongoing_projects'){
                 ";
                 $response = $response."
                     <div class='row mb-3'>
-                        <div class='col-6'><h5>{$ongoing_projects['name']}</h5></div>
+                        <div class='col-4'><h5>{$ongoing_projects['name']}</h5></div>
                     
                         <div class='col-6'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
                         </div>
+
+                        <div class='col-2 mx-auto'>
+                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$ongoing_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
+                        </div>
                     </div>
                 ";
             } else if($i>5){
                 $response = $response."
                     <div class='row mb-3'>
-                        <div class='col-6'><h5>{$ongoing_projects['name']}</h5></div>
+                        <div class='col-4'><h5>{$ongoing_projects['name']}</h5></div>
                     
                         <div class='col-6'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
+                        </div>
+
+                        <div class='col-2 mx-auto'>
+                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$ongoing_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
                         </div>
                     </div>
                 ";
@@ -603,12 +620,16 @@ if($_POST['show'] == 'completed_projects'){
             if($i<5){
                 $response = $response."
                     <div class='row mb-3'>
-                        <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
+                        <div class='col-4'><h5>{$completed_projects['name']}</h5></div>
                     
                         <div class='col-6'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
+                        </div>
+
+                        <div class='col-2 mx-auto'>
+                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$completed_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
                         </div>
                     </div>
                 ";
@@ -624,24 +645,32 @@ if($_POST['show'] == 'completed_projects'){
                 ";
                 $response = $response."
                     <div class='row mb-3'>
-                        <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
+                        <div class='col-4'><h5>{$completed_projects['name']}</h5></div>
                     
                         <div class='col-6'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
                         </div>
+
+                        <div class='col-2 mx-auto'>
+                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$completed_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
+                        </div>
                     </div>
                 ";
             } else if($i>5){
                 $response = $response."
                     <div class='row mb-3'>
-                        <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
+                        <div class='col-4'><h5>{$completed_projects['name']}</h5></div>
                     
                         <div class='col-6'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
+                        </div>
+
+                        <div class='col-2 mx-auto'>
+                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$completed_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
                         </div>
                     </div>
                 ";

@@ -12,12 +12,20 @@ if(isset($_POST['show'])){
         $completed_tasks_cnt = mysqli_num_rows($completed_tasks);
         $not_completed_tasks_cnt = mysqli_num_rows($not_completed_tasks);
 
+        if(($completed_tasks_cnt == 0) && ($not_completed_tasks_cnt == 0)){
+            $response["status"] = 0;
+            echo json_encode($response);
+            die();
+        }
+
         $response = [
             "tasks_chart"=>[
                 'completed_tasks'=>$completed_tasks_cnt,
                 'not_completed_tasks'=>$not_completed_tasks_cnt
             ]
         ];
+
+
 
         $all_users_with_tasks_query = mysqli_query($connect, "SELECT U.full_name FROM projects_tasks A LEFT JOIN users U ON A.user_id=U.id GROUP BY U.full_name"); // ЗАПРОС НА ПОЛУЧЕНИЕ full_name ВСЕХ users У КОТОРЫХ ЕСТЬ ХОТЯ БЫ ОДНА ЗАДАЧА
         $all_tasks_query = mysqli_query($connect, "SELECT A.*, U.full_name FROM projects_tasks A LEFT JOIN users U ON A.user_id=U.id ");// WHERE A.project_id='{$project_id}' ORDER BY A.id DESC
@@ -59,6 +67,12 @@ if(isset($_POST['show'])){
 
         $completed_tasks_cnt = mysqli_num_rows($completed_tasks);
         $not_completed_tasks_cnt = mysqli_num_rows($not_completed_tasks);
+
+        if(($completed_tasks_cnt == 0) && ($not_completed_tasks_cnt == 0)){
+            $response["status"] = 0;
+            echo json_encode($response);
+            die();
+        }
 
         $response = [
             "tasks_chart"=>[

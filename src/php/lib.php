@@ -97,8 +97,9 @@ function get_project_task($connect, $task_id){
 #               $project_id - id проекта
 # возвращает: массив [$status => boolean, $msg => string]
 function delete_project($connect, $project_id){
-    mysqli_query($connect, "DELETE FROM users_in_projects WHERE project_id='{$project_id}'");
     mysqli_query($connect, "DELETE FROM projects_tasks WHERE project_id='{$project_id}'");
+    mysqli_query($connect, "DELETE FROM users_in_projects WHERE project_id='{$project_id}'");
+    mysqli_query($connect, "DELETE FROM project_files WHERE project_id='{$project_id}'");
     $sql = mysqli_query($connect, "DELETE FROM projects WHERE id='{$project_id}'");
 
     if($sql){

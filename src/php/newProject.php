@@ -66,7 +66,7 @@
             # Если не удалось переместить, то формируем ответ с ошибкой
             $response = [
                 "status" => false,
-                "message" => "ошибка при загрузке изображения",
+                "message" => "Eror pri zagruzke img",
                 "type" => 2
             ];
     
