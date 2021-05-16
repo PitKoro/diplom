@@ -108,9 +108,11 @@ if($_POST['show']=='project_tasks'){
                     if(($result['status']=='1') && ($result['comment']=='')){
                         $table_data = $table_data."<td class='text-start'><b>Комметрарий:</b> <em>не указан</em></td>";
                     }
+
                     $table_data = $table_data."<td class='text-start'> 
                         <button style='width: 42px' class='js-delete-project-task-btn btn btn-danger mb-2' title='Удалить' value='{$result['id']}'><i class='fas fa-trash-alt'></i></button>
                         <button style='width: 42px' class='js-edit-project-task-btn btn btn-warning  mb-2' value='{$result['id']}' title='Изменить' data-bs-toggle='modal' data-bs-target='#edit-project-task-modal'><i class='fas fa-edit'></i></button>
+                        <button style='width: 42px' class='js-project-task-chat-btn btn btn-primary mb-2' title='Чат' value='{$result['id']}' data-bs-toggle='modal' data-bs-target='#project-task-chat-modal'><i class='fas fa-comment-alt'></i></button>
                     ";
                 if($result['status']=='0'){
                     $table_data= $table_data."
@@ -174,6 +176,7 @@ if($_POST['show']=='project_tasks'){
 
                 $table_data = $table_data."
                 <td class='text-start'>
+                <button style='width: 42px' class='js-project-task-chat-btn btn btn-primary mb-2' title='Чат' value='{$result['id']}' data-bs-toggle='modal' data-bs-target='#project-task-chat-modal'><i class='fas fa-comment-alt'></i></button>
                     <button style='width: 42px' class='js-edit-project-task-btn btn btn-warning  mb-2' value='{$result['id']}' title='Изменить' data-bs-toggle='modal' data-bs-target='#edit-project-task-modal'><i class='fas fa-edit'></i></button>
                 ";
 

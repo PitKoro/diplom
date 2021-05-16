@@ -96,11 +96,49 @@ ini_set('display_startup_errors', 1);
                     </div>
                 </div>
 
+
             </div>
         </div>
     </div>
 
-    
+    <!-- Modal for project task chat-->
+    <div class="modal fade" id="project-task-chat-modal" tabindex="-1" aria-labelledby="project-task-chat-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="project-task-chat-modal-label">Чат задачи</h5>
+                    <button type="button" id="project-task-chat-modal-close-btn" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="js-project-task-chat-modal-body">
+                        <div class='chat'>
+                            <div class='form-body mb-3'>
+                                <div class='' id='messages' style="overflow-y: scroll; height:200px;">
+                                    Загрузка...
+                                </div>
+                            </div>
+                            <div class='row g-0 justify-content-center chat-input'>
+                                <div class="col-8 me-2">
+                                    <input type='text' id='message-text' class='chat-form__input form-control' placeholder='Введите сообщение'>
+                                    <div class="invalid-feedback">
+                                        Введите сообщение
+                                    </div>
+                                </div>
+                                <div class="col-2"><button class='chat-form__submit btn btn-primary' value=''><i class="fas fa-paper-plane"></i></button></div>
+                                <input type='text' id='task-id' value='' hidden>
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+
+
     <!-- Modal for add task -->
     <div class="modal fade" id="add-project-task-modal" tabindex="-1" aria-labelledby="add-project-task-modal-label" aria-hidden="true">
         <div class="modal-dialog">
@@ -221,6 +259,7 @@ ini_set('display_startup_errors', 1);
     <script src="../../public/vendor/jquery/jquery-3.5.1.min.js"></script>
     <script src="../../public/vendor/popper/popper.min.js"></script>
     <script src="../../public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../src/js/chat.js"></script>
     <script>
         function start_all_tooltip(){
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
