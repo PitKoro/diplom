@@ -1,7 +1,13 @@
 <?
+
 session_start();//Подключение должно быть на первой строчке в коде, иначе появится ошибка
 require_once 'connect.php'; # Подключаем скрипт connect.php, таким образом устанавливаем соединение с сервером MySQL
 
+
+# для дебага
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 
 
 function auth($connect,$user_id, $task_id) {
@@ -35,32 +41,16 @@ function load($connect, $task_id) {
 						$response .= "<div class='mb-2 chat__message chat__message_$user[login]'><b>$user[full_name]:</b> $array[message]</div>"; //Добавляем сообщения в переменную $echo
 					}
 				}
-			
 			} else {
-				$response = "Нет сообщений!";//В базе ноль записей
+				$response = "<div id='js-empty-chat'>Нет сообщений!</div>";//В базе ноль записей
 			}
 		}
 	} else {
 		$response = "Проблема авторизации task_id={$task_id}";//Авторизация не удалась
 	}
-	$response .= "</br>";
 	return $response;//Возвращаем результат работы функции
 }
 
-
-function send($connect,$message, $task_id) {
-	if(auth($connect,$_SESSION['user']['id'], $task_id)) {//Если авторизация удачна
-		$message = htmlspecialchars($message);//Заменяем символы ‘<’ и ‘>’на ASCII-код
-		$message = trim($message); //Удаляем лишние пробелы
-		$message = addslashes($message); //Экранируем запрещенные символы
-
-		$user_id = $_SESSION['user']['id'];
-        $current_date = date("Y-m-d");
-		
-		$result = mysqli_query($connect,"INSERT INTO chat (`user_id`, `task_id`, `message`, `date`, `id`) VALUES ('$user_id', '$task_id','$message', '$current_date', NULL)");//Заносим сообщение в базу данных
-	}
-	return load($connect, $task_id); //Вызываем функцию загрузки сообщений
-}
 
 //Получаем переменные из супермассива $_POST
 //Тут же их можно проверить на наличие инъекций
@@ -69,22 +59,17 @@ if(isset($_POST['var1'])) {$var1 = $_POST['var1'];}
 if(isset($_POST['task_id'])) {$task_id = $_POST['task_id'];}
 
 switch($_POST['act']) {//В зависимости от значения act вызываем разные функции
-	case 'load': 
-		$echo = load($connect, $task_id); //Загружаем сообщения
-	break;
-	
-	case 'send': 
-		if(isset($var1)) {
-			$echo = send($connect, $var1, $task_id); //Отправляем сообщение
-		}
-	break;
-	
 	case 'auth': 
-		if(isset($var1) && isset($var2)) {//Авторизуемся
-			if(auth($connect,$var1,$var2)) {
-				$echo = load($connect);
+		if(isset($task_id)) {//Авторизуемся
+			$user_id = $_SESSION['user']['id'];
+			if(auth($connect,$user_id,$task_id)) {
+				$echo = load($connect, $task_id);
 			}
 		}
+	break;
+
+	case 'get_user_id':
+		$echo = $_SESSION['user']['id'];
 	break;
 }
 

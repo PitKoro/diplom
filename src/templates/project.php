@@ -29,7 +29,9 @@ ini_set('display_startup_errors', 1);
 </head>
 <body>
 
-    <?echo"<input name='project_id' value='{$_GET['id']}' hidden>";?>
+<?echo"<input name='project_id' value='{$_GET['id']}' hidden>";?>
+<?echo"<input name='user_id' value='{$_SESSION['user']['id']}' hidden>";?>
+<?echo"<input name='user_full_name' value='{$_SESSION['user']['full_name']}' hidden>";?>
 
     <? require "blocks/navbar.php"; ?>
     <div class="container mt-5">
