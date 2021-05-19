@@ -22,7 +22,8 @@ async def chat(websocket, path):
             message = json.loads(message)
             print(message)
 
-            user_id = message["user_id"]
+            user_login = message["user_login"]
+            user_full_name = message["user_full_name"]
             task_id = message["task_id"]
             message_text = message["message"]
             current_date = str(datetime.today().strftime('%Y-%m-%d'))
@@ -37,16 +38,16 @@ async def chat(websocket, path):
             )
 
             with connection.cursor() as cursor:
-                sql = "INSERT INTO chat (user_id, task_id, message, date) VALUES (%s,%s,%s,%s)"
-                cursor.execute(sql, (user_id, task_id, message_text, current_date))
+                sql = "INSERT INTO chat (user_login, user_full_name, task_id, message, date) VALUES (%s,%s,%s,%s,%s)"
+                cursor.execute(sql, (user_login, user_full_name, task_id, message_text, current_date))
             connection.commit()
 
-            with connection.cursor() as cursor:
-                # Read a single record
-                sql = "SELECT `full_name` FROM `users` WHERE `id`=%s"
-                cursor.execute(sql, (user_id,))
-                result = cursor.fetchone()
-                message.update(result)
+            # with connection.cursor() as cursor:
+            #     # Read a single record
+            #     sql = "SELECT `full_name` FROM `users` WHERE `id`=%s"
+            #     cursor.execute(sql, (user_id,))
+            #     result = cursor.fetchone()
+            #     message.update(result)
             
             message = json.dumps(message)
             # for user in USERS:

@@ -26,7 +26,35 @@ if (!$_SESSION['user']) {
 
 
     <div class="container mt-5">
-        <table class="table table-bordered table-hover text-center" id="projects_table"></table>
+        <div class="row gy-0">            
+            <div class="col">
+                <div class="row mb-2">
+                    <div class="col">
+                        <div class="mx-auto" style="width:129px;">
+                            <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                <button type="button" class="btn btn-outline-primary js-project-tasks-btn active">Пользователи</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <div class="table-responsive">
+                            <div class="fixed-height-table">
+                                <table class="table table-bordered table-hover pl-2 pr-2 text-center js-all-users-table">
+
+                                </table>
+                                
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
 
     <!-- Bootstrap and jQuery JS -->
@@ -34,15 +62,45 @@ if (!$_SESSION['user']) {
     <script src="../../public/vendor/popper/popper.min.js"></script>
     <script src="../../public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
-        $(document).ready(function(){
+        function show_all_users(){
             $.ajax({
                 type: "POST",
                 url: "../php/get_db_table.php",
-                data: {table: "user"},
+                data: {show: "all_users"},
                 success: function(html){
-                    $("#projects_table").html(html);
+                    $(".js-all-users-table").html(html);
                 } 
             });
+        }
+
+        $(document).ready(function(){
+            show_all_users();
+        });
+
+
+        // УДАЛЕНИЕ ПОЛЬЗОВАТЕЛЯ ИЗ ПРОЕКТА
+        $('.js-all-users-table').on('click', '.js-delete-project-user-btn', function(event){
+            event.preventDefault();
+            let isDelete = confirm("Вы точно хотите удалить этого пользователя?");
+            if(isDelete){
+                let user_id = $(this).val();
+
+                $.ajax({
+                    method: 'POST',
+                    url: '../php/delete.php',
+                    data: {
+                        action: 'delete_user',
+                        user_id: user_id
+                    },
+                    success: function(response){
+                        if(response.status){
+                            show_all_users();
+                        } else {
+                            console.log(response.msg);
+                        }
+                    }
+                });
+            }
         });
     </script>
 </body>

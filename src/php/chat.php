@@ -35,11 +35,10 @@ function load($connect, $task_id) {
 		if($result) {
 			if(mysqli_num_rows($result) >= 1) {
 				while($array = mysqli_fetch_array($result)) {//Выводим их с помощью цикла
-					$user_result = mysqli_query($connect,"SELECT * FROM users WHERE id='$array[user_id]'");//Получаем данные об авторе сообщения
-					if(mysqli_num_rows($user_result) == 1) {
-						$user = mysqli_fetch_array($user_result);
-						$response .= "<div class='mb-2 chat__message chat__message_$user[login]'><b>$user[full_name]:</b> $array[message]</div>"; //Добавляем сообщения в переменную $echo
-					}
+					// $user_result = mysqli_query($connect,"SELECT * FROM users WHERE id='$array[user_id]'");//Получаем данные об авторе сообщения
+					// $user = mysqli_fetch_array($user_result);
+					$response .= "<div class='mb-2 chat__message chat__message_$array[user_login]'><b>$array[user_full_name]:</b> $array[message]</div>"; //Добавляем сообщения в переменную $echo
+
 				}
 			} else {
 				$response = "<div id='js-empty-chat'>Нет сообщений!</div>";//В базе ноль записей

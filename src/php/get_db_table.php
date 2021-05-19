@@ -40,6 +40,57 @@ if($_POST['show']=='project_data') {
     die();
 }
 
+if($_POST['show']=='all_users'){
+    header('Content-Type: text/html; charset=utf-8');
+    $all_users_query = mysqli_query($connect, "SELECT * FROM users");
+
+    $table_data = "
+    <thead>
+        <tr>
+            <th scope='col'>ФИО</th>
+            <th scope='col'>Логин</th>
+            <th scope='col'>Почта</th>
+            <th scope='col'>Статус</th>
+        </tr>
+    </thead>
+    <tbody>";
+
+    while($all_users = mysqli_fetch_array($all_users_query))#функция вывода таблицы 
+    {
+
+        $table_data = $table_data."
+        <tr>
+            <td> {$all_users['full_name']} </td>
+            <td> {$all_users['login']} </td>
+            <td> {$all_users['email']}</td>        
+        ";
+        if($all_users['status']=='10'){
+            $table_data = $table_data."
+            <td>Администратор</td> 
+            ";
+        } else {
+            $table_data = $table_data."
+            <td>Обычный пользователь</td> 
+            ";
+        }
+        if(($_SESSION['user']['status'] == '10')&&($all_users['id']!=$_SESSION['user']['id'])){
+            $table_data = $table_data."       
+                <td> <button class='js-delete-project-user-btn btn btn-danger' value='{$all_users['id']}' title='Удалить'><i class='fas fa-trash-alt'></i></button></td>
+            ";
+        }
+        $table_data = $table_data."
+            </tr> 
+            ";
+        
+    }
+
+    $table_data = $table_data."</tbody>";
+    mysqli_free_result($sql);
+    echo $table_data;
+    die();
+
+}
+
 
 if($_POST['show']=='all_user_tasks'){
     header('Content-Type: text/html; charset=utf-8');

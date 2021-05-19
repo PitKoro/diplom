@@ -178,6 +178,36 @@ function delete_project_user($connect, $project_id, $user_id){
 }
 
 
+# Функция - удаление пользователя из системы
+# аргументы:    $connect - дескриптор подключения к БД
+#               $user_id - id пользователя
+# возвращает: массив [$status => boolean, $msg => string]
+function delete_user($connect, $user_id){
+    mysqli_query($connect, "DELETE FROM chat WHERE id IN (SELECT C.id FROM (SELECT * FROM chat) C LEFT JOIN projects_tasks PT ON C.task_id=PT.id WHERE PT.user_id='{$user_id}')"); # все сообщения связанные с пользователем
+    mysqli_query($connect, "DELETE FROM projects_tasks WHERE user_id='{$user_id}'"); # Удаляем задачи пользователя из проектов
+    mysqli_query($connect, "DELETE FROM users_in_projects WHERE user_id='{$user_id}'"); # Удаляем пользователя из проектов
+    $sql = mysqli_query($connect, "DELETE FROM users WHERE id='{$user_id}'"); # Удаляем пользователя из системы
+    
+    if($sql){
+        $status = true;
+        $msg = "user with id={$user_id} successfully deleted!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    } else {
+        $status = false;
+        $msg = "Failed to delete user with id ={$task_id}!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    }
+}
+
+
 # Функция - удаление файла из БД
 # аргументы:    $connect - дескриптор подключения к БД
 #               $file_id - id файла

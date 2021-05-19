@@ -41,7 +41,7 @@ $(document).on('click', '.js-project-task-chat-btn', function(){
 		response = JSON.parse(response.data);
 		const div = document.createElement('div');
 		div.className = "message mb-2";
-		div.innerHTML=`<b>${response.full_name}: </b>${response.message}`
+		div.innerHTML=`<b>${response.user_full_name}: </b>${response.message}`
 
 		document.getElementById('messages').appendChild(div);
 		document.getElementById('messages').lastChild.scrollIntoView(false)
@@ -59,10 +59,12 @@ $(document).on('click', '.chat-form__submit', function(e){
 		task_id = $('#task-id').val();
 		user_id = $('input[name="user_id"]').val();
 		user_full_name = $('input[name="user_full_name"]').val();
+		user_login = $('input[name="user_login"]').val();
 		let msg = {
 			message: message,
 			task_id: task_id,
-			user_id: user_id
+			user_full_name: user_full_name,
+			user_login: user_login
 		};
 
 		socket.send(JSON.stringify(msg));

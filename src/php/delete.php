@@ -12,6 +12,13 @@ ini_set('display_startup_errors', 1);
 
 if(isset($_POST)){
     if(isset($_POST['action'])){
+
+        if($_POST['action'] == 'delete_user'){
+            $user_id = $_POST['user_id'];
+            $response = delete_user($connect, $user_id);
+            echo json_encode($response);
+        }
+
         if($_POST['action'] == 'delete_project'){
             $project_id = $_POST['project_id'];
             $response = delete_project($connect, $project_id);
