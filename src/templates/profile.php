@@ -28,7 +28,7 @@ if (!$_SESSION['user']) {
             <div class="col-sm-3">
                 <div class="col mb-5">
                     <div class="card">
-                        <img class="rounded mx-auto my-1 d-block" src="<?= '../../'.$_SESSION['user']['avatar'] ?>" width="200" alt="">
+                        <img class="rounded mx-auto my-2 d-block" src="<?= '../../'.$_SESSION['user']['avatar'] ?>" width="200" alt="">
                         <div class="card-body">
                             <?echo"<input name='user_id' value='{$_SESSION['user']['id']}' hidden>";?>
                             <h4 class="card-title js-project-name"><?=$_SESSION['user']['full_name']?></h4>
@@ -36,12 +36,12 @@ if (!$_SESSION['user']) {
                             <p class="card-text js-project-description">Почта: <?=$_SESSION['user']['email']?></p>
                             <p class="card-text js-project-description">Роль: <? echo ($_SESSION['user']['status']=='10') ? "Администратор":"Обычный пользователь"; ?></p>
                         </div>
-                        <?if($_SESSION['user']['status']=='10'): ?>
+                        <!-- <?if($_SESSION['user']['status']=='10'): ?>
                             <div class="card-body text-center">
                             <button style='width: 42px' class="btn btn-danger js-delete-project-btn" value="" title="Удалить проект"><i class="fas fa-trash-alt"></i></button>
                                 <button style='width: 42px' class="btn btn-warning js-edit-project-data-btn" value="" data-bs-toggle='modal' data-bs-target='#edit-project-data-modal' title="Редактировать проект"><i class="fas fa-edit"></i></button>
                             </div>
-                        <?endif;?>
+                        <?endif;?> -->
                     </div>
                 </div>
             </div>
@@ -50,7 +50,7 @@ if (!$_SESSION['user']) {
 
                 <div class="row mb-2">
                     <div class="col">
-                        <div class="mx-auto" style="width:280px;">
+                        <div class="mx-auto" style="width:78px;">
                             <div class="btn-group" role="group" aria-label="Basic outlined example">
                                 <button type="button" class="btn btn-outline-primary js-project-tasks-btn active">Задачи</button>
                             </div>
