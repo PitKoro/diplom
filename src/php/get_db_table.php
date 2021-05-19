@@ -40,6 +40,123 @@ if($_POST['show']=='project_data') {
     die();
 }
 
+
+if($_POST['show']=='all_user_tasks'){
+    header('Content-Type: text/html; charset=utf-8');
+    $user_id = $_POST['user_id'];
+
+    $sql = mysqli_query($connect, "SELECT A.*, U.full_name FROM projects_tasks A LEFT JOIN users U ON A.user_id=U.id WHERE A.user_id='{$user_id}' ORDER BY A.status ");
+
+
+    $row_cnt = mysqli_num_rows($sql);
+
+    if($row_cnt > 0){
+        $table_data = "
+        <thead>
+            <tr>
+            <th scope='col'>Проект</th>
+            <th scope='col'>Название</th>
+            <th scope='col'>Ответственный</th>
+            <th scope='col'>Дата завершения</th>
+            <th scope='col'>Статус</th>";
+            
+            $table_data=$table_data."</tr>
+                                    </thead>
+                                    <tbody>";
+
+        while($result = mysqli_fetch_array($sql))#функция вывода таблицы 
+        {
+            
+            $task_end_date = date("d.m.Y",strtotime($result['end_date']));
+            $current_date = time();
+            $days_to_finish = ceil(( strtotime($task_end_date) - $current_date ) / (60*60*24));
+
+            if($result['status']=='1'){
+                $table_data = $table_data."<tr class='table-success'>";
+            } else if(($days_to_finish<=5) && ($days_to_finish>=0) && ($result['status']!='1')){
+                $table_data = $table_data."<tr class='table-warning'>";
+            } else if(($days_to_finish<0) && ($result['status']!='1')){
+                $table_data = $table_data."<tr class='table-danger'>";
+            } else {
+                $table_data = $table_data."<tr class='table-primary'>";
+            }
+            
+           
+            $status = (($result['status']=='1') ? "Выполнено" : "Не выполнено");
+            $project_query = mysqli_query($connect, "SELECT * FROM projects WHERE id='{$result['project_id']}'");
+            $project = mysqli_fetch_array($project_query);
+            $table_data = $table_data."
+            <td> {$project['name']} </td>
+            <td> {$result['name']}</td>
+            <td>{$result['full_name']}</td>
+            <td>{$result['end_date']}</td>
+            <td>{$status}</td>
+            ";
+
+            if($result['comment']!=''){
+                $table_data = $table_data."<td  class='text-start'><b>Комметрарий:</b> {$result['comment']}</td>";
+            }
+
+            if(($result['status']=='1') && ($result['comment']=='')){
+                $table_data = $table_data."<td class='text-start'><b>Комметрарий:</b> <em>не указан</em></td>";
+            }
+
+            if($result['status']=='0'){
+
+                if($result['user_id'] == $_SESSION['user']['id']){
+
+                    if(($days_to_finish<=5) && ($days_to_finish>=0)){
+
+                        if($days_to_finish == '-0'){ $days_to_finish=0; }
+
+                        $table_data= $table_data."
+                        <td>
+                            <span class='text-center'>
+                                <i class='fas fa-exclamation-triangle' data-bs-toggle='tooltip' data-bs-placement='top' title='Осталось дней: {$days_to_finish}' style='font-size: 25px; color: #ff9933;'></i>
+                            </span>
+                        </td>";
+                    } else if(($days_to_finish<0)){
+                        $days_to_finish = abs($days_to_finish);
+                        $table_data= $table_data."
+                        <td>
+                            <span>
+                                <i class='fas fa-exclamation-triangle' data-bs-toggle='tooltip' data-bs-placement='top' title='Просрочено дней: {$days_to_finish}' style='font-size: 25px; color: #ff0000;'></i>
+                            </span>
+                        </td>";
+                    }
+                }
+
+
+
+            } else {
+
+                $table_data = $table_data."</td>";
+                
+            }
+
+
+
+            $table_data = $table_data."</tr>";
+
+            
+        }
+
+        $table_data = $table_data."</tbody>";
+        mysqli_free_result($sql);
+        echo $table_data;
+        die();
+    } else {
+        $response = "
+            <div class='form-footer mt-3'>
+                <h4>Задач у пользователя пока нет.</h4>
+            </div>";
+        echo $response;
+        die();
+    }
+
+    
+}
+
 if($_POST['show']=='project_tasks'){
     header('Content-Type: text/html; charset=utf-8');
     $project_id = $_POST['project_id'];
