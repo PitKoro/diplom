@@ -180,6 +180,39 @@ if(isset($_POST['modal'])){
         die();
     }
 
+    if($_POST['modal']=='edit_user'){
+        header('Content-Type: text/html; charset=utf-8');
+        $user_id = $_POST['user_id'];
+        $user_data = get_user_data($connect, $user_id);
+        
+        $response = "
+            <input type='text' name='user_id' value='{$user_data[0]['id']}' hidden>
+
+            <label for='user-full-name-field' class='form-label mt-3'>ФИО</label>
+            <input type='text' name='user_full_name' class='form-control' id='user-full-name-field' placeholder='Введите ФИО' value='{$user_data[0]['full_name']}' required>
+
+            <label for='user-login-field' class='form-label mt-3'>Логин</label>
+            <input type='text' name='user_login' class='form-control' id='user-login-field' placeholder='Введите логин' value='{$user_data[0]['login']}'>
+
+            <label for='user-email-field' class='form-label mt-3'>Почта</label>
+            <input type='text' name='user_email' class='form-control' id='user-email-field' placeholder='Введите эл. почту' value='{$user_data[0]['email']}'>
+
+            <label for='user-password-field' class='form-label mt-3'>Новый пароль</label>
+            <input type='text' name='user_password' class='form-control' id='user-password-field' placeholder='Введите новый пароль' value=''>
+
+            <label for='user-avatar-field' class='form-label mt-3'>Изображение профиля</label>
+            <input class='form-control' type='file' id='user-avatar-field' name='user_avatar' value='{$user_data[0]['avatar']}'>
+
+            <label for='user-status-field' class='form-label mt-3'>Роль пользователя</label>
+            <select class='form-select' name='user_status' id='user-status-field'>
+                <option value='10' ".(($user_data[0]['status'] == '10') ? 'selected':'').">Администратор</option>
+                <option value='1' ".(($user_data[0]['status'] == '1') ? 'selected':'').">Обычный пользователь</option>
+            </select>
+        ";
+
+        echo $response;
+        die();
+    }
     
 }
 

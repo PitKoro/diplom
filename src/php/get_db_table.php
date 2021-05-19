@@ -73,10 +73,21 @@ if($_POST['show']=='all_users'){
             <td>Обычный пользователь</td> 
             ";
         }
-        if(($_SESSION['user']['status'] == '10')&&($all_users['id']!=$_SESSION['user']['id'])){
+        
+        if(($_SESSION['user']['status'] == '10')){
             $table_data = $table_data."       
-                <td> <button class='js-delete-project-user-btn btn btn-danger' value='{$all_users['id']}' title='Удалить'><i class='fas fa-trash-alt'></i></button></td>
+                <td>
+                    <button style='width: 42px' class='js-edit-user-btn btn btn-warning' value='{$all_users['id']}' title='Изменить' data-bs-toggle='modal' data-bs-target='#edit-user-modal'><i class='fas fa-edit'></i></button>
             ";
+
+            if($all_users['id']!=$_SESSION['user']['id']){
+                $table_data = $table_data."       
+                <button class='js-delete-project-user-btn btn btn-danger' value='{$all_users['id']}' title='Удалить'><i class='fas fa-trash-alt'></i></button>
+            ";
+            } else {
+                $table_data = $table_data."</td>";
+            }
+
         }
         $table_data = $table_data."
             </tr> 

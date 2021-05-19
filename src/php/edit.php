@@ -89,6 +89,51 @@ if(isset($_POST)){
             echo json_encode($response);
             die();
         }
+
+        if($_POST['action']=='edit_user_data'){
+            $user_id = $_POST['user_id'];
+            $user_full_name = $_POST['user_full_name'];
+            $user_login = $_POST['user_login'];
+            $user_email = $_POST['user_email'];
+            $user_status = $_POST['user_status'];
+            $user_password = $_POST['user_password'];
+
+            $path_to_photo = null;
+            if($_POST['is_change_photo']=='true'){
+                
+                if($path_to_photo != 'public/img/uploads/default/default.jpg'){
+
+                    $path_to_photo = 'public/img/uploads/avatar/' . time() . $_FILES['user_avatar']['name']; # добавляем в название аватарки числа текущего времени (чтобы не возникал конфликт имен)
+                    # перемещяем загруженное изображение в public/img/uploads/
+                    if (!move_uploaded_file($_FILES['user_avatar']['tmp_name'], '../../' . $path_to_photo)) {
+                        # Если не удалось переместить, то формируем ответ с ошибкой
+                        $response = [
+                            "status" => false,
+                            "message" => "ошибка при загрузке изображения",
+                            "type" => 2
+                        ];
+                
+                        echo json_encode($response); # Возвращаем ответ в формате json
+                    }
+                }
+            } else if($_POST['is_change_photo']=='false') {
+                $path_to_photo = 'false';
+            }
+            
+            $user_data=[
+                'id' => $user_id,
+                'full_name' => $user_full_name,
+                'login' => $user_login,
+                'email' => $user_email,
+                'avatar' => $path_to_photo,
+                'status' => $user_status,
+                'password' => $user_password               
+            ];
+
+            $response = edit_user_data($connect, $user_data);
+            echo json_encode($response);
+            die();
+        }
     }
     
 

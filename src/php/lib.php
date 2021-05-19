@@ -77,6 +77,21 @@ function get_project_data($connect, $project_id){
 }
 
 
+# Функция - получение информации о пользователе
+# аргументы:    $connect - дескриптор подключения к БД
+#               $user_id - id пользователя
+# возвращает: массив со всей информацией о пользователе
+function get_user_data($connect, $user_id){
+    $sql = mysqli_query($connect, "SELECT * FROM users WHERE id='{$user_id}'");
+    $user_data = array();
+    while($result = mysqli_fetch_assoc($sql)){
+        array_push($user_data, $result);
+    }
+
+    return $user_data;
+}
+
+
 # Функция - получение информации о задаче в проекте
 # аргументы:    $connect - дескриптор подключения к БД
 #               $task_id - id задачи
@@ -301,6 +316,43 @@ function edit_project_data($connect, $project_data){
     }
 }
 
+
+# Функция - изменение информации о пользователе в БД
+# аргументы:    $connect - дескриптор подключения к БД
+#               $user_data - массив с данными о пользователе
+# возвращает: массив [$status => boolean, $msg => string]
+function edit_user_data($connect, $user_data){
+    $sql = null;
+    $user_data['password'] = md5($user_data['password']);
+    if( ($user_data['avatar'] != 'false') && ($user_data['password'] != '')){
+        $sql = mysqli_query($connect, "UPDATE users SET password = '{$user_data['password']}', full_name = '{$user_data['full_name']}', `login` = '{$user_data['login']}', `email` = '{$user_data['email']}',`avatar`= '{$user_data['avatar']}', `status` = '{$user_data['status']}' WHERE `users`.`id` = '{$user_data['id']}'");
+    } else if( ($user_data['avatar'] != 'false') && ($user_data['password'] == '')){
+        $sql = mysqli_query($connect, "UPDATE users SET password = '{$user_data['password']}', full_name = '{$user_data['full_name']}', `login` = '{$user_data['login']}', `email` = '{$user_data['email']}',`avatar`= '{$user_data['avatar']}', `status` = '{$user_data['status']}' WHERE `users`.`id` = '{$user_data['id']}'");
+    } else if(($user_data['password'] != '') && ($user_data['avatar'] == 'false')){
+        $sql = mysqli_query($connect, "UPDATE users SET password = '{$user_data['password']}', full_name = '{$user_data['full_name']}', `login` = '{$user_data['login']}', `email` = '{$user_data['email']}', `status` = '{$user_data['status']}' WHERE `users`.`id` = '{$user_data['id']}'");
+    } else {
+        $sql = mysqli_query($connect, "UPDATE users SET full_name = '{$user_data['full_name']}', `login` = '{$user_data['login']}', `email` = '{$user_data['email']}', `status` = '{$user_data['status']}' WHERE `users`.`id` = '{$user_data['id']}'");
+    }
+    
+    
+    if($sql){
+        $status = true;
+        $msg = "user data updated!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    } else {
+        $status = false;
+        $msg = "Failed to update user data!";
+        $response = [
+            'status' => $status,
+            'msg' => $msg
+        ];
+        return $response;
+    }
+}
 
 # Функция - изменение информации о задаче проекта в БД
 # аргументы:    $connect - дескриптор подключения к БД
