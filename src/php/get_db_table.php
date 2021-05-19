@@ -508,7 +508,7 @@ if($_POST['show'] == 'overdue_projects'){
             $i+=1;
             if($i<5){
                 $response = $response."
-                    <div class='row mb-3'>
+                    <div class='row align-items-center mb-3'>
                         <div class='col-4'><h5>{$overdue_projects['name']}</h5></div>
                     
                         <div class='col-6'>
@@ -532,7 +532,7 @@ if($_POST['show'] == 'overdue_projects'){
                     <div class='collapse' id='collapseOngoingProject'>
                 ";
                 $response = $response."
-                    <div class='row mb-3'>
+                    <div class='row align-items-center mb-3'>
                         <div class='col-4'><h5>{$overdue_projects['name']}</h5></div>
                     
                         <div class='col-6'>
@@ -547,7 +547,7 @@ if($_POST['show'] == 'overdue_projects'){
                 ";
             } else if($i>5){
                 $response = $response."
-                    <div class='row mb-3'>
+                    <div class='row align-items-center mb-3'>
                         <div class='col-4'><h5>{$overdue_projects['name']}</h5></div>
                     
                         <div class='col-6'>
@@ -647,7 +647,7 @@ if($_POST['show'] == 'ongoing_projects'){
                     <div class='collapse' id='collapseOngoingProject'>
                 ";
                 $response = $response."
-                    <div class='row mb-3'>
+                    <div class='row align-items-center mb-3'>
                         <div class='col-4'><h5>{$ongoing_projects['name']}</h5></div>
                     
                         <div class='col-6'>
@@ -663,7 +663,7 @@ if($_POST['show'] == 'ongoing_projects'){
                 ";
             } else if($i>5){
                 $response = $response."
-                    <div class='row mb-3'>
+                    <div class='row align-items-center mb-3'>
                         <div class='col-4'><h5>{$ongoing_projects['name']}</h5></div>
                     
                         <div class='col-6'>
@@ -739,7 +739,7 @@ if($_POST['show'] == 'completed_projects'){
             $i+=1;
             if($i<5){
                 $response = $response."
-                    <div class='row mb-3'>
+                    <div class='row align-items-center mb-3'>
                         <div class='col-4'><h5>{$completed_projects['name']}</h5></div>
                     
                         <div class='col-6'>
@@ -764,7 +764,7 @@ if($_POST['show'] == 'completed_projects'){
                     <div class='collapse' id='collapseOngoingProject'>
                 ";
                 $response = $response."
-                    <div class='row mb-3'>
+                    <div class='row align-items-center mb-3'>
                         <div class='col-4'><h5>{$completed_projects['name']}</h5></div>
                     
                         <div class='col-6'>
@@ -780,7 +780,7 @@ if($_POST['show'] == 'completed_projects'){
                 ";
             } else if($i>5){
                 $response = $response."
-                    <div class='row mb-3'>
+                    <div class='row align-items-center mb-3'>
                         <div class='col-4'><h5>{$completed_projects['name']}</h5></div>
                     
                         <div class='col-6'>
