@@ -25,7 +25,7 @@ if (!$_SESSION['user']) {
 
     <div class="container mt-5">
         <div class="row gy-0">
-            <div class="col-sm-3">
+            <div class="col-sm-3 col-md-4 col-xl-3">
                 <div class="col mb-5">
                     <div class="card">
                         <img class="rounded mx-auto my-2 d-block" src="<?= '../../'.$_SESSION['user']['avatar'] ?>" width="200" alt="">
@@ -46,7 +46,7 @@ if (!$_SESSION['user']) {
                 </div>
             </div>
             
-            <div class="col-sm-9">
+            <div class="col-sm-9 col-md-8 col-xl-9">
 
                 <div class="row mb-2">
                     <div class="col">

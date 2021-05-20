@@ -31,7 +31,7 @@ include '../php/lib.php';
 
         </div>
         <div class="row justify-content-center">
-            <div class="col-8">
+            <div class="col-8 col-md-11 col-xl-8">
             <?
                 $all_user_projects = get_all_user_projects($connect, $_SESSION['user']['id']);
                 if(count($all_user_projects)){
