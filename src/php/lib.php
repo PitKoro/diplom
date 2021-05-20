@@ -323,13 +323,13 @@ function edit_project_data($connect, $project_data){
 # возвращает: массив [$status => boolean, $msg => string]
 function edit_user_data($connect, $user_data){
     $sql = null;
-    $user_data['password'] = md5($user_data['password']);
+    $password = md5($user_data['password']);
     if( ($user_data['avatar'] != 'false') && ($user_data['password'] != '')){
-        $sql = mysqli_query($connect, "UPDATE users SET password = '{$user_data['password']}', full_name = '{$user_data['full_name']}', `login` = '{$user_data['login']}', `email` = '{$user_data['email']}',`avatar`= '{$user_data['avatar']}', `status` = '{$user_data['status']}' WHERE `users`.`id` = '{$user_data['id']}'");
+        $sql = mysqli_query($connect, "UPDATE users SET password = '{$password}', full_name = '{$user_data['full_name']}', `login` = '{$user_data['login']}', `email` = '{$user_data['email']}',`avatar`= '{$user_data['avatar']}', `status` = '{$user_data['status']}' WHERE `users`.`id` = '{$user_data['id']}'");
     } else if( ($user_data['avatar'] != 'false') && ($user_data['password'] == '')){
-        $sql = mysqli_query($connect, "UPDATE users SET password = '{$user_data['password']}', full_name = '{$user_data['full_name']}', `login` = '{$user_data['login']}', `email` = '{$user_data['email']}',`avatar`= '{$user_data['avatar']}', `status` = '{$user_data['status']}' WHERE `users`.`id` = '{$user_data['id']}'");
+        $sql = mysqli_query($connect, "UPDATE users SET full_name = '{$user_data['full_name']}', `login` = '{$user_data['login']}', `email` = '{$user_data['email']}',`avatar`= '{$user_data['avatar']}', `status` = '{$user_data['status']}' WHERE `users`.`id` = '{$user_data['id']}'");
     } else if(($user_data['password'] != '') && ($user_data['avatar'] == 'false')){
-        $sql = mysqli_query($connect, "UPDATE users SET password = '{$user_data['password']}', full_name = '{$user_data['full_name']}', `login` = '{$user_data['login']}', `email` = '{$user_data['email']}', `status` = '{$user_data['status']}' WHERE `users`.`id` = '{$user_data['id']}'");
+        $sql = mysqli_query($connect, "UPDATE users SET password = '{$password}', full_name = '{$user_data['full_name']}', `login` = '{$user_data['login']}', `email` = '{$user_data['email']}', `status` = '{$user_data['status']}' WHERE `users`.`id` = '{$user_data['id']}'");
     } else {
         $sql = mysqli_query($connect, "UPDATE users SET full_name = '{$user_data['full_name']}', `login` = '{$user_data['login']}', `email` = '{$user_data['email']}', `status` = '{$user_data['status']}' WHERE `users`.`id` = '{$user_data['id']}'");
     }

@@ -88,6 +88,7 @@
                 ];
         
                 echo json_encode($response); # Возвращаем ответ в формате json
+                die();
             }
         }
         
