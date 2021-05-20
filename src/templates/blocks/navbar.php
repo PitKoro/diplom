@@ -18,7 +18,7 @@
                         <li class="dropdown-li"><a class="dropdown-item" href="./profile.php">Мой профиль</a></li>
                         <li class="dropdown-li"><a class="dropdown-item" href="./myProjects.php">Мои проекты</a></li>
                         <? if ($_SESSION['user']['status']=='10'): ?>
-                            <li class="dropdown-li"><a class="dropdown-item" href="./myUsers.php">Мои пользователи</a></li>
+                            <li class="dropdown-li"><a class="dropdown-item" href="./myUsers.php">Пользователи</a></li>
                         <? endif; ?>
                         
                     </ul>
