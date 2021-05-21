@@ -62,11 +62,12 @@ include '../php/lib.php';
                                     </div>
                                     <div class='card-footer'>
                                         <div class='row'>
+                                            
                                             <div class='col'>
-                                                <a href='./project.php?id={$all_user_projects[$i]['id']}' class='btn btn-primary'>Подробнее</a>
+                                                <button class='btn btn-danger js-delete-project-btn' value='{$all_user_projects[$i]['id']}'><i class='fas fa-trash-alt'></i></button>
                                             </div>
-                                            <div class='col'>
-                                                <button class='btn btn-danger js-delete-project-btn' value='{$all_user_projects[$i]['id']}'>Удалить</button>
+                                            <div class='col text-end'>
+                                                <a href='./project.php?id={$all_user_projects[$i]['id']}' class='btn btn-primary' style='width: 40px;'><i class='fas fa-angle-right'></i></a>
                                             </div>
                                         </div>
 

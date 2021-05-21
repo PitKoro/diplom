@@ -77,12 +77,12 @@ if($_POST['show']=='all_users'){
         if(($_SESSION['user']['status'] == '10')){
             $table_data = $table_data."       
                 <td>
-                    <button style='width: 42px' class='js-edit-user-btn btn btn-warning' value='{$all_users['id']}' title='Изменить' data-bs-toggle='modal' data-bs-target='#edit-user-modal'><i class='fas fa-edit'></i></button>
+                    <button style='width: 42px' class='js-edit-user-btn btn btn-warning mb-2' value='{$all_users['id']}' title='Изменить' data-bs-toggle='modal' data-bs-target='#edit-user-modal'><i class='fas fa-edit'></i></button>
             ";
 
             if($all_users['id']!=$_SESSION['user']['id']){
                 $table_data = $table_data."       
-                <button class='js-delete-project-user-btn btn btn-danger' value='{$all_users['id']}' title='Удалить'><i class='fas fa-trash-alt'></i></button>
+                <button class='js-delete-project-user-btn btn btn-danger mb-2' value='{$all_users['id']}' title='Удалить'><i class='fas fa-trash-alt'></i></button>
             ";
             } else {
                 $table_data = $table_data."</td>";
@@ -571,9 +571,9 @@ if($_POST['show'] == 'overdue_projects'){
             if($i<5){
                 $response = $response."
                     <div class='row align-items-center mb-3'>
-                        <div class='col-4'><h5>{$overdue_projects['name']}</h5></div>
+                        <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
                     
-                        <div class='col-6'>
+                        <div class='col-4'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
@@ -595,9 +595,9 @@ if($_POST['show'] == 'overdue_projects'){
                 ";
                 $response = $response."
                     <div class='row align-items-center mb-3'>
-                        <div class='col-4'><h5>{$overdue_projects['name']}</h5></div>
+                        <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
                     
-                        <div class='col-6'>
+                        <div class='col-4'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
@@ -610,9 +610,9 @@ if($_POST['show'] == 'overdue_projects'){
             } else if($i>5){
                 $response = $response."
                     <div class='row align-items-center mb-3'>
-                        <div class='col-4'><h5>{$overdue_projects['name']}</h5></div>
+                        <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
                     
-                        <div class='col-6'>
+                        <div class='col-4'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
@@ -685,9 +685,9 @@ if($_POST['show'] == 'ongoing_projects'){
             if($i<5){
                 $response = $response."
                     <div class='row align-items-center mb-3'>
-                        <div class='col-4'><h6>{$ongoing_projects['name']}</h6></div>
+                        <div class='col-6'><h6>{$ongoing_projects['name']}</h6></div>
                     
-                        <div class='col-6'>
+                        <div class='col-4'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
@@ -710,9 +710,9 @@ if($_POST['show'] == 'ongoing_projects'){
                 ";
                 $response = $response."
                     <div class='row align-items-center mb-3'>
-                        <div class='col-4'><h5>{$ongoing_projects['name']}</h5></div>
+                        <div class='col-6'><h5>{$ongoing_projects['name']}</h5></div>
                     
-                        <div class='col-6'>
+                        <div class='col-4'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
@@ -726,9 +726,9 @@ if($_POST['show'] == 'ongoing_projects'){
             } else if($i>5){
                 $response = $response."
                     <div class='row align-items-center mb-3'>
-                        <div class='col-4'><h5>{$ongoing_projects['name']}</h5></div>
+                        <div class='col-6'><h5>{$ongoing_projects['name']}</h5></div>
                     
-                        <div class='col-6'>
+                        <div class='col-4'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
@@ -802,9 +802,9 @@ if($_POST['show'] == 'completed_projects'){
             if($i<5){
                 $response = $response."
                     <div class='row align-items-center mb-3'>
-                        <div class='col-4'><h5>{$completed_projects['name']}</h5></div>
+                        <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
                     
-                        <div class='col-6'>
+                        <div class='col-4'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
@@ -827,9 +827,9 @@ if($_POST['show'] == 'completed_projects'){
                 ";
                 $response = $response."
                     <div class='row align-items-center mb-3'>
-                        <div class='col-4'><h5>{$completed_projects['name']}</h5></div>
+                        <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
                     
-                        <div class='col-6'>
+                        <div class='col-4'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
@@ -843,9 +843,9 @@ if($_POST['show'] == 'completed_projects'){
             } else if($i>5){
                 $response = $response."
                     <div class='row align-items-center mb-3'>
-                        <div class='col-4'><h5>{$completed_projects['name']}</h5></div>
+                        <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
                     
-                        <div class='col-6'>
+                        <div class='col-4'>
                             <div class='progress'>
                                 <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
                             </div>
