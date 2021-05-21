@@ -112,6 +112,7 @@ function get_project_task($connect, $task_id){
 #               $project_id - id проекта
 # возвращает: массив [$status => boolean, $msg => string]
 function delete_project($connect, $project_id){
+    mysqli_query($connect, "DELETE FROM chat WHERE id IN (SELECT C.id FROM (SELECT * FROM chat) C LEFT JOIN projects_tasks PT ON C.task_id=PT.id WHERE PT.project_id='{$project_id}')"); # все сообщения связанные с проектом
     mysqli_query($connect, "DELETE FROM projects_tasks WHERE project_id='{$project_id}'");
     mysqli_query($connect, "DELETE FROM users_in_projects WHERE project_id='{$project_id}'");
     mysqli_query($connect, "DELETE FROM project_files WHERE project_id='{$project_id}'");
@@ -143,6 +144,7 @@ function delete_project($connect, $project_id){
 #               $task_id - id задачи
 # возвращает: массив [$status => boolean, $msg => string]
 function delete_project_task($connect, $project_id, $task_id){
+    mysqli_query($connect, "DELETE FROM chat WHERE task_id='{$task_id}'"); # все сообщения связанные с задачей
     $sql = mysqli_query($connect, "DELETE FROM projects_tasks WHERE id = '{$task_id}' AND project_id = '{$project_id}'");
     if($sql){
         $status = true;
