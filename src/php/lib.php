@@ -172,6 +172,10 @@ function delete_project_task($connect, $project_id, $task_id){
 #               $user_id - id пользователя
 # возвращает: массив [$status => boolean, $msg => string]
 function delete_project_user($connect, $project_id, $user_id){
+    $deleting_tasks_query = mysqli_query($connect, "SELECT id FROM projects_tasks WHERE project_id='{$project_id}' AND user_id='{$user_id}'");
+    while($deleting_tasks = mysqli_fetch_array($deleting_tasks_query)){
+        mysqli_query($connect, "DELETE FROM chat WHERE task_id='{$deleting_tasks['id']}'"); # Удаляем все сообщения связанные с задачами удаляемого пользователя
+    }
     mysqli_query($connect, "DELETE FROM projects_tasks WHERE project_id='{$project_id}' AND user_id='{$user_id}'"); # Удаляем задачи пользователя из проекта
     $sql = mysqli_query($connect, "DELETE FROM users_in_projects WHERE project_id='{$project_id}' AND user_id='{$user_id}'"); # Удаляем пользователя из проекта
     
