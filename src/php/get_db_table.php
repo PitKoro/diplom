@@ -573,7 +573,7 @@ if($_POST['show'] == 'overdue_projects'){
                 if($i<5){
                     $response = $response."
                         <div class='row align-items-center mb-3'>
-                            <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
+                            <div class='col-6'><h6><a href='./project.php?id={$overdue_projects['id']}'>{$overdue_projects['name']}</a></h6></div>
                         
                             <div class='col-4'>
                                 <div class='progress'>
@@ -597,7 +597,7 @@ if($_POST['show'] == 'overdue_projects'){
                     ";
                     $response = $response."
                         <div class='row align-items-center mb-3'>
-                            <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
+                            <div class='col-6'><h6><a href='./project.php?id={$overdue_projects['id']}'>{$overdue_projects['name']}</a></h6></div>
                         
                             <div class='col-4'>
                                 <div class='progress'>
@@ -612,7 +612,7 @@ if($_POST['show'] == 'overdue_projects'){
                 } else if($i>5){
                     $response = $response."
                         <div class='row align-items-center mb-3'>
-                            <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
+                            <div class='col-6'><h6><a href='./project.php?id={$overdue_projects['id']}'>{$overdue_projects['name']}</a></h6></div>
                         
                             <div class='col-4'>
                                 <div class='progress'>
@@ -637,7 +637,7 @@ if($_POST['show'] == 'overdue_projects'){
     if($project_count == 0){
         $response = $response."
             <div class='row mb-3'>
-                <div class='col'><h5>Просроченных проектов нет</h5></div>
+                <div class='col'><h6>Просроченных проектов нет</h6></div>
             </div>
         ";
 
@@ -691,7 +691,7 @@ if($_POST['show'] == 'ongoing_projects'){
                 if($i<5){
                     $response = $response."
                         <div class='row align-items-center mb-3'>
-                            <div class='col-6'><h6>{$ongoing_projects['name']}</h6></div>
+                            <div class='col-6'><h6><a href='./project.php?id={$ongoing_projects['id']}'>{$ongoing_projects['name']}</a></h6></div>
                         
                             <div class='col-4'>
                                 <div class='progress'>
@@ -716,7 +716,7 @@ if($_POST['show'] == 'ongoing_projects'){
                     ";
                     $response = $response."
                         <div class='row align-items-center mb-3'>
-                            <div class='col-6'><h5>{$ongoing_projects['name']}</h5></div>
+                            <div class='col-6'><h6><a href='./project.php?id={$ongoing_projects['id']}'>{$ongoing_projects['name']}</a></h6></div>
                         
                             <div class='col-4'>
                                 <div class='progress'>
@@ -732,7 +732,7 @@ if($_POST['show'] == 'ongoing_projects'){
                 } else if($i>5){
                     $response = $response."
                         <div class='row align-items-center mb-3'>
-                            <div class='col-6'><h5>{$ongoing_projects['name']}</h5></div>
+                            <div class='col-6'><h6><a href='./project.php?id={$ongoing_projects['id']}'>{$ongoing_projects['name']}</a></h6></div>
                         
                             <div class='col-4'>
                                 <div class='progress'>
@@ -759,7 +759,7 @@ if($_POST['show'] == 'ongoing_projects'){
     if($project_count == 0){
         $response = $response."
             <div class='row mb-3'>
-                <div class='col'><h5>Текущих проектов нет</h5></div>
+                <div class='col'><h6>Текущих проектов нет</h6></div>
             </div>
         ";
 
@@ -812,7 +812,7 @@ if($_POST['show'] == 'completed_projects'){
                 if($i<5){
                     $response = $response."
                         <div class='row align-items-center mb-3'>
-                            <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
+                            <div class='col-6'><h6><a href='./project.php?id={$completed_projects['id']}'>{$completed_projects['name']}</a></h6></div>
                         
                             <div class='col-4'>
                                 <div class='progress'>
@@ -837,7 +837,7 @@ if($_POST['show'] == 'completed_projects'){
                     ";
                     $response = $response."
                         <div class='row align-items-center mb-3'>
-                            <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
+                            <div class='col-6'><h6><a href='./project.php?id={$completed_projects['id']}'>{$completed_projects['name']}</a></h6></div>
                         
                             <div class='col-4'>
                                 <div class='progress'>
@@ -853,7 +853,7 @@ if($_POST['show'] == 'completed_projects'){
                 } else if($i>5){
                     $response = $response."
                         <div class='row align-items-center mb-3'>
-                            <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
+                            <div class='col-6'><h6><a href='./project.php?id={$completed_projects['id']}'>{$completed_projects['name']}</a></h6></div>
                         
                             <div class='col-4'>
                                 <div class='progress'>
@@ -879,7 +879,7 @@ if($_POST['show'] == 'completed_projects'){
     if($project_count == 0){
         $response = $response."
             <div class='row mb-3'>
-                <div class='col'><h5>Завершенных проектов нет</h5></div>
+                <div class='col'><h6>Завершенных проектов нет</h6></div>
             </div>
         ";
 
