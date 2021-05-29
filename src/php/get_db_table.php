@@ -546,84 +546,88 @@ if($_POST['show'] == 'overdue_projects'){
     $project_count = 0;
     $i = 0;
     while($overdue_projects = mysqli_fetch_array($overdue_projects_query)){
+        $check_session_user_in_project_query = mysqli_query($connect, "SELECT * FROM users_in_projects WHERE user_id='{$_SESSION['user']['id']}' AND project_id='{$overdue_projects['id']}'");
+        $check_session_user_in_project = mysqli_fetch_array($check_session_user_in_project_query);
+        if(($_SESSION['user']['status'] == '10') || ($check_session_user_in_project['user_id'] == $_SESSION['user']['id'])){
+            $overdue_project_tasks_query = mysqli_query($connect, "SELECT * FROM projects_tasks WHERE project_id={$overdue_projects['id']}");
 
-        $overdue_project_tasks_query = mysqli_query($connect, "SELECT * FROM projects_tasks WHERE project_id={$overdue_projects['id']}");
-
-        $count_completed_tasks = 0;
-        $count_project_tasks = 0;
-        $progress = 0;
-        
-        while($overdue_project_tasks = mysqli_fetch_array($overdue_project_tasks_query)){
-            if($overdue_project_tasks['status'] == '1'){
-                $count_completed_tasks += 1;
-            }
-
-            $count_project_tasks += 1;
-        }
-
-        if($count_project_tasks>0){
-            $progress = round($count_completed_tasks/$count_project_tasks, 2) * 100;
-        }
-
-        if($progress != 100){
-            $project_count += 1;
-            $i+=1;
-            if($i<5){
-                $response = $response."
-                    <div class='row align-items-center mb-3'>
-                        <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
-                    
-                        <div class='col-4'>
-                            <div class='progress'>
-                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
-                            </div>
-                        </div>
-                        <div class='col-2 mx-auto'>
-                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$overdue_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
-                        </div>
-                    </div>
-                ";
-            } else if($i==5){
-                $response = $response."
-                    <a class='mb-3' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOngoingProject' aria-expanded='false' aria-controls='collapseOngoingProject'>
-                        Больше <i class='fas fa-angle-down'></i>
-                    </a>
-                ";
+            $count_completed_tasks = 0;
+            $count_project_tasks = 0;
+            $progress = 0;
             
-                $response = $response."
-                    <div class='collapse' id='collapseOngoingProject'>
-                ";
-                $response = $response."
-                    <div class='row align-items-center mb-3'>
-                        <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
-                    
-                        <div class='col-4'>
-                            <div class='progress'>
-                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+            while($overdue_project_tasks = mysqli_fetch_array($overdue_project_tasks_query)){
+                if($overdue_project_tasks['status'] == '1'){
+                    $count_completed_tasks += 1;
+                }
+    
+                $count_project_tasks += 1;
+            }
+    
+            if($count_project_tasks>0){
+                $progress = round($count_completed_tasks/$count_project_tasks, 2) * 100;
+            }
+    
+            if($progress != 100){
+                $project_count += 1;
+                $i+=1;
+                if($i<5){
+                    $response = $response."
+                        <div class='row align-items-center mb-3'>
+                            <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
+                        
+                            <div class='col-4'>
+                                <div class='progress'>
+                                    <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                                </div>
+                            </div>
+                            <div class='col-2 mx-auto'>
+                                <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$overdue_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
                             </div>
                         </div>
-                        <div class='col-2 mx-auto'>
-                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$overdue_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
-                        </div>
-                    </div>
-                ";
-            } else if($i>5){
-                $response = $response."
-                    <div class='row align-items-center mb-3'>
-                        <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
-                    
-                        <div class='col-4'>
-                            <div class='progress'>
-                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                    ";
+                } else if($i==5){
+                    $response = $response."
+                        <a class='mb-3' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOngoingProject' aria-expanded='false' aria-controls='collapseOngoingProject'>
+                            Больше <i class='fas fa-angle-down'></i>
+                        </a>
+                    ";
+                
+                    $response = $response."
+                        <div class='collapse' id='collapseOngoingProject'>
+                    ";
+                    $response = $response."
+                        <div class='row align-items-center mb-3'>
+                            <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
+                        
+                            <div class='col-4'>
+                                <div class='progress'>
+                                    <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                                </div>
+                            </div>
+                            <div class='col-2 mx-auto'>
+                                <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$overdue_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
                             </div>
                         </div>
-                        <div class='col-2 mx-auto'>
-                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$overdue_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
+                    ";
+                } else if($i>5){
+                    $response = $response."
+                        <div class='row align-items-center mb-3'>
+                            <div class='col-6'><h5>{$overdue_projects['name']}</h5></div>
+                        
+                            <div class='col-4'>
+                                <div class='progress'>
+                                    <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                                </div>
+                            </div>
+                            <div class='col-2 mx-auto'>
+                                <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$overdue_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
+                            </div>
                         </div>
-                    </div>
-                ";
+                    ";
+                }
             }
         }
+
     }
 
     if($i > 4){
@@ -660,87 +664,91 @@ if($_POST['show'] == 'ongoing_projects'){
     $project_count = 0;
     $i = 0;
     while($ongoing_projects = mysqli_fetch_array($ongoing_projects_query)){
+        $check_session_user_in_project_query = mysqli_query($connect, "SELECT * FROM users_in_projects WHERE user_id={$_SESSION['user']['id']} AND project_id={$ongoing_projects['id']}");
+        $check_session_user_in_project = mysqli_fetch_array($check_session_user_in_project_query);
+        if(($_SESSION['user']['status'] == '10') || ($check_session_user_in_project['user_id'] == $_SESSION['user']['id'])){
+            $ongoing_project_tasks_query = mysqli_query($connect, "SELECT * FROM projects_tasks WHERE project_id={$ongoing_projects['id']}");
 
-        $ongoing_project_tasks_query = mysqli_query($connect, "SELECT * FROM projects_tasks WHERE project_id={$ongoing_projects['id']}");
-
-        $count_completed_tasks = 0;
-        $count_project_tasks = 0;
-        $progress = 0;
-        
-        while($ongoing_project_tasks = mysqli_fetch_array($ongoing_project_tasks_query)){
-            if($ongoing_project_tasks['status'] == '1'){
-                $count_completed_tasks += 1;
-            }
-
-            $count_project_tasks += 1;
-        }
-
-        if($count_project_tasks>0){
-            $progress = round($count_completed_tasks/$count_project_tasks, 2) * 100;
-        }
-
-        if($progress != 100){
-            $project_count += 1;
-            $i+=1;
-            if($i<5){
-                $response = $response."
-                    <div class='row align-items-center mb-3'>
-                        <div class='col-6'><h6>{$ongoing_projects['name']}</h6></div>
-                    
-                        <div class='col-4'>
-                            <div class='progress'>
-                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
-                            </div>
-                        </div>
-                        <div class='col-2 mx-auto'>
-                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$ongoing_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
-                        </div>
-                    </div>
-
-                ";
-            } else if($i==5){
-                $response = $response."
-                    <a class='mb-3' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOngoingProject' aria-expanded='false' aria-controls='collapseOngoingProject'>
-                        Больше <i class='fas fa-angle-down'></i>
-                    </a>
-                ";
+            $count_completed_tasks = 0;
+            $count_project_tasks = 0;
+            $progress = 0;
             
-                $response = $response."
-                    <div class='collapse' id='collapseOngoingProject'>
-                ";
-                $response = $response."
-                    <div class='row align-items-center mb-3'>
-                        <div class='col-6'><h5>{$ongoing_projects['name']}</h5></div>
-                    
-                        <div class='col-4'>
-                            <div class='progress'>
-                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+            while($ongoing_project_tasks = mysqli_fetch_array($ongoing_project_tasks_query)){
+                if($ongoing_project_tasks['status'] == '1'){
+                    $count_completed_tasks += 1;
+                }
+    
+                $count_project_tasks += 1;
+            }
+    
+            if($count_project_tasks>0){
+                $progress = round($count_completed_tasks/$count_project_tasks, 2) * 100;
+            }
+    
+            if($progress != 100){
+                $project_count += 1;
+                $i+=1;
+                if($i<5){
+                    $response = $response."
+                        <div class='row align-items-center mb-3'>
+                            <div class='col-6'><h6>{$ongoing_projects['name']}</h6></div>
+                        
+                            <div class='col-4'>
+                                <div class='progress'>
+                                    <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                                </div>
+                            </div>
+                            <div class='col-2 mx-auto'>
+                                <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$ongoing_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
                             </div>
                         </div>
-
-                        <div class='col-2 mx-auto'>
-                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$ongoing_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
-                        </div>
-                    </div>
-                ";
-            } else if($i>5){
-                $response = $response."
-                    <div class='row align-items-center mb-3'>
-                        <div class='col-6'><h5>{$ongoing_projects['name']}</h5></div>
-                    
-                        <div class='col-4'>
-                            <div class='progress'>
-                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+    
+                    ";
+                } else if($i==5){
+                    $response = $response."
+                        <a class='mb-3' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOngoingProject' aria-expanded='false' aria-controls='collapseOngoingProject'>
+                            Больше <i class='fas fa-angle-down'></i>
+                        </a>
+                    ";
+                
+                    $response = $response."
+                        <div class='collapse' id='collapseOngoingProject'>
+                    ";
+                    $response = $response."
+                        <div class='row align-items-center mb-3'>
+                            <div class='col-6'><h5>{$ongoing_projects['name']}</h5></div>
+                        
+                            <div class='col-4'>
+                                <div class='progress'>
+                                    <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                                </div>
+                            </div>
+    
+                            <div class='col-2 mx-auto'>
+                                <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$ongoing_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
                             </div>
                         </div>
-
-                        <div class='col-2 mx-auto'>
-                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$ongoing_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
+                    ";
+                } else if($i>5){
+                    $response = $response."
+                        <div class='row align-items-center mb-3'>
+                            <div class='col-6'><h5>{$ongoing_projects['name']}</h5></div>
+                        
+                            <div class='col-4'>
+                                <div class='progress'>
+                                    <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                                </div>
+                            </div>
+    
+                            <div class='col-2 mx-auto'>
+                                <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$ongoing_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
+                            </div>
                         </div>
-                    </div>
-                ";
+                    ";
+                }
             }
         }
+
     }
 
     if($i > 4){
@@ -777,87 +785,91 @@ if($_POST['show'] == 'completed_projects'){
     $project_count = 0;
     $i = 0;
     while($completed_projects = mysqli_fetch_array($completed_projects_query)){
+        $check_session_user_in_project_query = mysqli_query($connect, "SELECT * FROM users_in_projects WHERE user_id={$_SESSION['user']['id']} AND project_id={$completed_projects['id']}");
+        $check_session_user_in_project = mysqli_fetch_array($check_session_user_in_project_query);
+        if(($_SESSION['user']['status'] == '10') || ($check_session_user_in_project['user_id'] == $_SESSION['user']['id'])){
+            $completed_project_tasks_query = mysqli_query($connect, "SELECT * FROM projects_tasks WHERE project_id={$completed_projects['id']}");
 
-        $completed_project_tasks_query = mysqli_query($connect, "SELECT * FROM projects_tasks WHERE project_id={$completed_projects['id']}");
-
-        $count_completed_tasks = 0;
-        $count_project_tasks = 0;
-        $progress = 0;
-        
-        while($completed_project_tasks = mysqli_fetch_array($completed_project_tasks_query)){
-            if($completed_project_tasks['status'] == '1'){
-                $count_completed_tasks += 1;
-            }
-
-            $count_project_tasks += 1;
-        }
-
-        if($count_project_tasks>0){
-            $progress = round($count_completed_tasks/$count_project_tasks, 2) * 100;
-        }
-
-        if($progress == 100){
-            $project_count += 1;
-            $i+=1;
-            if($i<5){
-                $response = $response."
-                    <div class='row align-items-center mb-3'>
-                        <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
-                    
-                        <div class='col-4'>
-                            <div class='progress'>
-                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
-                            </div>
-                        </div>
-
-                        <div class='col-2 mx-auto'>
-                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$completed_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
-                        </div>
-                    </div>
-                ";
-            } else if($i==5){
-                $response = $response."
-                    <a class='mb-3' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOngoingProject' aria-expanded='false' aria-controls='collapseOngoingProject'>
-                        Больше <i class='fas fa-angle-down'></i>
-                    </a>
-                ";
+            $count_completed_tasks = 0;
+            $count_project_tasks = 0;
+            $progress = 0;
             
-                $response = $response."
-                    <div class='collapse' id='collapseOngoingProject'>
-                ";
-                $response = $response."
-                    <div class='row align-items-center mb-3'>
-                        <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
-                    
-                        <div class='col-4'>
-                            <div class='progress'>
-                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+            while($completed_project_tasks = mysqli_fetch_array($completed_project_tasks_query)){
+                if($completed_project_tasks['status'] == '1'){
+                    $count_completed_tasks += 1;
+                }
+    
+                $count_project_tasks += 1;
+            }
+    
+            if($count_project_tasks>0){
+                $progress = round($count_completed_tasks/$count_project_tasks, 2) * 100;
+            }
+    
+            if($progress == 100){
+                $project_count += 1;
+                $i+=1;
+                if($i<5){
+                    $response = $response."
+                        <div class='row align-items-center mb-3'>
+                            <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
+                        
+                            <div class='col-4'>
+                                <div class='progress'>
+                                    <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                                </div>
+                            </div>
+    
+                            <div class='col-2 mx-auto'>
+                                <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$completed_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
                             </div>
                         </div>
-
-                        <div class='col-2 mx-auto'>
-                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$completed_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
-                        </div>
-                    </div>
-                ";
-            } else if($i>5){
-                $response = $response."
-                    <div class='row align-items-center mb-3'>
-                        <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
-                    
-                        <div class='col-4'>
-                            <div class='progress'>
-                                <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                    ";
+                } else if($i==5){
+                    $response = $response."
+                        <a class='mb-3' type='button' data-bs-toggle='collapse' data-bs-target='#collapseOngoingProject' aria-expanded='false' aria-controls='collapseOngoingProject'>
+                            Больше <i class='fas fa-angle-down'></i>
+                        </a>
+                    ";
+                
+                    $response = $response."
+                        <div class='collapse' id='collapseOngoingProject'>
+                    ";
+                    $response = $response."
+                        <div class='row align-items-center mb-3'>
+                            <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
+                        
+                            <div class='col-4'>
+                                <div class='progress'>
+                                    <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                                </div>
+                            </div>
+    
+                            <div class='col-2 mx-auto'>
+                                <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$completed_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
                             </div>
                         </div>
-
-                        <div class='col-2 mx-auto'>
-                            <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$completed_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
+                    ";
+                } else if($i>5){
+                    $response = $response."
+                        <div class='row align-items-center mb-3'>
+                            <div class='col-6'><h5>{$completed_projects['name']}</h5></div>
+                        
+                            <div class='col-4'>
+                                <div class='progress'>
+                                    <div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' style='width: {$progress}%' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>{$progress}%</div>
+                                </div>
+                            </div>
+    
+                            <div class='col-2 mx-auto'>
+                                <button class='btn btn-primary js-project-charts' style='border-radius: 20px;' value='{$completed_projects['id']}' title='Статистика по проекту'><i class='fas fa-angle-right'></i></button>
+                            </div>
                         </div>
-                    </div>
-                ";
+                    ";
+                }
             }
         }
+
 
     }
     if($i > 4){

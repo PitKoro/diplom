@@ -65,7 +65,7 @@ if (!$_SESSION['user']) {
 
             <div class="col-sm-12 col-md-6">
                 <div class="row no-gutters">
-                    <div class="col-md-12 col-xl-10 col-xxl-9 mb-3 pe-md-2">
+                    <div class="col-md-12 mb-3 pe-md-2">
                         <div class="card h-md-100">
                             <div class="card-body">
                                 <p class="js-project-tasks-chart-title" style="font-size: 16px; font-weight: 900; fill: rgb(55, 61, 63);">Задачи всех проектов</p>
@@ -75,7 +75,7 @@ if (!$_SESSION['user']) {
                         </div>
                     </div>
 
-                    <div class="col-md-12 col-xl-10 col-xxl-9 mb-3 pe-md-2">
+                    <div class="col-md-12 mb-3 pe-md-2">
                         <div class="card h-md-100">
                             <div class="card-body">
                                 <p class="js-project-users-bar-title" style="font-size: 16px; font-weight: 900; fill: rgb(55, 61, 63);">Пользователи всех проектов</p>

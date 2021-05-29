@@ -99,6 +99,13 @@ if(isset($_POST)){
             $user_status = $_POST['user_status'];
             $user_password = $_POST['user_password'];
 
+            if($_SESSION['user']['id'] == $user_id){
+                $_SESSION['user']['full_name'] = $user_full_name;
+                $_SESSION['user']['login'] = $user_login;
+                $_SESSION['user']['email'] = $user_email;
+                $_SESSION['user']['status'] = $user_status;
+            }
+
             $path_to_photo = null;
             if($_POST['is_change_photo']=='true'){
                 
@@ -117,6 +124,7 @@ if(isset($_POST)){
                         echo json_encode($response); # Возвращаем ответ в формате json
                         die();
                     }
+                    $_SESSION['user']['avatar'] = $path_to_photo;
                 }
             } else if($_POST['is_change_photo']=='false') {
                 $path_to_photo = 'false';
