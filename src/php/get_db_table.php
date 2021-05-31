@@ -50,7 +50,7 @@ if($_POST['show']=='all_users'){
             <th scope='col'>ФИО</th>
             <th scope='col'>Логин</th>
             <th scope='col'>Почта</th>
-            <th scope='col'>Статус</th>
+            <th scope='col'>Роль</th>
         </tr>
     </thead>
     <tbody>";

@@ -31,10 +31,10 @@ if (!$_SESSION['user']) {
                         <img class="rounded mx-auto my-2 d-block" src="<?= '../../'.$_SESSION['user']['avatar'] ?>" width="200" alt="">
                         <div class="card-body">
                             <?echo"<input name='user_id' value='{$_SESSION['user']['id']}' hidden>";?>
-                            <h4 class="card-title js-project-name"><?=$_SESSION['user']['full_name']?></h4>
+                            <h5 class="card-title js-project-name mb-4"><?=$_SESSION['user']['full_name']?></h5>
                             <p class="card-text js-project-description">Логин: <?=$_SESSION['user']['login']?></p>
                             <p class="card-text js-project-description">Почта: <?=$_SESSION['user']['email']?></p>
-                            <p class="card-text js-project-description">Роль: <? echo ($_SESSION['user']['status']=='10') ? "Администратор":"Обычный пользователь"; ?></p>
+                            <p class="card-text js-project-description mb-3">Роль: <? echo ($_SESSION['user']['status']=='10') ? "Администратор":"Обычный пользователь"; ?></p>
                         </div>
                         <!-- <?if($_SESSION['user']['status']=='10'): ?>
                             <div class="card-body text-center">
