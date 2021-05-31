@@ -10,7 +10,20 @@
                     <a class="nav-link" aria-current="page" href="./main.php">Главная</a>
                 </li>
 
-                <li class="nav-item dropdown px-1">
+                <li class="nav-item px-1">
+                    <a class="nav-link" href="./myProjects.php">Мои проекты</a>
+                </li>
+
+                <li class="nav-item px-1">
+                    <a class="nav-link" href="./profile.php">Мой профиль</a>
+                </li>
+                <? if ($_SESSION['user']['status']=='10'): ?>
+                    <li class="nav-item px-1">
+                        <a class="nav-link" href="./myUsers.php">Пользователи</a>
+                    </li>
+                <? endif; ?>
+
+                <!-- <li class="nav-item dropdown px-1">
                     <a class="nav-link dropdown-toggle" href="#" id="dropdown-menu-profile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Профиль
                     </a>
@@ -22,7 +35,7 @@
                         <? endif; ?>
                         
                     </ul>
-                </li>
+                </li> -->
                 <? if ($_SESSION['user']['status']=='10'): ?>
                     <li class="nav-item dropdown px-1">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdown-menu-create" role="button" data-bs-toggle="dropdown" aria-expanded="false">

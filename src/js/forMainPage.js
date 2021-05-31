@@ -178,8 +178,8 @@ $(document).ready(function(){
         },
         success: function(response){
             if(response.status == '0'){
-                $('#task-chart-donut').empty().append("<h5>Задач нет</h5>");
-                $('#users-chart-bar').empty().append("<h5>Задач нет</h5>");
+                $('#task-chart-donut').empty().append("<h6>Задач нет</h6>");
+                $('#users-chart-bar').empty().append("<h6>Задач нет</h6>");
             }else {
                 show_project_charts(response);
             }
@@ -202,8 +202,8 @@ $(document).on('click','.js-project-charts', function(){
         },
         success: function(response){
             if(response.status == '0'){
-                $('#task-chart-donut').empty().append("<h5>Задач нет</h5>");
-                $('#users-chart-bar').empty().append("<h5>Задач нет</h5>");
+                $('#task-chart-donut').empty().append("<h6>Задач нет</h6>");
+                $('#users-chart-bar').empty().append("<h6>Задач нет</h6>");
             }else {
                 show_project_charts(response);
             }

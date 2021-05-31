@@ -54,7 +54,7 @@ include '../php/lib.php';
                                 </div>
                                 <div class='col-xs-8 col-md-9'>
                                     <div class='card-header text-white bg-primary'>
-                                        <h5 class='card-title'>Имя: {$all_user_projects[$i]['name']} id: {$all_user_projects[$i]['id']}</h5>
+                                        <h5 class='card-title'>{$all_user_projects[$i]['name']}</h5>
                                     </div>
                                     <div class='card-body'>
                                         <p class='card-text'>Описание: {$all_user_projects[$i]['description']}</p>

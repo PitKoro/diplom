@@ -9,6 +9,8 @@ function get_all_user_projects($connect, $user_id){
 
     $all_projects = array();
     while($result = mysqli_fetch_assoc($sql)){
+        $result['start_date'] = date("d.m.Y",strtotime($result['start_date']));
+        $result['end_date'] = date("d.m.Y",strtotime($result['end_date']));
         array_push($all_projects, $result);
     }
     return $all_projects;

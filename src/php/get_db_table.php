@@ -22,8 +22,8 @@ if($_POST['show']=='project_data') {
         $project_name = $project['name'];
         $project_description = $project['description'];
         $project_photo = $project['photo'];
-        $project_start_date = $project['start_date'];
-        $project_end_date = $project['end_date'];
+        $project_start_date = date("d.m.Y",strtotime($project['start_date']));
+        $project_end_date = date("d.m.Y",strtotime($project['end_date']));
     }
 
     mysqli_free_result($sql);
@@ -235,7 +235,6 @@ if($_POST['show']=='project_tasks'){
         $table_data = "
         <thead>
             <tr>
-            <th scope='col'>№</th>
             <th scope='col'>Название</th>
             <th scope='col'>Ответственный</th>
             <th scope='col'>Дата завершения</th>
@@ -275,7 +274,6 @@ if($_POST['show']=='project_tasks'){
             if($_SESSION['user']['status'] == '10'){
                 $status = (($result['status']=='1') ? "Выполнено" : "Не выполнено");
                 $table_data = $table_data."                
-                    <td> {$result['id']} </td>
                     <td> {$result['name']}</td>
                     <td>{$result['full_name']}</td>
                     <td>{$task_end_date}</td>
@@ -338,7 +336,6 @@ if($_POST['show']=='project_tasks'){
             } else {
                 $status = (($result['status']=='1') ? "Выполнено" : "Не выполнено");
                 $table_data = $table_data."
-                <td> {$result['id']} </td>
                 <td> {$result['name']}</td>
                 <td>{$result['full_name']}</td>
                 <td>{$result['end_date']}</td>
@@ -431,7 +428,6 @@ if($_POST['show'] == 'project_users'){
     $table_data = "
     <thead>
         <tr>
-        <th scope='col'>#</th>
         <th scope='col'>Логин</th>
         <th scope='col'>ФИО</th>
         </tr>
@@ -443,14 +439,13 @@ if($_POST['show'] == 'project_users'){
         if($_SESSION['user']['id'] == $result['id']){
             $table_data = $table_data."
             <tr>
-                <td> {$result['id']} </td>
+
                 <td> {$result['login']} </td>
                 <td> {$result['full_name']}</td>        
             </tr>";
         } else if($_SESSION['user']['status'] == '10'){
             $table_data = $table_data."
             <tr>
-                <td> {$result['id']} </td>
                 <td> {$result['login']} </td>
                 <td> {$result['full_name']}</td>        
                 <td> <button class='js-delete-project-user-btn btn btn-danger' value='{$result['id']}' title='Удалить'><i class='fas fa-trash-alt'></i></button></td>
@@ -458,7 +453,6 @@ if($_POST['show'] == 'project_users'){
         } else {
             $table_data = $table_data."
             <tr>
-                <td> {$result['id']} </td>
                 <td> {$result['login']} </td>
                 <td> {$result['full_name']}</td>        
             </tr>";

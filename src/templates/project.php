@@ -37,10 +37,10 @@ ini_set('display_startup_errors', 1);
     <? require "blocks/navbar.php"; ?>
     <div class="container mt-5">
         <div class="row gy-0">
-            <div class="col-sm-3">
+            <div class="col-md-12 col-xl-3">
                 <div class="col mb-5">
                     <div class="card">
-                        <img src="" class="card-img-top js-project-photo p-2">
+                        <img src="" class="card-img-top js-project-photo p-2" style="max-height: 300px; max-width: 300px; margin: auto;">
                         <div class="card-body">
                             <h4 class="card-title js-project-name">Card title</h4>
                             <p class="card-text js-project-description">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -59,7 +59,7 @@ ini_set('display_startup_errors', 1);
                 </div>
             </div>
             
-            <div class="col-sm-9">
+            <div class="col-md-12 col-xl-9">
 
                 <div class="row mb-2">
                     <div class="col">
