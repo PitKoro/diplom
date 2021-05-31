@@ -156,11 +156,11 @@ if($_POST['show']=='all_user_tasks'){
             ";
 
             if($result['comment']!=''){
-                $table_data = $table_data."<td  class='text-start'><b>Комметрарий:</b> {$result['comment']}</td>";
+                $table_data = $table_data."<td  class='text-start'><b>Комметрарий:</b> <p>{$result['comment']}</p></td>";
             }
 
             if(($result['status']=='1') && ($result['comment']=='')){
-                $table_data = $table_data."<td class='text-start'><b>Комметрарий:</b> <em>не указан</em></td>";
+                $table_data = $table_data."<td class='text-start'><b>Комметрарий:</b> <p><em>не указан</em></p></td>";
             }
 
             if($result['status']=='0'){
@@ -279,11 +279,11 @@ if($_POST['show']=='project_tasks'){
                     <td>{$task_end_date}</td>
                     <td>{$status}</td>";
                     if($result['comment']!=''){
-                        $table_data = $table_data."<td  class='text-start'><b>Комметрарий:</b> {$result['comment']}</td>";
+                        $table_data = $table_data."<td  class='text-start'><b>Комметрарий:</b> <p>{$result['comment']}</p></td>";
                     }
 
                     if(($result['status']=='1') && ($result['comment']=='')){
-                        $table_data = $table_data."<td class='text-start'><b>Комметрарий:</b> <em>не указан</em></td>";
+                        $table_data = $table_data."<td class='text-start'><b>Комметрарий:</b> <p><em>не указан</em></p></td>";
                     }
 
                     $table_data = $table_data."<td class='text-start'> 
@@ -343,11 +343,11 @@ if($_POST['show']=='project_tasks'){
                 ";
 
                 if($result['comment']!=''){
-                    $table_data = $table_data."<td  class='text-start'><b>Комметрарий:</b> {$result['comment']}</td>";
+                    $table_data = $table_data."<td  class='text-start'><b>Комметрарий:</b> <p>{$result['comment']}</p></td>";
                 }
 
                 if(($result['status']=='1') && ($result['comment']=='')){
-                    $table_data = $table_data."<td class='text-start'><b>Комметрарий:</b> <em>не указан</em></td>";
+                    $table_data = $table_data."<td class='text-start'><b>Комметрарий:</b> <p><em>не указан</em></p></td>";
                 }
 
                 $table_data = $table_data."
