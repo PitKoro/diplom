@@ -50,7 +50,7 @@ include '../php/lib.php';
                         <div class='card mb-3'>
                             <div class='row g-0'>
                                 <div class='col-xs-4 col-md-3'>
-                                    <img src='../../{$all_user_projects[$i]['photo']}' class='rounded mx-auto d-block img-thumbnail' style='width: 200px; height:200px;'>
+                                    <img src='../../{$all_user_projects[$i]['photo']}' class='rounded mx-auto d-block img-thumbnail' style='width: 100%; height:100%;'>
                                 </div>
                                 <div class='col-xs-8 col-md-9'>
                                     <div class='card-header text-white bg-primary'>
